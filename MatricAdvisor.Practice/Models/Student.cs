@@ -2,11 +2,11 @@ using static System.Console;
 using System.Collections.Generic;
 using System;
 //Model/Student.cs
-//This class describes what a student looks like to our system\.
+//This class describes what a student looks like to our system.
 
 namespace MatricAdvisor.Practice.Models
 {
-    public class Student
+    public class Student  
     {
         public string Name {get; set; } =string.Empty;
         public string Surname {get; set;} = string.Empty;
@@ -35,6 +35,29 @@ namespace MatricAdvisor.Practice.Models
         {
             return $"{Name} {Surname} | Year: {MatricYear} | APS: {TotalAps}";
         }
+
+        public bool ChecksQualification(Programme programme)
+        {
+
+            if (TotalAps < programme.MinimumAps)
+            {
+                return false;
+            }
+
+            foreach(var requirement in programme.SubjectRequirements)
+            {
+                var studentSubjects = Subjects.Find(s => s.SubjectName == requirement.SubjectName);
+
+                if(studentSubjects == null || studentSubjects.Mark < requirement.MinimumMark)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+       
 
     }
 

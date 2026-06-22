@@ -1,11 +1,17 @@
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using MatricAdvisor.API.Data;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // --- ADD SERVICES ---
 builder.Services.AddControllers();
+
+builder.Services.AddDbContext<AppDbContext>(Options =>
+      Options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddCors(options =>
 {

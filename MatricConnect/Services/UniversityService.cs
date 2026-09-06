@@ -42,5 +42,11 @@ namespace MatricConnect.Services
                     .ToList ();
         }
 
+        public Programme? GetProgrammeById(int programmeId)
+        {
+            return _context.Programmes
+                   .FirstOrDefault(p => p.Id  == programmeId);
+        }
+
     }
 }

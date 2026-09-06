@@ -57,7 +57,7 @@ static void RunApplication(UniversityService universityService)
 
     Console.WriteLine("==============================================");
     Console.WriteLine();
-    Console.WriteLine($" UNIVERSITIES IN {selectedProvince.ToUpper()}");
+    Console.WriteLine($"            UNIVERSITIES IN {selectedProvince.ToUpper()}");
     Console.WriteLine();
     Console.WriteLine("==============================================");
     Console.WriteLine();
@@ -87,16 +87,64 @@ static void RunApplication(UniversityService universityService)
 
     Console.Clear();
 
-    Console.WriteLine("=====================================");
-    Console.WriteLine($" PROGRAMMES AT {selectedUniversity.Name.ToUpper()}");
-    Console.WriteLine("=====================================");
+    Console.WriteLine("===================================================");
+    Console.WriteLine($"      PROGRAMMES AT {selectedUniversity.Name.ToUpper()}");
+    Console.WriteLine("===================================================");
     Console.WriteLine();
 
-    foreach (var programme in programmes)
+    for (int i = 0; i < programmes.Count; i++)
     {
-        Console.WriteLine(programme.Name);
+        Console.WriteLine($"{ i + 1}. {programmes[i].Name}");
     }
 
+    Console.WriteLine();
+    Console.WriteLine("Select a programme: ");
+
+    string? programmesInput = Console.ReadLine();
+
+    if(!int.TryParse(programmesInput, out int programmesSelection) 
+            || programmesSelection < 1
+            || programmesSelection > programmes.Count)
+    {
+        Console.WriteLine("\nInvalid selection.");
+        Pause();
+        return;
+    }
+
+    var selectedProgramme = programmes[programmesSelection - 1];
+    var programmeDetails = universityService
+        .GetProgrammeById(selectedProgramme.Id);
+
+
+    Console.Clear();
+
+    Console.WriteLine("==============================================");
+    Console.WriteLine("             PROGRAMME DETAILS ");
+    Console.WriteLine("==============================================");
+    Console.WriteLine();
+
+
+    Console.WriteLine($"Programme: {programmeDetails?.Name}");
+    Console.WriteLine($"University: {selectedUniversity.Name}");
+    Console.WriteLine($"Field: {programmeDetails?.FieldOfStudy}");
+
+    Console.WriteLine();
+    Console.WriteLine("Entry Requirements");
+    Console.WriteLine("-------------------");
+    Console.WriteLine($"Minimum APS: {programmeDetails?.RequiredAPS}");
+    Console.WriteLine($"Mathematics: {programmeDetails?.RequiredMathematics:0}%");
+
+    if (programmeDetails?.RequiredPhysicalScience == null)
+    {
+        Console.WriteLine("Physical Science: Not rquired");
+    }
+    else
+    {
+        Console.WriteLine($"Physical Science: {programmeDetails.RequiredPhysicalScience}%");
+    }
+
+    Console.WriteLine();
+    Console.WriteLine($"Application Deadline: {programmeDetails?.ApplicationDeadline:dd MMMM yyyy}");
 
     Pause();
 }

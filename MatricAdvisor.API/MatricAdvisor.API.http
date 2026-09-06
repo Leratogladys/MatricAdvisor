@@ -1,0 +1,6 @@
+@MatricAdvisor.API_HostAddress = http://localhost:5002
+
+GET {{MatricAdvisor.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,4 +1,4 @@
-# 🎓 Matric Advisor
+# 🎓 MatricConnect
 
 > Helping South African matric students discover tertiary study opportunities based on their academic profile.
 

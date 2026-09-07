@@ -1,6 +1,7 @@
 ﻿using MatricConnect.Data;
 using Microsoft.EntityFrameworkCore;
 using MatricConnect.Services;
+using MatricConnect.Models;
 
 var databasePath = Path.Combine(
     AppContext.BaseDirectory,
@@ -15,10 +16,11 @@ using var context = new MatricConnectContext(options);
 DbInitializer.Seed(context);
 
 var universityService = new UniversityService(context);
+var eligibilityService = new EligibilityService();
 
-RunApplication(universityService);
+RunApplication(universityService, eligibilityService);
 
-static void RunApplication(UniversityService universityService)
+static void RunApplication(UniversityService universityService,EligibilityService eligibilityService)
 {
     Console.Clear();
 
@@ -50,8 +52,7 @@ static void RunApplication(UniversityService universityService)
 
     string selectedProvince = provinces[selection - 1];
 
-    var universities =
-        universityService.GetUniversitiesByProvince(selectedProvince);
+    var universities = universityService.GetUniversitiesByProvince(selectedProvince);
 
     Console.Clear();
 
@@ -112,8 +113,42 @@ static void RunApplication(UniversityService universityService)
     }
 
     var selectedProgramme = programmes[programmesSelection - 1];
-    var programmeDetails = universityService
-        .GetProgrammeById(selectedProgramme.Id);
+    var programmeDetails = universityService.GetProgrammeById(selectedProgramme.Id);
+
+    Console.Clear();
+
+    Console.WriteLine("==============================================");
+    Console.WriteLine("             STUDENT INFORMATION ");
+    Console.WriteLine("==============================================");
+    Console.WriteLine();
+
+
+    Console.Write("Enter your APS score: ");
+    string? apsInput = Console.ReadLine();
+
+    Console.Write("Enter your Mathematics mark: ");
+    string? mathematicsInput = Console.ReadLine();
+
+
+    Console.Write("Enter your Physical Science mark: ");
+    string? physicalScienceInput = Console.ReadLine();
+
+    if(!int.TryParse(apsInput, out int apsScore) ||
+       !decimal.TryParse(mathematicsInput, out decimal mathematicsMark) ||
+       !decimal.TryParse(physicalScienceInput, out decimal physicalScienceMark))
+    {
+        Console.WriteLine();
+        Console.WriteLine("Invalid input. Please enter numeric values.");
+        Pause();
+        return;
+    }
+
+    var student = new Student
+    {
+        APSScore = apsScore,
+        MathematicsMark = mathematicsMark,
+        PhysicalScienceMark = physicalScienceMark
+    };
 
 
     Console.Clear();
@@ -136,7 +171,7 @@ static void RunApplication(UniversityService universityService)
 
     if (programmeDetails?.RequiredPhysicalScience == null)
     {
-        Console.WriteLine("Physical Science: Not rquired");
+        Console.WriteLine("Physical Science: Not required");
     }
     else
     {

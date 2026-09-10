@@ -13,7 +13,7 @@ namespace MatricConnect.Models
         public string LastName { get; set; } = string.Empty;
         public int APSScore { get; set; }
         public decimal MathematicsMark { get; set; }
-        public decimal PhysicalScienceMark  { get; set; }
+        public decimal? PhysicalScienceMark  { get; set; }
         public string Province { get; set; } = string.Empty;
 
         public ICollection<SavedProgramme> SavedProgrammes { get; set; } = new List<SavedProgramme>();

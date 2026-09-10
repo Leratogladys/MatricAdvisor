@@ -1,7 +1,7 @@
 ﻿using MatricConnect.Data;
-using Microsoft.EntityFrameworkCore;
-using MatricConnect.Services;
 using MatricConnect.Models;
+using MatricConnect.Services;
+using Microsoft.EntityFrameworkCore;
 
 var databasePath = Path.Combine(
     AppContext.BaseDirectory,
@@ -19,8 +19,9 @@ var universityService = new UniversityService(context);
 var eligibilityService = new EligibilityService();
 
 RunApplication(universityService, eligibilityService);
-
-static void RunApplication(UniversityService universityService,EligibilityService eligibilityService)
+static void RunApplication(
+    UniversityService universityService,
+    EligibilityService eligibilityService)
 {
     Console.Clear();
 
@@ -63,19 +64,19 @@ static void RunApplication(UniversityService universityService,EligibilityServic
     Console.WriteLine("==============================================");
     Console.WriteLine();
 
-    foreach (var university in universities)
+    for (int i = 0; i < universities.Count; i++)
     {
-        Console.WriteLine($"{university.Id}. {university.Name}");
+        Console.WriteLine($"{i + 1}. {universities[i].Name}");
     }
 
     Console.WriteLine();
     Console.Write("Select a university: ");
-    
+
     string? universityInput = Console.ReadLine();
 
-    if(!int.TryParse(universityInput, out int universitySelection) || 
-            universitySelection < 1 || 
-            universitySelection > universities.Count)
+    if (!int.TryParse(universityInput, out int universitySelection) ||
+        universitySelection < 1 ||
+        universitySelection > universities.Count)
     {
         Console.WriteLine("\nInvalid selection.");
         Pause();
@@ -83,6 +84,7 @@ static void RunApplication(UniversityService universityService,EligibilityServic
     }
 
     var selectedUniversity = universities[universitySelection - 1];
+
     var programmes = universityService
         .GetProgrammesByUniversity(selectedUniversity.Id);
 
@@ -95,33 +97,36 @@ static void RunApplication(UniversityService universityService,EligibilityServic
 
     for (int i = 0; i < programmes.Count; i++)
     {
-        Console.WriteLine($"{ i + 1}. {programmes[i].Name}");
+        Console.WriteLine($"{i + 1}. {programmes[i].Name}");
     }
 
     Console.WriteLine();
-    Console.WriteLine("Select a programme: ");
+    Console.Write("Select a programme: ");
 
     string? programmesInput = Console.ReadLine();
 
-    if(!int.TryParse(programmesInput, out int programmesSelection) 
-            || programmesSelection < 1
-            || programmesSelection > programmes.Count)
+    if (!int.TryParse(programmesInput, out int programmesSelection) ||
+        programmesSelection < 1 ||
+        programmesSelection > programmes.Count)
     {
         Console.WriteLine("\nInvalid selection.");
         Pause();
         return;
     }
 
+    Console.Clear();
+
     var selectedProgramme = programmes[programmesSelection - 1];
-    var programmeDetails = universityService.GetProgrammeById(selectedProgramme.Id);
+
+    var programmeDetails = universityService
+        .GetProgrammeById(selectedProgramme.Id);
 
     Console.Clear();
 
-    Console.WriteLine("==============================================");
-    Console.WriteLine("             STUDENT INFORMATION ");
-    Console.WriteLine("==============================================");
+    Console.WriteLine("==================================================");
+    Console.WriteLine("                  STUDENT INFORMATION");
+    Console.WriteLine("==================================================");
     Console.WriteLine();
-
 
     Console.Write("Enter your APS score: ");
     string? apsInput = Console.ReadLine();
@@ -129,18 +134,33 @@ static void RunApplication(UniversityService universityService,EligibilityServic
     Console.Write("Enter your Mathematics mark: ");
     string? mathematicsInput = Console.ReadLine();
 
-
     Console.Write("Enter your Physical Science mark: ");
     string? physicalScienceInput = Console.ReadLine();
 
-    if(!int.TryParse(apsInput, out int apsScore) ||
-       !decimal.TryParse(mathematicsInput, out decimal mathematicsMark) ||
-       !decimal.TryParse(physicalScienceInput, out decimal physicalScienceMark))
+    if (!int.TryParse(apsInput, out int apsScore) ||
+        !decimal.TryParse(mathematicsInput, out decimal mathematicsMark))
     {
         Console.WriteLine();
         Console.WriteLine("Invalid input. Please enter numeric values.");
         Pause();
         return;
+    }
+
+    decimal? physicalScienceMark = null;
+
+    if (!string.IsNullOrWhiteSpace(physicalScienceInput))
+    {
+        if (!decimal.TryParse(
+            physicalScienceInput,
+            out decimal physicalScienceValue))
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid Physical Science mark.");
+            Pause();
+            return;
+        }
+
+        physicalScienceMark = physicalScienceValue;
     }
 
     var student = new Student
@@ -150,22 +170,20 @@ static void RunApplication(UniversityService universityService,EligibilityServic
         PhysicalScienceMark = physicalScienceMark
     };
 
-
     Console.Clear();
 
     Console.WriteLine("==============================================");
-    Console.WriteLine("             PROGRAMME DETAILS ");
+    Console.WriteLine("             PROGRAMME DETAILS");
     Console.WriteLine("==============================================");
     Console.WriteLine();
-
 
     Console.WriteLine($"Programme: {programmeDetails?.Name}");
     Console.WriteLine($"University: {selectedUniversity.Name}");
     Console.WriteLine($"Field: {programmeDetails?.FieldOfStudy}");
 
     Console.WriteLine();
-    Console.WriteLine("Entry Requirements");
-    Console.WriteLine("-------------------");
+    Console.WriteLine("            Entry Requirements");
+    Console.WriteLine("-------------------------------------------");
     Console.WriteLine($"Minimum APS: {programmeDetails?.RequiredAPS}");
     Console.WriteLine($"Mathematics: {programmeDetails?.RequiredMathematics:0}%");
 
@@ -175,11 +193,30 @@ static void RunApplication(UniversityService universityService,EligibilityServic
     }
     else
     {
-        Console.WriteLine($"Physical Science: {programmeDetails.RequiredPhysicalScience}%");
+        Console.WriteLine($"Physical Science: {programmeDetails.RequiredPhysicalScience:0}%");
     }
 
     Console.WriteLine();
     Console.WriteLine($"Application Deadline: {programmeDetails?.ApplicationDeadline:dd MMMM yyyy}");
+    Console.WriteLine();
+
+    bool isEligible = eligibilityService.IsEligible(student, programmeDetails!);
+    Console.WriteLine();
+
+    if (isEligible)
+    {
+        Console.WriteLine("------------------");
+        Console.WriteLine("ELIGIBILITY RESULT");
+        Console.WriteLine("------------------");
+        Console.WriteLine("You MEET the minimum requirements for this programme.");
+    }
+    else
+    {
+        Console.WriteLine("------------------");
+        Console.WriteLine("ELIGIBILITY RESULT");
+        Console.WriteLine("------------------");
+        Console.WriteLine("You DO NOT the minimum requirements for this programme.");
+    }
 
     Pause();
 }

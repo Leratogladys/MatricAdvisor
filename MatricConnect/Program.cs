@@ -2,6 +2,8 @@
 using MatricConnect.Models;
 using MatricConnect.Services;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
+using System.Xml.Linq;
 
 var databasePath = Path.Combine(
     AppContext.BaseDirectory,
@@ -17,11 +19,21 @@ DbInitializer.Seed(context);
 
 var universityService = new UniversityService(context);
 var eligibilityService = new EligibilityService();
+var studentService = new StudentService(context);
+var savedProgrammeService = new SavedProgrammeService(context);
 
-RunApplication(universityService, eligibilityService);
+RunApplication(
+    universityService,
+    eligibilityService,
+    studentService,
+    savedProgrammeService);
+
 static void RunApplication(
     UniversityService universityService,
-    EligibilityService eligibilityService)
+    EligibilityService eligibilityService,
+    StudentService studentService,
+    SavedProgrammeService savedProgrammeService)
+
 {
     Console.Clear();
 
@@ -128,14 +140,33 @@ static void RunApplication(
     Console.WriteLine("==================================================");
     Console.WriteLine();
 
+    Console.Write("Enter your first name: ");
+    string? firstName = Console.ReadLine();
+
+    Console.Write("Enter your last name: ");
+    string? lastName = Console.ReadLine();
+
+    Console.Write("Enter your province: ");
+    string? studentProvince = Console.ReadLine();
+
     Console.Write("Enter your APS score: ");
     string? apsInput = Console.ReadLine();
 
     Console.Write("Enter your Mathematics mark: ");
     string? mathematicsInput = Console.ReadLine();
 
-    Console.Write("Enter your Physical Science mark: ");
+    Console.Write("Enter your Physical Science mark (leave blank if not applicable): ");
     string? physicalScienceInput = Console.ReadLine();
+
+    if(string.IsNullOrWhiteSpace(firstName) ||
+       string.IsNullOrWhiteSpace(lastName) ||
+       string.IsNullOrWhiteSpace(studentProvince))
+    {
+        Console.WriteLine();
+        Console.WriteLine("First name, last name and province are required.");
+        Pause();
+        return;
+    }
 
     if (!int.TryParse(apsInput, out int apsScore) ||
         !decimal.TryParse(mathematicsInput, out decimal mathematicsMark))
@@ -165,10 +196,16 @@ static void RunApplication(
 
     var student = new Student
     {
+        FirstName = firstName,
+        LastName = lastName,
+        Province = studentProvince,
         APSScore = apsScore,
         MathematicsMark = mathematicsMark,
         PhysicalScienceMark = physicalScienceMark
     };
+
+    var savedStudent = studentService.AddStudent(student);
+
 
     Console.Clear();
 
@@ -200,22 +237,56 @@ static void RunApplication(
     Console.WriteLine($"Application Deadline: {programmeDetails?.ApplicationDeadline:dd MMMM yyyy}");
     Console.WriteLine();
 
-    bool isEligible = eligibilityService.IsEligible(student, programmeDetails!);
+    Console.WriteLine("------------------");
+    Console.WriteLine("ELIGIBILITY RESULT");
+    Console.WriteLine("------------------");
+
+    var eligibilityIssues = eligibilityService.GetEligibilityIssues(student, programmeDetails!);
     Console.WriteLine();
 
-    if (isEligible)
+    if (eligibilityIssues.Count == 0)
     {
-        Console.WriteLine("------------------");
-        Console.WriteLine("ELIGIBILITY RESULT");
-        Console.WriteLine("------------------");
         Console.WriteLine("You MEET the minimum requirements for this programme.");
     }
     else
     {
-        Console.WriteLine("------------------");
-        Console.WriteLine("ELIGIBILITY RESULT");
-        Console.WriteLine("------------------");
-        Console.WriteLine("You DO NOT the minimum requirements for this programme.");
+        Console.WriteLine();
+        Console.WriteLine("You DO NOT meet the minimum requirements for this programme.");
+
+        Console.WriteLine();
+        Console.WriteLine("Requirements not met:");
+
+        foreach (var issue in eligibilityIssues)
+        {
+            Console.WriteLine($"- {issue}");
+        }
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("What would you like to do?");
+    Console.WriteLine("1. Save this programme");
+    Console.WriteLine("2. Exit");
+
+    Console.WriteLine();
+    Console.WriteLine("Select an option: ");
+
+    string? saveOption = Console.ReadLine();
+
+    if (saveOption == "1")
+    {
+        savedProgrammeService.SaveProgramme(savedStudent.Id, selectedProgramme.Id);
+        Console.WriteLine();
+        Console.WriteLine("Programme saved successfully.");
+    }
+    else if (saveOption == "2")
+    {
+        Console.WriteLine();
+        Console.WriteLine("Programme was not saved.");
+    }
+    else
+    {
+        Console.WriteLine();
+        Console.WriteLine("Invalid option.");
     }
 
     Pause();

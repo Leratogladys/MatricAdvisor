@@ -1,14 +1,24 @@
 ﻿using MatricConnect.Data;
 using MatricConnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatricConnect.Services;
 
 public class SavedProgrammeService(MatricConnectContext context)
 {
-    public SavedProgramme SaveProgramme(
+    public bool SaveProgramme(
         int studentId,
         int programmeId)
     {
+        bool alreadySaved = context.SavedProgrammes
+            .Any(sp => sp.StudentId == studentId &&
+                 sp.ProgrammeId == programmeId);
+
+        if (alreadySaved)
+        {
+            return false;
+        }
+
         var savedProgramme = new SavedProgramme
         {
             StudentId = studentId,
@@ -18,6 +28,15 @@ public class SavedProgrammeService(MatricConnectContext context)
         context.SavedProgrammes.Add(savedProgramme);
         context.SaveChanges();
 
-        return savedProgramme;
+        return true;
+    }
+
+    public List<SavedProgramme> GetSavedProgrammesByStudent(int studentId)
+    {
+        return context.SavedProgrammes
+            .Where(sp => sp.StudentId == studentId)
+            .Include(sp => sp.Programme)
+            .ThenInclude(p => p.University)
+            .ToList();
     }
 }

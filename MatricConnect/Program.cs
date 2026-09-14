@@ -3,6 +3,7 @@ using MatricConnect.Models;
 using MatricConnect.Services;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
+using System.Xml;
 using System.Xml.Linq;
 
 var databasePath = Path.Combine(
@@ -262,31 +263,84 @@ static void RunApplication(
         }
     }
 
-    Console.WriteLine();
-    Console.WriteLine("What would you like to do?");
-    Console.WriteLine("1. Save this programme");
-    Console.WriteLine("2. Exit");
+    bool continueMenu = true;
 
-    Console.WriteLine();
-    Console.WriteLine("Select an option: ");
-
-    string? saveOption = Console.ReadLine();
-
-    if (saveOption == "1")
-    {
-        savedProgrammeService.SaveProgramme(savedStudent.Id, selectedProgramme.Id);
-        Console.WriteLine();
-        Console.WriteLine("Programme saved successfully.");
-    }
-    else if (saveOption == "2")
+    while (continueMenu)
     {
         Console.WriteLine();
-        Console.WriteLine("Programme was not saved.");
-    }
-    else
-    {
+        Console.WriteLine("What would you like to do?");
+        Console.WriteLine("1. Save this programme");
+        Console.WriteLine("2. View saved programmes");
+        Console.WriteLine("3. Exit");
+
         Console.WriteLine();
-        Console.WriteLine("Invalid option.");
+        Console.Write("Select an option: ");
+
+        string? saveOption = Console.ReadLine();
+
+        if (saveOption == "1")
+        {
+            bool programmeSaved =
+                savedProgrammeService.SaveProgramme(
+                    savedStudent.Id,
+                    selectedProgramme.Id);
+
+            Console.WriteLine();
+
+            if (programmeSaved)
+            {
+                Console.WriteLine("Programme saved successfully.");
+            }
+            else
+            {
+                Console.WriteLine("This programme is already saved.");
+            }
+        }
+        else if (saveOption == "2")
+        {
+            var savedProgrammes =
+                savedProgrammeService.GetSavedProgrammesByStudent(
+                    savedStudent.Id);
+
+            Console.Clear();
+
+            Console.WriteLine("==============================================");
+            Console.WriteLine("              SAVED PROGRAMMES");
+            Console.WriteLine("==============================================");
+            Console.WriteLine();
+
+            if (savedProgrammes.Count == 0)
+            {
+                Console.WriteLine("You have no saved programmes.");
+            }
+            else
+            {
+                for (int i = 0; i < savedProgrammes.Count; i++)
+                {
+                    var savedProgramme = savedProgrammes[i];
+
+                    Console.WriteLine(
+                        $"{i + 1}. {savedProgramme.Programme.Name}");
+
+                    Console.WriteLine(
+                        $"   {savedProgramme.Programme.University.Name}");
+
+                    Console.WriteLine();
+                }
+            }
+        }
+        else if (saveOption == "3")
+        {
+            continueMenu = false;
+
+            Console.WriteLine();
+            Console.WriteLine("Exiting application.");
+        }
+        else
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid option.");
+        }
     }
 
     Pause();

@@ -6,13 +6,11 @@ using SQLitePCL;
 using System.Xml;
 using System.Xml.Linq;
 
-var databasePath = Path.Combine(
-    AppContext.BaseDirectory,
-    "MatricConnect.db");
+var databasePath = Path.Combine(AppContext.BaseDirectory, "MatricConnect.db");
 
 var options = new DbContextOptionsBuilder<MatricConnectContext>()
-    .UseSqlite($"Data Source={databasePath}")
-    .Options;
+            .UseSqlite($"Data Source={databasePath}")
+            .Options;
 
 using var context = new MatricConnectContext(options);
 
@@ -24,6 +22,65 @@ var studentService = new StudentService(context);
 var savedProgrammeService = new SavedProgrammeService(context);
 var currentStudent = SelectStudentProfile(studentService);
 
+static void RunApplication(
+          UniversityService universityService,
+          EligibilityService eligibilityService,
+          SavedProgrammeService savedProgrammeService,
+          Student currentStudent)
+{
+    bool running = true;
+    while (running)
+    {
+        Console.Clear();
+
+        Console.WriteLine("========================================");
+        Console.WriteLine("              MATRIC CONNECT");
+        Console.WriteLine("========================================");
+        Console.WriteLine();
+
+        Console.WriteLine($"Welcome, {currentStudent.FirstName}");
+        Console.WriteLine();
+
+        Console.WriteLine("1. Search Universities");
+        Console.WriteLine("2. View Saved Programmes");
+        Console.WriteLine("3. Exit");
+
+        Console.WriteLine();
+        Console.Write("Select an option: ");
+        string? option = Console.ReadLine();
+
+        if (option == "1")
+        {
+            SearchUniversities(
+                universityService,
+                eligibilityService,
+                savedProgrammeService,
+                currentStudent);
+        }
+
+        else if (option == "2")
+        {
+            ViewSavedProgrammes(
+               savedProgrammeService,
+               currentStudent);
+        }
+        else if (option == "3")
+        {
+            running = false;
+
+            Console.WriteLine();
+            Console.WriteLine("Exiting application.");
+        }
+        else
+        {
+            Console.WriteLine();
+            Console.WriteLine("invalid option.");
+
+            Pause();
+        }
+    }
+}
+
 if (currentStudent != null)
 {
     RunApplication(
@@ -33,7 +90,7 @@ if (currentStudent != null)
         currentStudent);
 }
 
-static void RunApplication(
+static void SearchUniversities(
     UniversityService universityService,
     EligibilityService eligibilityService,
     SavedProgrammeService savedProgrammeService,
@@ -195,240 +252,233 @@ static void RunApplication(
         }
     }
 
-    bool continueMenu = true;
+    Console.WriteLine();
+    Console.WriteLine("What would you like to do?");
+    Console.WriteLine("1. Save this programme");
+    Console.WriteLine("2. Return to Main Menu");
 
-    while (continueMenu)
+    Console.WriteLine();
+    Console.WriteLine("Select an option");
+
+    string? option = Console.ReadLine();
+    
+    if(option == "1")
     {
-        Console.WriteLine();
-        Console.WriteLine("What would you like to do?");
-        Console.WriteLine("1. Save this programme");
-        Console.WriteLine("2. View saved programmes");
-        Console.WriteLine("3. Exit");
+        bool programmeSaved = savedProgrammeService.SaveProgramme(
+            currentStudent.Id, selectedProgramme.Id);
 
         Console.WriteLine();
-        Console.Write("Select an option: ");
 
-        string? saveOption = Console.ReadLine();
-
-        if (saveOption == "1")
+        if(programmeSaved)
         {
-            bool programmeSaved =
-                savedProgrammeService.SaveProgramme(
-                    currentStudent.Id,
-                    selectedProgramme.Id);
-
-            Console.WriteLine();
-
-            if (programmeSaved)
-            {
-                Console.WriteLine("Programme saved successfully.");
-            }
-            else
-            {
-                Console.WriteLine("This programme is already saved.");
-            }
-        }
-        else if (saveOption == "2")
-        {
-            var savedProgrammes =
-                savedProgrammeService.GetSavedProgrammesByStudent(
-                    currentStudent.Id);
-
-            Console.Clear();
-
-            Console.WriteLine("==============================================");
-            Console.WriteLine("              SAVED PROGRAMMES");
-            Console.WriteLine("==============================================");
-            Console.WriteLine();
-
-            if (savedProgrammes.Count == 0)
-            {
-                Console.WriteLine("You have no saved programmes.");
-            }
-            else
-            {
-                for (int i = 0; i < savedProgrammes.Count; i++)
-                {
-                    var savedProgramme = savedProgrammes[i];
-
-                    Console.WriteLine(
-                        $"{i + 1}. {savedProgramme.Programme.Name}");
-
-                    Console.WriteLine(
-                        $"   {savedProgramme.Programme.University.Name}");
-
-                    Console.WriteLine();
-                }
-            }
-        }
-        else if (saveOption == "3")
-        {
-            continueMenu = false;
-
-            Console.WriteLine();
-            Console.WriteLine("Exiting application.");
+            Console.WriteLine("Programme saved successfully.");
         }
         else
         {
+            Console.WriteLine("This programme is already saved.");
+        }
+        Pause();
+    }
+    else if (option == "2")
+    {
+        return;
+    }
+    else
+    {
+        Console.WriteLine();
+        Console.WriteLine("Invalid option.");
+
+        Pause();
+    }
+
+
+    Pause();
+}
+
+static void ViewSavedProgrammes(SavedProgrammeService savedProgrammeService, Student currentStudent)
+{
+    var savedProgrammes = savedProgrammeService.GetSavedProgrammesByStudent(currentStudent.Id);
+
+    Console.Clear();
+
+    Console.WriteLine("==============================================");
+    Console.WriteLine("              SAVED PROGRAMMES");
+    Console.WriteLine("==============================================");
+    Console.WriteLine();
+
+    if (savedProgrammes.Count == 0)
+    {
+        Console.WriteLine("You have no saved programmes.");
+    }
+    else
+    {
+        for (int i = 0; i < savedProgrammes.Count; i++)
+        {
+            var savedProgramme = savedProgrammes[1];
+
+            Console.WriteLine($"{i + 1}. {savedProgramme.Programme.Name}");
+            Console.WriteLine($"{savedProgramme.Programme.University.Name}");
+
             Console.WriteLine();
-            Console.WriteLine("Invalid option.");
         }
     }
 
     Pause();
 }
-      static Student? SelectStudentProfile(StudentService studentService)
-       {
-            Console.Clear();
 
-            Console.WriteLine("=================================");
-            Console.WriteLine("               MATRIC CONNECT");
-            Console.WriteLine("=================================");
+static Student? SelectStudentProfile(StudentService studentService)
+{
+    Console.Clear();
+
+    Console.WriteLine("=================================");
+    Console.WriteLine("               MATRIC CONNECT");
+    Console.WriteLine("=================================");
+    Console.WriteLine();
+
+    Console.WriteLine("1. Create New Student Profile");
+    Console.WriteLine("2. Existing Student");
+    Console.WriteLine("3. Exit");
+
+    Console.WriteLine();
+    Console.Write("Select an option: ");
+
+    string? option = Console.ReadLine();
+
+    if (option == "1")
+    {
+        Console.Clear();
+
+        Console.WriteLine("=====================================");
+        Console.WriteLine("        CREATE STUDENT PROFILE");
+        Console.WriteLine("=====================================");
+        Console.WriteLine();
+
+        Console.Write("Enter your first name: ");
+        string? firstName = Console.ReadLine();
+
+        Console.Write("Enter your last name: ");
+        string? lastName = Console.ReadLine();
+
+        Console.Write("Enter your province: ");
+        string? province = Console.ReadLine();
+
+        Console.Write("Enter your APS score: ");
+        string? apsInput = Console.ReadLine();
+
+        Console.Write("Enter your Mathematics marks: ");
+        string? mathematicsInput = Console.ReadLine();
+
+        Console.Write("Enter your Physical Science mark (leave blank if not applicable): ");
+        string? physicalScienceInput = Console.ReadLine();
+
+        if (string.IsNullOrWhiteSpace(firstName) ||
+            string.IsNullOrWhiteSpace(lastName) ||
+            string.IsNullOrWhiteSpace(province))
+        {
             Console.WriteLine();
+            Console.WriteLine("First namr, last name and province are required.");
 
-            Console.WriteLine("1. Create New Student Profile");
-            Console.WriteLine("2. Existing Student");
-            Console.WriteLine("3. Exit");
+            Pause();
+            return null;
+        }
 
+        if (!int.TryParse(apsInput, out int apsScore) ||
+            !decimal.TryParse(mathematicsInput, out decimal mathematicsMark))
+        {
             Console.WriteLine();
-            Console.Write("Select an option: ");
+            Console.WriteLine("Invalid APS or Mathematics mark.");
 
-            string? option = Console.ReadLine();
+            Pause();
+            return null;
+        }
 
-            if (option == "1")
+        decimal? physicalScienceMark = null;
+
+        if (!string.IsNullOrWhiteSpace(physicalScienceInput))
+        {
+            if (!decimal.TryParse(physicalScienceInput, out decimal physicalScienceValue))
             {
-                Console.Clear();
-
-                Console.WriteLine("=====================================");
-                Console.WriteLine("        CREATE STUDENT PROFILE");
-                Console.WriteLine("=====================================");
                 Console.WriteLine();
-
-                Console.Write("Enter your first name: ");
-                string? firstName = Console.ReadLine();
-
-                Console.Write("Enter your last name: ");
-                string? lastName = Console.ReadLine();
-
-                Console.Write("Enter your province: ");
-                string? province = Console.ReadLine();
-
-                Console.Write("Enter your APS score: ");
-                string? apsInput = Console.ReadLine();
-
-                Console.Write("Enter your Mathematics marks: ");
-                string? mathematicsInput = Console.ReadLine();
-
-                Console.Write("Enter your Physical Science mark (leave blank if not applicable): ");
-                string? physicalScienceInput = Console.ReadLine();
-
-                if (string.IsNullOrWhiteSpace(firstName) ||
-                    string.IsNullOrWhiteSpace(lastName) ||
-                    string.IsNullOrWhiteSpace(province))
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("First namr, last name and province are required.");
-
-                    Pause();
-                    return null;
-                }
-
-                if (!int.TryParse(apsInput, out int apsScore) ||
-                    !decimal.TryParse(mathematicsInput, out decimal mathematicsMark))
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Invalid APS or Mathematics mark.");
-
-                    Pause();
-                    return null;
-                }
-
-                decimal? physicalScienceMark = null;
-
-                if (!string.IsNullOrWhiteSpace(physicalScienceInput))
-                {
-                    if (!decimal.TryParse(physicalScienceInput, out decimal physicalScienceValue))
-                    {
-                        Console.WriteLine();
-                        Console.WriteLine("Invalid Physical Science mark.");
-
-                        Pause();
-                        return null;
-                    }
-
-                    physicalScienceMark = physicalScienceValue;
-                }
-
-                var student = new Student
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Province = province,
-                    APSScore = apsScore,
-                    MathematicsMark = mathematicsMark,
-                    PhysicalScienceMark = physicalScienceMark
-                };
-
-                var savedStudent = studentService.AddStudent(student);
-
-                Console.WriteLine();
-                Console.WriteLine("Student profile created successfully.");
-                Console.WriteLine($"Your Student ID is {savedStudent.Id}");
-
-                Console.WriteLine();
-                Console.WriteLine("Keep this ID. You will use it to access your profile.");
+                Console.WriteLine("Invalid Physical Science mark.");
 
                 Pause();
-
-                return savedStudent;
-            }
-
-            if (option == "2")
-            {
-                Console.WriteLine();
-                Console.Write("Enter your Student ID: ");
-
-                string? studentIdInput = Console.ReadLine();
-
-                if (!int.TryParse(studentIdInput, out int studentId))
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("Invalid Student ID.");
-
-                    Pause();
-                    return null;
-                }
-
-                var student = studentService.GetStudentById(studentId);
-
-                if (student == null)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("No student profile was found with that ID.");
-
-                    Pause();
-                    return null;
-                }
-
-                Console.WriteLine();
-                Console.WriteLine($"Welcome back, {student.FirstName} {student.LastName}.");
-
-                Pause();
-                return student;
-            }
-
-            if (option == "3")
-            {
                 return null;
             }
 
+            physicalScienceMark = physicalScienceValue;
+        }
+
+        var student = new Student
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            Province = province,
+            APSScore = apsScore,
+            MathematicsMark = mathematicsMark,
+            PhysicalScienceMark = physicalScienceMark
+        };
+
+        var savedStudent = studentService.AddStudent(student);
+
+        Console.WriteLine();
+        Console.WriteLine("Student profile created successfully.");
+        Console.WriteLine($"Your Student ID is {savedStudent.Id}");
+
+        Console.WriteLine();
+        Console.WriteLine("Keep this ID. You will use it to access your profile.");
+
+        Pause();
+
+        return savedStudent;
+    }
+
+    if (option == "2")
+    {
+        Console.WriteLine();
+        Console.Write("Enter your Student ID: ");
+
+        string? studentIdInput = Console.ReadLine();
+
+        if (!int.TryParse(studentIdInput, out int studentId))
+        {
             Console.WriteLine();
-            Console.WriteLine("Invalid option.");
+            Console.WriteLine("Invalid Student ID.");
 
             Pause();
-
             return null;
         }
+
+        var student = studentService.GetStudentById(studentId);
+
+        if (student == null)
+        {
+            Console.WriteLine();
+            Console.WriteLine("No student profile was found with that ID.");
+
+            Pause();
+            return null;
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"Welcome back, {student.FirstName} {student.LastName}.");
+
+        Pause();
+        return student;
+    }
+
+    if (option == "3")
+    {
+        return null;
+    }
+
+    Console.WriteLine();
+    Console.WriteLine("Invalid option.");
+
+    Pause();
+
+    return null;
+}
+
 
 static void Pause()
 {

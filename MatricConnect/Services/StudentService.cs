@@ -12,4 +12,9 @@ public class StudentService(MatricConnectContext context)
 
         return student;
     }
+
+    public Student? GetStudentById(int studentId)
+    {
+        return context.Students.FirstOrDefault(s => s.Id == studentId);
+    }
 }

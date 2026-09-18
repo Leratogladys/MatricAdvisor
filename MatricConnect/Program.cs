@@ -6,7 +6,7 @@ using SQLitePCL;
 using System.Xml;
 using System.Xml.Linq;
 
-var databasePath = Path.Combine(AppContext.BaseDirectory, "MatricConnect.db");
+var databasePath = Path.Combine(AppContext.BaseDirectory,"MatricConnect.db");
 
 var options = new DbContextOptionsBuilder<MatricConnectContext>()
             .UseSqlite($"Data Source={databasePath}")
@@ -295,9 +295,13 @@ static void SearchUniversities(
     Pause();
 }
 
-static void ViewSavedProgrammes(SavedProgrammeService savedProgrammeService, Student currentStudent)
+static void ViewSavedProgrammes(
+    SavedProgrammeService savedProgrammeService,
+    Student currentStudent)
 {
-    var savedProgrammes = savedProgrammeService.GetSavedProgrammesByStudent(currentStudent.Id);
+    var savedProgrammes =
+        savedProgrammeService.GetSavedProgrammesByStudent(
+            currentStudent.Id);
 
     Console.Clear();
 
@@ -309,22 +313,85 @@ static void ViewSavedProgrammes(SavedProgrammeService savedProgrammeService, Stu
     if (savedProgrammes.Count == 0)
     {
         Console.WriteLine("You have no saved programmes.");
+        Pause();
+        return;
+    }
+
+    for (int i = 0; i < savedProgrammes.Count; i++)
+    {
+        var savedProgramme = savedProgrammes[i];
+
+        Console.WriteLine(
+            $"{i + 1}. {savedProgramme.Programme.Name}");
+
+        Console.WriteLine(
+            $"   {savedProgramme.Programme.University.Name}");
+
+        Console.WriteLine();
+    }
+
+    Console.WriteLine("What would you like to do?");
+    Console.WriteLine("1. Remove a saved programme");
+    Console.WriteLine("2. Return to Main Menu");
+
+    Console.WriteLine();
+    Console.Write("Select an option: ");
+
+    string? option = Console.ReadLine();
+
+    if (option == "1")
+    {
+        Console.WriteLine();
+        Console.Write(
+            "Enter the number of the programme you want to remove: ");
+
+        string? selectionInput = Console.ReadLine();
+
+        if (!int.TryParse(selectionInput, out int selection) ||
+            selection < 1 ||
+            selection > savedProgrammes.Count)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Invalid selection.");
+
+            Pause();
+            return;
+        }
+
+        var selectedSavedProgramme =
+             savedProgrammes[selection - 1];
+
+        bool removed =
+            savedProgrammeService.RemoveSavedProgramme(
+                currentStudent.Id,
+                selectedSavedProgramme.ProgrammeId);
+
+        Console.WriteLine();
+
+        if (removed)
+        {
+            Console.WriteLine("Programme removed successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Programme could not be removed.");
+        }
+
+        Pause();
+    }
+    else if (option == "2")
+    {
+        return;
     }
     else
     {
-        for (int i = 0; i < savedProgrammes.Count; i++)
-        {
-            var savedProgramme = savedProgrammes[1];
+        Console.WriteLine();
+        Console.WriteLine("Invalid option.");
 
-            Console.WriteLine($"{i + 1}. {savedProgramme.Programme.Name}");
-            Console.WriteLine($"{savedProgramme.Programme.University.Name}");
-
-            Console.WriteLine();
-        }
+        Pause();
     }
-
-    Pause();
 }
+
 
 static Student? SelectStudentProfile(StudentService studentService)
 {

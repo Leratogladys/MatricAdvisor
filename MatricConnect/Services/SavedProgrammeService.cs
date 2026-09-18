@@ -11,8 +11,9 @@ public class SavedProgrammeService(MatricConnectContext context)
         int programmeId)
     {
         bool alreadySaved = context.SavedProgrammes
-            .Any(sp => sp.StudentId == studentId &&
-                 sp.ProgrammeId == programmeId);
+            .Any(sp =>
+                sp.StudentId == studentId &&
+                sp.ProgrammeId == programmeId);
 
         if (alreadySaved)
         {
@@ -31,12 +32,33 @@ public class SavedProgrammeService(MatricConnectContext context)
         return true;
     }
 
-    public List<SavedProgramme> GetSavedProgrammesByStudent(int studentId)
+    public List<SavedProgramme> GetSavedProgrammesByStudent(
+        int studentId)
     {
         return context.SavedProgrammes
             .Where(sp => sp.StudentId == studentId)
             .Include(sp => sp.Programme)
             .ThenInclude(p => p.University)
             .ToList();
+    }
+
+    public bool RemoveSavedProgramme(
+        int studentId,
+        int programmeId)
+    {
+        var savedProgramme = context.SavedProgrammes
+            .FirstOrDefault(sp =>
+                sp.StudentId == studentId &&
+                sp.ProgrammeId == programmeId);
+
+        if (savedProgramme == null)
+        {
+            return false;
+        }
+
+        context.SavedProgrammes.Remove(savedProgramme);
+        context.SaveChanges();
+
+        return true;
     }
 }

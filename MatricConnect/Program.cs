@@ -6,13 +6,15 @@ using SQLitePCL;
 using System.Xml;
 using System.Xml.Linq;
 
-var databasePath = Path.Combine(AppContext.BaseDirectory,"MatricConnect.db");
+var options =
+    new DbContextOptionsBuilder<MatricConnectContext>()
+        .UseSqlite(DatabaseConfiguration.GetConnectionString())
+        .Options;
 
-var options = new DbContextOptionsBuilder<MatricConnectContext>()
-            .UseSqlite($"Data Source={databasePath}")
-            .Options;
+using var context =
+    new MatricConnectContext(options);
 
-using var context = new MatricConnectContext(options);
+context.Database.Migrate();
 
 DbInitializer.Seed(context);
 
@@ -258,7 +260,7 @@ static void SearchUniversities(
     Console.WriteLine("2. Return to Main Menu");
 
     Console.WriteLine();
-    Console.WriteLine("Select an option");
+    Console.Write("Select an option");
 
     string? option = Console.ReadLine();
     
@@ -292,7 +294,7 @@ static void SearchUniversities(
     }
 
 
-    Pause();
+ 
 }
 
 static void ViewSavedProgrammes(
@@ -342,8 +344,7 @@ static void ViewSavedProgrammes(
     if (option == "1")
     {
         Console.WriteLine();
-        Console.Write(
-            "Enter the number of the programme you want to remove: ");
+        Console.Write("Enter the number of the programme you want to remove: ");
 
         string? selectionInput = Console.ReadLine();
 

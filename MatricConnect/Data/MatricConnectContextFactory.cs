@@ -10,7 +10,7 @@ public class MatricConnectContextFactory
     {
         var optionsBuilder = new DbContextOptionsBuilder<MatricConnectContext>();
 
-        optionsBuilder.UseSqlite("Data Source=MatricConnect.db");
+        optionsBuilder.UseSqlite(DatabaseConfiguration.GetConnectionString());
 
         return new MatricConnectContext(optionsBuilder.Options);
     }

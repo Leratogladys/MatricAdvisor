@@ -1,207 +1,156 @@
-# 🎓 MatricConnect
+# MatricAdvisor
 
-> Helping South African matric students discover tertiary study opportunities based on their academic profile.
+> A South African tertiary-study discovery project focused on helping matric learners understand APS scores, university programmes, and programme requirements.
 
-## Overview
+## Project Status
 
-Matric Advisor is a web application designed to simplify the transition from high school to higher education in South Africa.
+**In active development.**
 
-Instead of manually searching through multiple university websites, students can enter their academic profile and receive a list of university programmes they are likely eligible for, along with entry requirements and important application deadlines.
+This repository contains two stages of the project:
 
-The project aims to make higher education information more accessible while reducing the complexity of researching tertiary study options.
+- `MatricConnect/` — the earlier C# console prototype used to validate the core university-search and eligibility idea.
+- `MatricAdvisor.API/` — the current ASP.NET Core Web API implementation.
 
----
+The API is being developed incrementally. The sections below deliberately separate what is implemented today from what is still planned.
 
-## The Problem
+## Problem
 
-Every year, thousands of South African matric students must answer questions like:
+Information about university programmes, APS requirements, required subjects, and application criteria is spread across many institution websites. MatricAdvisor explores how a single system could make that information easier for South African learners to navigate.
 
-- Which universities can I apply to?
-- Which programmes do I qualify for?
-- What APS score do I need?
-- What subjects are required?
-- When do applications close?
+## Current API Implementation
 
-This information is often spread across multiple university websites, making the process time-consuming and confusing.
+The `MatricAdvisor.API` project currently includes:
 
-Matric Advisor centralises this information into one platform, helping students make informed decisions more efficiently.
+- ASP.NET Core Web API on **.NET 10**
+- `StudentsController` with APS calculation:
+  - `POST /api/students/calculate-aps`
+- `UniversitiesController` with early university endpoints:
+  - `GET /api/universities`
+  - `GET /api/universities/{id}`
+- Entity Framework Core
+- PostgreSQL through `Npgsql.EntityFrameworkCore.PostgreSQL`
+- Initial EF Core migration
+- Domain models for:
+  - University
+  - Programme
+  - SubjectRequirement
+  - SubjectMark
+- University → Programme → SubjectRequirement relationships
+- Swagger / OpenAPI for API exploration
+- CORS configuration for a future frontend client
 
----
+> **Note:** The university controller currently uses placeholder data while database-backed endpoints are being developed.
 
-## MVP Scope
+## Current Architecture
 
-The current version focuses on a single core user journey:
-
-> A matric student enters their academic profile and receives a list of university programmes they may qualify for.
-
-### Current Features
-
-- Student profile creation
-- APS score input
-- Programme search
-- University information
-- Entry requirements
-- Application deadlines
-- Eligibility recommendations
-- Save favourite programmes
-
----
-
-## Future Roadmap
-
-The long-term vision includes:
-
-- Bursary discovery
-- Scholarship opportunities
-- Career guidance
-- Application tracking
-- Document management
-- Email reminders
-- Institution dashboards
-- Student notifications
-
-These features are intentionally outside the MVP to maintain a focused and achievable development scope.
-
----
+```text
+Client / API consumer
+        |
+        v
+ASP.NET Core Controllers
+        |
+        v
+Domain Models + Business Rules
+        |
+        v
+Entity Framework Core
+        |
+        v
+PostgreSQL
+```
 
 ## Tech Stack
 
-### Backend
+### Implemented
 
 - C#
+- .NET 10
 - ASP.NET Core Web API
 - Entity Framework Core
-
-### Database
-
 - PostgreSQL
+- Npgsql
+- Swagger / OpenAPI
+- Git / GitHub
 
-### Frontend
+### Development Tools
 
-- React
-- HTML5
-- CSS3
-
-### Tools
-
-- Git
-- GitHub
-- Postman
 - Visual Studio
+- Postman
 - DBeaver
 
----
+## In Progress
 
-## Architecture
+The next API milestones are:
 
-```text
-React Frontend
-       │
-       ▼
-ASP.NET Core Web API
-       │
-       ▼
-Business Logic
-       │
-       ▼
-Entity Framework Core
-       │
-       ▼
-PostgreSQL Database
-```
+- Replace placeholder university responses with PostgreSQL-backed queries
+- Complete programme endpoints
+- Implement programme-requirement queries
+- Move eligibility rules into dedicated business/service logic
+- Add request/response DTOs and validation
+- Improve error handling and API response consistency
 
----
+## Planned
 
-## Example User Journey
+These are roadmap items and should not be read as currently implemented:
 
-1. Student creates a profile.
-2. Student enters:
-   - APS Score
-   - Subjects
-   - Province
-   - Preferred field of study
-3. The system evaluates eligibility.
-4. Matching university programmes are displayed.
-5. Student saves preferred study options.
+- Persistent student profiles
+- Full programme eligibility recommendations
+- Saved/favourite programmes
+- React frontend
+- Authentication
+- Bursary and scholarship discovery
+- Application tracking
+- Notifications and reminders
+- Automated tests and CI/CD
 
----
-
-## Project Structure
+## Core Data Model
 
 ```text
-MatricConnect/
-
-├── backend/
-│   ├── Controllers/
-│   ├── Models/
-│   ├── Services/
-│   ├── Data/
-│   ├── DTOs/
-│   └── Migrations/
-│
-├── frontend/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   └── assets/
-│
-└── README.md
+University
+    |
+    | 1..*
+    v
+Programme
+    |
+    | 1..*
+    v
+SubjectRequirement
 ```
 
----
+A programme stores a minimum APS and can have multiple subject requirements. This structure is intended to support programme-specific eligibility rules as the API evolves.
 
-## Database (Initial Entities)
+## Running the API
 
-- Student
-- University
-- Programme
-- ProgrammeRequirement
-- SavedProgramme
+### Prerequisites
 
----
+- .NET 10 SDK
+- PostgreSQL
+- A PostgreSQL connection string configured as `DefaultConnection`
 
-## Development Status
+From the repository root:
 
-🚧 In Active Development
+```bash
+cd MatricAdvisor.API
+dotnet restore
+dotnet ef database update
+dotnet run
+```
 
-Current milestone:
-
-- Project planning
-- Database design
-- Backend architecture
-- MVP implementation
-
----
+When running in the Development environment, Swagger UI is enabled for exploring available endpoints.
 
 ## Design Principles
 
-- Simplicity over feature overload
-- Real-world usability
-- Scalable architecture
-- Clean code
-- Separation of concerns
-- Mobile-friendly design
-
----
-
-## Vision
-
-Matric Advisor aims to become a trusted platform that helps South African learners confidently navigate their journey from high school into higher education.
-
-The initial MVP focuses on university programme discovery, with future expansion into bursaries, applications, and student support services.
-
----
+- Keep the MVP focused
+- Prefer clear, maintainable backend structure over feature overload
+- Separate implemented functionality from roadmap ideas
+- Model real university requirements accurately
+- Evolve from a validated console prototype into an API-driven application
 
 ## Author
 
-**Lerato Gladys**
+**Lerato Molefe**  
+Junior backend software developer in training, focused on C# and .NET.
 
-Student Software Developer
-
-Portfolio:
-https://github.com/Leratogladys
-
-LinkedIn:
-https://www.linkedin.com/in/lerato-molefe-7403891b7
-
-
+- Portfolio: https://leratogladys.github.io/Portfolio
+- GitHub: https://github.com/Leratogladys
+- LinkedIn: https://www.linkedin.com/in/lerato-molefe-7403891b7

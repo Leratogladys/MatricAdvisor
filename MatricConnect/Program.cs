@@ -8,6 +8,7 @@ using MatricConnect.Data;
 using MatricConnect.Models;
 using MatricConnect.Services;
 using Microsoft.EntityFrameworkCore;
+using MatricConnect.Validation;
 
 namespace MatricConnect
 {
@@ -556,34 +557,22 @@ namespace MatricConnect
 
                     string? physicalScienceInput = Console.ReadLine();
 
-                    if (string.IsNullOrWhiteSpace(firstName) ||
-                        string.IsNullOrWhiteSpace(lastName) ||
-                        string.IsNullOrWhiteSpace(province))
+                   
+                    if (!int.TryParse(apsInput,out int apsScore))
                     {
                         Console.WriteLine();
 
-                        Console.WriteLine("First name, last name and province are required.");
+                        Console.WriteLine("APS score must be a whole number.");
 
                         Pause();
                         continue;
                     } // end if
 
-                    if (!int.TryParse(apsInput,out int apsScore) || apsScore < 0)
+                    if (!decimal.TryParse(mathematicsInput, out decimal mathematicsMark))
                     {
                         Console.WriteLine();
 
-                        Console.WriteLine("APS score cannot be negative.");
-
-                        Pause();
-                        continue;
-                    } // end if
-
-                    if (!decimal.TryParse(mathematicsInput, out decimal mathematicsMark) ||
-                        mathematicsMark < 0 || mathematicsMark > 100)
-                    {
-                        Console.WriteLine();
-
-                        Console.WriteLine("Mathematics mark must be between 0 and 100.");
+                        Console.WriteLine("Mathematics mark must be a number.");
 
                         Pause();
                         continue;
@@ -591,17 +580,13 @@ namespace MatricConnect
 
                     decimal? physicalScienceMark = null;
 
-                    if (!string.IsNullOrWhiteSpace(
-                            physicalScienceInput))
+                    if (!string.IsNullOrWhiteSpace(physicalScienceInput))
                     {
-                        if (!decimal.TryParse(physicalScienceInput,
-                            out decimal physicalScienceValue) ||
-                            physicalScienceValue < 0 ||
-                            physicalScienceValue > 100)
+                        if (!decimal.TryParse(physicalScienceInput, out decimal physicalScienceValue))
                         {
                             Console.WriteLine();
 
-                            Console.WriteLine("Physical Science mark must be between 0 and 100.");
+                            Console.WriteLine("Physical Science mark must be a number or left blank.");
 
                             Pause();
                             continue;
@@ -612,13 +597,30 @@ namespace MatricConnect
 
                     var student = new Student
                     {
-                        FirstName = firstName,
-                        LastName = lastName,
-                        Province = province,
+                        FirstName = firstName ?? string.Empty,
+                        LastName = lastName ?? string.Empty,
+                        Province = province ?? string.Empty,
                         APSScore = apsScore,
                         MathematicsMark = mathematicsMark,
                         PhysicalScienceMark = physicalScienceMark
                     };
+
+                    var studentValidator = new StudentValidator();
+
+                    var validationErrors = studentValidator.Validate(student);
+
+                    if(validationErrors.Count > 0)
+                    {
+                        Console.WriteLine();
+
+                        foreach (var error in validationErrors)
+                        {
+                            Console.WriteLine(error);
+                        } // end foreach
+
+                        Pause();
+                        continue;
+                    } // end if
 
                     var savedStudent = studentService.AddStudent(student);
 

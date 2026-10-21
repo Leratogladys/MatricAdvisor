@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="MatricConnect.Core/MatricConnect.Core.csproj" Id="69e74c1b-3687-458c-a4ec-85ec1ae0997c" />
   <Project Path="MatricConnect/MatricConnect.csproj" />
 </Solution>

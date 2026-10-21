@@ -246,9 +246,9 @@ namespace MatricConnect
 
             Console.Clear();
 
-            Console.WriteLine("===================================================");
+            Console.WriteLine("========================================================");
             Console.WriteLine($"      PROGRAMMES AT {selectedUniversity.Name.ToUpper()}");
-            Console.WriteLine("===================================================");
+            Console.WriteLine("========================================================");
             Console.WriteLine();
 
             for (int i = 0; i < programmes.Count; i++)
@@ -670,7 +670,7 @@ namespace MatricConnect
 
                     Console.WriteLine();
 
-                    Console.WriteLine($"Welcome back, {student.FirstName} {student.LastName}!.");
+                    Console.WriteLine($"Welcome back, {student.FirstName} {student.LastName}!");
 
                     Pause();
 

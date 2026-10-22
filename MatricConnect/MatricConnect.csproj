@@ -20,11 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MatricConnect.Core\MatricConnect.Core.csproj" />
+    <ProjectReference Include="..\MatricConnect.Infrastructure\MatricConnect.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

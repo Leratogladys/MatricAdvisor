@@ -9,6 +9,7 @@ using MatricConnect.Models;
 using MatricConnect.Services;
 using Microsoft.EntityFrameworkCore;
 using MatricConnect.Validation;
+using MatricConnect.Infrastructure.Repositories;
 
 namespace MatricConnect
 {
@@ -48,7 +49,9 @@ namespace MatricConnect
 
             var eligibilityService = new EligibilityService();
 
-            var studentService = new StudentService(context);
+            var studentRepository = new StudentRepository(context);
+
+            var studentService = new StudentService(studentRepository);
 
             var savedProgrammeService = new SavedProgrammeService(context);
 

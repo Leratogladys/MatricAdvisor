@@ -1,31 +1,34 @@
-﻿// Programmer name : Lerato Molefe
+﻿// Programmer name: Lerato Molefe
 // Project name    : Matric Connect
-// Purpose         : Provides database operations for creating and
+// Purpose         : Implements database operations for creating and
 //                   retrieving student profiles.
 
+using MatricConnect.Core.Interfaces;
 using MatricConnect.Data;
 using MatricConnect.Models;
 
-namespace MatricConnect.Services
+
+namespace MatricConnect.Infrastructure.Repositories
 {
-    public class StudentService
+    public class StudentRepository : IStudentRepository
     {
         private readonly MatricConnectContext _context;
 
-        public StudentService(MatricConnectContext context)
+        public StudentRepository(MatricConnectContext context)
         {
             //
-            // Name              : StudentService(MatricConnectContext context)
-            // Purpose           : Initializes the student service with access
-            //                     to the Matric Connect database context.
+            // Name              : StudentRepository(MatricConnectContext context)
+            // Purpose           : Initializes the repository with the
+            //                     database context used for student data.
             // Re-use            : None
             // Method Parameters : MatricConnectContext context
-            //                     - database context used to access student data
+            //                     - database context used to access students
             // Output Type       : None
             //
 
             _context = context;
-        } // end method
+
+        } // end constructor
 
         public Student AddStudent(Student student)
         {
@@ -43,7 +46,7 @@ namespace MatricConnect.Services
             _context.SaveChanges();
 
             return student;
-        } // end method
+        }// end method AddStudent
 
         public Student? GetStudentById(int studentId)
         {
@@ -54,12 +57,10 @@ namespace MatricConnect.Services
             // Method Parameters : int studentId
             //                     - ID of the student profile to retrieve
             // Output Type       : Student?
-            //                     - matching student when found
-            //                     - null when no matching student exists
+            //                     - matching student, or null if not found
             //
 
-            return _context.Students
-                .FirstOrDefault(s => s.Id == studentId);
-        } // end method
-    } // end class StudentService
-} // end namespace MatricConnect.Services
+            return _context.Students.FirstOrDefault(s => s.Id == studentId);
+        } // end method GetStudentById
+    } // end class StudentRepository
+} // end namespace MatricConnect.Infrastructure.Repositories

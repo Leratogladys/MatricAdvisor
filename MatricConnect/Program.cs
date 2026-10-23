@@ -45,7 +45,8 @@ namespace MatricConnect
 
             DbInitializer.Seed(context);
 
-            var universityService = new UniversityService(context);
+            var universityRepository = new UniversityRepository(context);
+            var universityService = new UniversityService(universityRepository);
 
             var eligibilityService = new EligibilityService();
 

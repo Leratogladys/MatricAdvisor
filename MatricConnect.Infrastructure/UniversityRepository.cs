@@ -5,19 +5,20 @@
 
 using MatricConnect.Data;
 using MatricConnect.Models;
+using MatricConnect.Core.Interfaces;
 
-namespace MatricConnect.Services
+namespace MatricConnect.Infrastructure.Repositories
 {
-    public class UniversityService
+    public class UniversityRepository : IUniversityRepository
     {
         private readonly MatricConnectContext _context;
 
-        public UniversityService(MatricConnectContext context)
+        public UniversityRepository(MatricConnectContext context)
         {
             //
-            // Name              : UniversityService(
+            // Name              : UniversityRepository(
             //                     MatricConnectContext context)
-            // Purpose           : Initializes the university service with
+            // Purpose           : Initializes the university repository with
             //                     access to the Matric Connect database.
             // Re-use            : None
             // Method Parameters : MatricConnectContext context
@@ -107,8 +108,7 @@ namespace MatricConnect.Services
             //                     - null when no matching programme exists
             //
 
-            return _context.Programmes
-                .FirstOrDefault(p => p.Id == programmeId);
+            return _context.Programmes.FirstOrDefault(p => p.Id == programmeId);
         } // end method
-    } // end class UniversityService
-} // end namespace MatricConnect.Services
+    } // end class UniversityRepository
+} // end namespace MatricConnect.Repository

@@ -54,7 +54,9 @@ namespace MatricConnect
 
             var studentService = new StudentService(studentRepository);
 
-            var savedProgrammeService = new SavedProgrammeService(context);
+            var savedProgrammeRepository = new SavedProgrammeRepository(context);
+
+            var savedProgrammeService =  new SavedProgrammeService(savedProgrammeRepository);
 
             var currentStudent = SelectStudentProfile(studentService);
 

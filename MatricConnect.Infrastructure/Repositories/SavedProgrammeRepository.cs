@@ -3,17 +3,19 @@
 // Purpose         : Manages programmes saved by students, including
 //                   saving, retrieving, and removing saved programmes.
 
+using MatricConnect.Core.Interfaces;
 using MatricConnect.Data;
 using MatricConnect.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MatricConnect.Services
+namespace MatricConnect.Infrastructure.Repositories
 {
-    public class SavedProgrammeService
+    // SavedProgrammeRepository.cs
+    public class SavedProgrammeRepository : ISavedProgrammeRepository
     {
         private readonly MatricConnectContext _context;
 
-        public SavedProgrammeService(MatricConnectContext context)
+        public SavedProgrammeRepository(MatricConnectContext context)
         {
             //
             // Name              : SavedProgrammeService(

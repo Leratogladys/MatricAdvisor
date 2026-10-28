@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="MatricConnect.Core/MatricConnect.Core.csproj" Id="69e74c1b-3687-458c-a4ec-85ec1ae0997c" />
   <Project Path="MatricConnect.Infrastructure/MatricConnect.Infrastructure.csproj" Id="e7ce5ceb-f73b-4cdd-9508-6b6a4262d11c" />
+  <Project Path="MatricConnect.Web/MatricConnect.Web.csproj" Id="555f509d-f991-48bd-bf0d-3d79030617a4" />
   <Project Path="MatricConnect/MatricConnect.csproj" />
 </Solution>

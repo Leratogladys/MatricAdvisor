@@ -4,12 +4,15 @@
 //                   student profile selection, university searching,
 //                   eligibility checking, and saved programme management.
 
+using MatricConnect.Core.Interfaces;
 using MatricConnect.Data;
+using MatricConnect.Infrastructure.Repositories;
 using MatricConnect.Models;
 using MatricConnect.Services;
-using Microsoft.EntityFrameworkCore;
 using MatricConnect.Validation;
-using MatricConnect.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 
 namespace MatricConnect
 {
@@ -19,44 +22,53 @@ namespace MatricConnect
         {
             //
             // Name              : void Main()
-            // Purpose           : Configures the database, creates application
-            //                     services, selects a student profile, and
-            //                     starts the Matric Connect application.
-            // Re-use            : GetConnectionString(),
-            //                     MatricConnectContext(),
-            //                     Seed(),
-            //                     UniversityService(),
-            //                     EligibilityService(),
-            //                     StudentService(),
-            //                     SavedProgrammeService(),
+            // Purpose           : Configures dependency injection and the database,
+            //                     selects a student profile, and starts the
+            //                     Matric Connect application.
+            // Re-use            : DatabaseConfiguration.GetConnectionString(),
+            //                     DbInitializer.Seed(),
             //                     SelectStudentProfile(),
             //                     RunApplication()
             // Method Parameters : None
             // Output Type       : None
             //
 
-            var options = new DbContextOptionsBuilder<MatricConnectContext>()
-                    .UseSqlite(DatabaseConfiguration.GetConnectionString())
-                    .Options;
+            var services = new ServiceCollection();
 
-            using var context = new MatricConnectContext(options);
+            services.AddDbContext<MatricConnectContext>(options =>
+              options.UseSqlite(DatabaseConfiguration.GetConnectionString()));
+
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<IUniversityRepository, UniversityRepository>();
+            services.AddScoped<ISavedProgrammeRepository, SavedProgrammeRepository>();
+
+            services.AddScoped<StudentService>();
+            services.AddScoped<UniversityService>();
+            services.AddScoped<SavedProgrammeService>();
+            services.AddScoped<EligibilityService>();
+
+            using var serviceProvider = services.BuildServiceProvider(
+                new ServiceProviderOptions
+                {
+                    ValidateScopes = true,
+                    ValidateOnBuild = true
+                });
+
+            using var scope = serviceProvider.CreateScope();
+
+            var context = scope.ServiceProvider.GetRequiredService<MatricConnectContext>();
 
             context.Database.Migrate();
 
             DbInitializer.Seed(context);
 
-            var universityRepository = new UniversityRepository(context);
-            var universityService = new UniversityService(universityRepository);
+            var universityService = scope.ServiceProvider.GetRequiredService<UniversityService>();
 
-            var eligibilityService = new EligibilityService();
+            var eligibilityService = scope.ServiceProvider.GetRequiredService<EligibilityService>();
 
-            var studentRepository = new StudentRepository(context);
+            var studentService = scope.ServiceProvider.GetRequiredService<StudentService>();
 
-            var studentService = new StudentService(studentRepository);
-
-            var savedProgrammeRepository = new SavedProgrammeRepository(context);
-
-            var savedProgrammeService =  new SavedProgrammeService(savedProgrammeRepository);
+            var savedProgrammeService = scope.ServiceProvider.GetRequiredService<SavedProgrammeService>();
 
             var currentStudent = SelectStudentProfile(studentService);
 
@@ -67,6 +79,7 @@ namespace MatricConnect
                     eligibilityService,
                     savedProgrammeService,
                     currentStudent);
+            
             } // end if
         } // end method
 

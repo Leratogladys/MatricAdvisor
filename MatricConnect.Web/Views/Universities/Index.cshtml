@@ -1,0 +1,77 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays province selection and university search results.
+*@
+
+@model MatricConnect.Web.Models.UniversitySearchViewModel
+
+@{
+    ViewData["Title"] = "Search Universities";
+    bool searchSubmitted = Context.Request.Query.ContainsKey("SelectedProvince");
+}
+
+<h1>Search Universities</h1>
+
+<p>Select a province to begin browsing universities.</p>
+
+<form asp-controller="Universities" asp-action="Index" method="get">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-8">
+            <label asp-for="SelectedProvince" class="form-label">
+                Province
+            </label>
+
+            <select asp-for="SelectedProvince" class="form-select">
+                <option value="">Select a province</option>
+
+                @foreach (var province in Model.Provinces)
+                {
+                    <option value="@province">@province</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">
+                Find Universities
+            </button>
+        </div>
+    </div>
+
+    <span asp-validation-for="SelectedProvince"
+          class="text-danger d-block mt-2"></span>
+</form>
+
+@if (searchSubmitted && ViewData.ModelState.IsValid)
+{
+    <hr class="my-4" />
+
+    <h2>Universities in @Model.SelectedProvince</h2>
+
+    @if (Model.Universities.Count == 0)
+    {
+        <p>No universities were found for this province.</p>
+    }
+    else
+    {
+        <div class="row g-3 mt-1">
+            @foreach (var university in Model.Universities)
+            {
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h3 class="h5 card-title">@university.Name</h3>
+                            <p class="card-text">@university.Province</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
+else if (!searchSubmitted)
+{
+    <p class="mt-4">
+        Choose a province and select Find Universities to see results.
+    </p>
+}

@@ -106,5 +106,47 @@ namespace MatricConnect.Web.Controllers
 
             return View(model);
         } // end method Programmes
+
+        [HttpGet]
+        public IActionResult ProgrammeDetails(int id)
+        {
+            //
+            // Name              : IActionResult ProgrammeDetails(int id)
+            // Purpose           : Displays a programme and its entry requirements.
+            // Re-use            : UniversityService.GetProgrammeById(),
+            //                     UniversityService.GetUniversityById()
+            // Method Parameters : int id
+            //                     - ID of the selected programme
+            // Output Type       : IActionResult
+            //                     - programme details view, or a 404 response
+            //                       when the programme or university is not found
+            //
+
+            if(!ModelState.IsValid || id <= 0)
+            {
+                return NotFound();
+            } // end if
+
+            var programme = _universityService.GetProgrammeById(id);
+
+            if (programme == null)
+            {
+                return NotFound();
+            } // end if
+
+            var university = _universityService.GetUniversityById(programme.UniversityId);
+            if(university == null)
+            {
+                return NotFound();
+            } // end if
+
+            var model = new ProgrammeDetailsViewModel
+            {
+                Programme = programme,
+                University = university
+            };
+
+            return View(model);
+        } // end method ProgrammeDetails
     } // end class UniversitiesController
 } // end namespace MatricConnect.Web.Controllers

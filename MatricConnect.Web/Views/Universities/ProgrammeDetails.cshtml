@@ -1,0 +1,67 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays programme details and entry requirements.
+*@
+
+@model MatricConnect.Web.Models.ProgrammeDetailsViewModel
+
+@{
+    ViewData["Titlle"] = "Programme Details";
+}
+
+<h1>@Model.Programme.Name</h1>
+
+<p class="lead">@Model.University.Name</p>
+
+<p>
+    <strong>Province:</strong> @Model.University.Province
+</p>
+
+<p>
+    <strong>Field of study:</strong> @Model.Programme.FieldOfStudy
+</p>
+
+<a asp-controller="Universities"
+   asp-action="Programmes"
+   asp-route-id="@Model.University.Id"
+   class="btn btn-outline-secondary mb-4">
+   Back to Programmes
+</a>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="h4">Entry Requirements</h2>
+
+        <dl class="row">
+            <dt class="col-sm-4">Minimum APS</dt>
+            <dd class="col-sm-8">@Model.Programme.RequiredAPS</dd>
+
+            <dt class="col-sm-4">Mathematics</dt>
+            <dd class="col-sm-8">@Model.Programme.RequiredMathematics.ToString("0.##")%</dd>
+
+                <dt class="col-sm-4">Physical Science</dt>
+                <dd class="col-sm-8">
+                    @if(Model.Programme.RequiredPhysicalScience.HasValue)
+                {
+                    <span>
+                        @Model.Programme.RequiredPhysicalScience.Value.ToString("0.##")%
+                    </span>
+                }
+                else
+                {
+                    <span>Not Required</span>
+                }
+            </dd>
+
+            <dt class="col-sm-4">Applications Deadline</dt>
+            <dd class="col-sm-8">
+                @Model.Programme.ApplicationDeadline.ToString(" dd MMMM yyyy")
+            </dd>
+        </dl>
+
+        <p class="text-muted mb-0">
+            Universities may have additional admission requirements.
+            Meeting these minimum requirements does not guarantee admission.
+        </p>
+    </div>
+</div>

@@ -6,7 +6,7 @@
 @model MatricConnect.Web.Models.ProgrammeDetailsViewModel
 
 @{
-    ViewData["Titlle"] = "Programme Details";
+    ViewData["Title"] = "Programme Details";
 }
 
 <h1>@Model.Programme.Name</h1>
@@ -65,3 +65,113 @@
         </p>
     </div>
 </div>
+<div class="card mt-4">
+    <div  class="card-body">
+        <h2 class="h4">Check Your Eligibility</h2>
+
+        <p>Enter your academic results to compare them with this programme.</p>
+
+        <form asp-controller="Universities"
+              asp-action="CheckEligibility"
+              asp-route-id="@Model.Programme.Id"
+              method="post">
+          
+          <div class="mb-3">
+              <label asp-for="EligibilityInput.APSScore"
+              class="form-label"></label>
+
+              <input asp-for="EligibilityInput.APSScore"
+              class="form-control" type="number" min="0" max="57" step="1" />
+
+              <span asp-validation-for="EligibilityInput.APSScore" 
+              class="text-danger"></span>
+
+          </div>
+
+          <div class="mb-3">
+              <label asp-for="EligibilityInput.MathematicsMark"
+               class="form-label"></label>
+
+               <input asp-for="EligibilityInput.MathematicsMark"
+                   class="form-control"
+                   type="number"
+                   min="0"
+                   max="100"
+                   step="0.01" />
+
+                   <span  asp-validation-for="EligibilityInput.MathematicsMark"
+                          class="text-danger"></span>
+          </div>
+
+           <div class="mb-3">
+                <label asp-for="EligibilityInput.PhysicalScienceMark"
+                       class="form-label"></label>
+
+                <input asp-for="EligibilityInput.PhysicalScienceMark"
+                       class="form-control"
+                       type="number"
+                       min="0"
+                       max="100"
+                       step="0.01" />
+
+                <div class="form-text">
+                    Leave blank if you do not take Physical Science.
+                </div>
+
+                <span asp-validation-for="EligibilityInput.PhysicalScienceMark"
+                      class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Check Eligibility
+            </button>
+        </form>
+
+        @if (Model.EligibilityChecked)
+        {
+            <div id="eligibility-result" class="mt-4" role="status">
+                @if (Model.EligibilityIssues.Count == 0)
+                {
+                    <div class="alert alert-success">
+                        You MEET the requirements currently evaluated
+                        by Matric Connect.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <p>
+                            You do not meet all the requirements currently
+                            evaluated by Matric Connect:
+                        </p>
+
+                        <ul class="mb-0">
+                            @foreach (var issue in Model.EligibilityIssues)
+                            {
+                                <li>@issue</li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.querySelectorAll(
+            'input[name^="EligibilityInput."]'
+        ).forEach(function (input){
+           input.addEventListener('input', function () {
+                const result = document.getElementById('eligibility-result');
+
+                if(result) {
+                    result.hidden = true;
+                }
+            });
+        });
+    </script>
+}

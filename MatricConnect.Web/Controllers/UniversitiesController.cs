@@ -5,7 +5,7 @@
 using MatricConnect.Services;
 using MatricConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
+using MatricConnect.Models;
 
 
 namespace MatricConnect.Web.Controllers
@@ -13,21 +13,25 @@ namespace MatricConnect.Web.Controllers
     public class UniversitiesController : Controller
     {
         private readonly UniversityService _universityService;
+        private readonly EligibilityService _eligibilityService;
 
-        public UniversitiesController(UniversityService universityService)
+        public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService)
         {
-            //
             // Name              : UniversitiesController(
-            //                     UniversityService universityService)
-            // Purpose           : Receives the university service through
-            //                     dependency injection.
+            //                     UniversityService universityService,
+            //                     EligibilityService eligibilityService)
+            // Purpose           : Receives browsing and eligibility services
+            //                     through dependency injection.
             // Re-use            : None
             // Method Parameters : UniversityService universityService
             //                     - service used to retrieve browsing data
+            //                     EligibilityService eligibilityService
+            //                     - service used to evaluate entry requirements
             // Output Type       : None
             //
 
             _universityService = universityService;
+            _eligibilityService = eligibilityService;
         } // end constructor
 
         [HttpGet]
@@ -148,5 +152,74 @@ namespace MatricConnect.Web.Controllers
 
             return View(model);
         } // end method ProgrammeDetails
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CheckEligibility( int id,
+        [Bind(Prefix = "EligibilityInput")] EligibilityInputViewModel input)
+        {
+            //
+            // Name              : IActionResult CheckEligibility(
+            //                     int id, EligibilityInputViewModel input)
+            // Purpose           : Validates academic input and evaluates it
+            //                     against the selected programme's requirements.
+            // Re-use            : UniversityService.GetProgrammeById(),
+            //                     UniversityService.GetUniversityById(),
+            //                     EligibilityService.GetEligibilityIssues()
+            // Method Parameters : int id
+            //                     - ID of the programme being evaluated
+            //                     EligibilityInputViewModel input
+            //                     - academic results submitted through the form
+            // Output Type       : IActionResult
+            //                     - programme details with validation or results,
+            //                       or a 404 response for an invalid programme
+            //
+
+            if (id <= 0 || ModelState.GetFieldValidationState(nameof(id)) == Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Invalid)
+            {
+                return NotFound();
+            } // end if
+
+            var programme = _universityService.GetProgrammeById(id);
+
+            if (programme == null)
+            {
+                return NotFound();
+            } // end if
+
+            var university = _universityService
+                .GetUniversityById(programme.UniversityId);
+
+            if (university == null)
+            {
+                return NotFound();
+            } // end if
+
+            var model = new ProgrammeDetailsViewModel
+            {
+                Programme = programme,
+                University = university,
+                EligibilityInput = input
+            };
+
+            if (!ModelState.IsValid)
+            {
+                return View("ProgrammeDetails", model);
+            } // end if
+
+            var student = new Student
+            {
+                APSScore = input.APSScore!.Value,
+                MathematicsMark = input.MathematicsMark!.Value,
+                PhysicalScienceMark = input.PhysicalScienceMark
+            };
+
+            model.EligibilityIssues = _eligibilityService
+                .GetEligibilityIssues(student, programme);
+
+            model.EligibilityChecked = true;
+
+            return View("ProgrammeDetails", model);
+        } // end method CheckEligibility
     } // end class UniversitiesController
 } // end namespace MatricConnect.Web.Controllers

@@ -41,18 +41,19 @@ else
                     <p class="card-text">@programme.FieldOfStudy</p>
 
                     <dl class="row mb-0">
-                        <dt class="col-sm-6">Minimum APS</dt>
-                        <dd class="col-sm-6">@programme.RequiredAPS</dd>
-                        <dt class="col-sm-6">Mathematics</dt>
-                        <dd class="col-sm-6">@programme.RequiredMathematics.ToString("0.##")%</dd>
+                        <dt class="col-6">Minimum APS</dt>
+                        <dd class="col-6">@programme.RequiredAPS</dd>
 
-                            <dt class="col-ms-6">Physical Science</dt>
-                            <dd class="col-ms-6">
-                                @if(programme.RequiredPhysicalScience.HasValue)
+                        <dt class="col-6">Mathematics</dt>
+                        <dd class="col-6">
+                            @programme.RequiredMathematics.ToString("0.##")%
+                        </dd>
+
+                        <dt class="col-6">Physical Science</dt>
+                        <dd class="col-6">
+                            @if (programme.RequiredPhysicalScience.HasValue)
                             {
-                                <span>
-                                    @programme.RequiredPhysicalScience.Value.ToString("0.##")%
-                                </span>
+                                <span>@programme.RequiredPhysicalScience.Value.ToString("0.##")%</span>
                             }
                             else
                             {

@@ -95,5 +95,20 @@ namespace MatricConnect.Services
 
             return _universityRepository.GetProgrammeById(programmeId);
         } // end method GetProgrammeById
+
+        public University? GetUniversityById(int universityId)
+        {
+            //
+            // Name              : University? GetUniversityById(int universityId)
+            // Purpose           : Retrieves a university through the repository.
+            // Re-use            : IUniversityRepository.GetUniversityById
+            // Method Parameters : int universityId
+            //                     - ID of the university to retrieve
+            // Output Type       : University?
+            //                     - matching university, or null if not found
+            //
+
+            return _universityRepository.GetUniversityById(universityId);
+        } // end method GetUniverstyById
     } // end class UniversityService
 } // end namespace MatricConnect.Services

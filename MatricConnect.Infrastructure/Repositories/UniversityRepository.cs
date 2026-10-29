@@ -30,6 +30,10 @@ namespace MatricConnect.Infrastructure.Repositories
             _context = context;
         } // end method
 
+        public UniversityRepository()
+        {
+        }
+
         public List<string> GetProvince()
         {
             //
@@ -110,5 +114,21 @@ namespace MatricConnect.Infrastructure.Repositories
 
             return _context.Programmes.FirstOrDefault(p => p.Id == programmeId);
         } // end method
+
+        public University? GetUniversityById(int universityId)
+        {
+            //
+            // Name              : University? GetUniversityById(int universityId)
+            // Purpose           : Retrieves a university from the database by ID.
+            // Re-use            : None
+            // Method Parameters : int universityId
+            //                     - ID of the university to retrieve
+            // Output Type       : University?
+            //                     - matching university, or null if not found
+            //
+
+            return _context.Universities.FirstOrDefault(u => u.Id == universityId);
+
+        } // end method GetUniversityById
     } // end class UniversityRepository
 } // end namespace MatricConnect.Repository

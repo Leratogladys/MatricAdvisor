@@ -18,4 +18,8 @@
     <ProjectReference Include="..\MatricConnect.Core\MatricConnect.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

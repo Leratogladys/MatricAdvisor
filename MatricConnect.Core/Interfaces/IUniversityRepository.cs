@@ -53,5 +53,18 @@ namespace MatricConnect.Core.Interfaces
         //                     - matching programme, or null if not found
         //
         Programme? GetProgrammeById(int programmeId);
+
+        //
+        // Name              : University? GetUniversityById(int universityId)
+        // Purpose           : Retrieves a university using its unique ID.
+        // Re-use            : None
+        // Method Parameters : int universityId
+        //                     - ID of the university to retrieve
+        // Output Type       : University?
+        //                     - matching university, or null if not found
+        //
+        University? GetUniversityById(int universityId);
     } // end interface IUniversityRepository
+
+    
 } // end namespace MatricConnect.Core.Interfaces

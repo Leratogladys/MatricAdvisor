@@ -5,6 +5,7 @@
 using MatricConnect.Services;
 using MatricConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace MatricConnect.Web.Controllers
@@ -68,5 +69,42 @@ namespace MatricConnect.Web.Controllers
             return View(model);
        
         } // end method Index
+
+        [HttpGet]
+        public IActionResult Programmes(int id)
+        {
+            //
+            // Name              : IActionResult Programmes(int id)
+            // Purpose           : Displays programmes offered by a university.
+            // Re-use            : UniversityService.GetUniversityById(),
+            //                     UniversityService.GetProgrammesByUniversity()
+            // Method Parameters : int id
+            //                     - ID of the selected university
+            // Output Type       : IActionResult
+            //                     - programme list view, or a 404 response
+            //                       when the university does not exist
+            //
+
+            if(!ModelState.IsValid || id <= 0)
+            {
+                return NotFound();
+
+            } // end if 
+
+            var universty = _universityService.GetUniversityById(id);
+
+            if(universty == null)
+            {
+                return NotFound();
+            } // end if
+
+            var model = new UniversityProgrammesViewModel
+            {
+                University = universty,
+                Programmes = _universityService.GetProgrammesByUniversity(id)
+            };
+
+            return View(model);
+        } // end method Programmes
     } // end class UniversitiesController
 } // end namespace MatricConnect.Web.Controllers

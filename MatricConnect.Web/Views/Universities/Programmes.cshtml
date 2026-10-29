@@ -1,0 +1,61 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays programmes offered by the selected university.
+*@
+
+@model MatricConnect.Web.Models.UniversityProgrammesViewModel
+
+@{
+    ViewData["Title"] = "Browse Programmes";
+}
+
+<h1>Programmes at @Model.University.Name</h1>
+
+<p>@Model.University.Province</p>
+
+<a asp-controller="Universities"
+   asp-action="Index"
+   asp-route-selectedProvince="@Model.University.Province"
+   class="btn btn-outline-secondary mb-4">
+    Back to Universities
+</a>
+
+   @if (Model.Programmes.Count == 0)
+{
+    <p>No programmes are currently listed for this university.</p>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var programme in Model.Programmes)
+        {
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5 card-title">@programme.Name</h2>
+                    <p class="card-text">@programme.FieldOfStudy</p>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-6">Minimum APS</dt>
+                        <dd class="col-sm-6">@programme.RequiredAPS</dd>
+                        <dt class="col-sm-6">Mathematics</dt>
+                        <dd class="col-sm-6">@programme.RequiredMathematics.ToString("0.##")%</dd>
+
+                            <dt class="col-ms-6">Physical Science</dt>
+                            <dd class="col-ms-6">
+                                @if(programme.RequiredPhysicalScience.HasValue)
+                            {
+                                <span>
+                                    @programme.RequiredPhysicalScience.Value.ToString("0.##")%
+                                </span>
+                            }
+                            else
+                            {
+                                <span>Not required</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        }
+    </div>
+}

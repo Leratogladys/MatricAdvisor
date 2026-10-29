@@ -60,7 +60,13 @@
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-body">
-                            <h3 class="h5 card-title">@university.Name</h3>
+                            <h3 class="h5 card-title">
+                                <a asp-controller="Universities"
+                                   asp-action="Programmes"
+                                   asp-route-id="@university.Id">
+                                    @university.Name
+                               </a>
+                            </h3>
                             <p class="card-text">@university.Province</p>
                         </div>
                     </div>

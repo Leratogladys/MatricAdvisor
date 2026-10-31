@@ -1,0 +1,53 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays the student profile selected in the session.
+*@
+
+@model MatricConnect.Models.Student
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h1>My Profile</h1>
+
+<dl class="row">
+    <dt class="col-5">Student ID</dt>
+    <dd class="col-7">@Model.Id</dd>
+
+    <dt class="col-5">Name</dt>
+    <dd class="col-7">@Model.FirstName @Model.LastName</dd>
+
+    <dt class="col-5">Home province</dt>
+    <dd class="col-7">@Model.Province</dd>
+
+    <dt class="col-5">APS score</dt>
+    <dd class="col-7">@Model.APSScore</dd>
+
+    <dt class="col-5">Mathematics</dt>
+    <dd class="col-7">@Model.MathematicsMark.ToString("0.##")%</dd>
+
+    <dt class="col-5">Physical Science</dt>
+    <dd class="col-7">
+        @if(Model.PhysicalScienceMark.HasValue)
+        {
+            <span>@Model.PhysicalScienceMark.Value.ToString("0.##")%</span>
+        }
+        else
+        {
+            <span>Not Provided</span>
+        }
+    </dd>
+</dl>
+
+    <a asp-controller="Universities"
+       asp-action="Index"
+       class="btn btn-primary">
+       Search Universities
+   </a>
+
+    <a asp-controller="Students"
+       asp-action="Existing"
+       class="btn btn-outline-secondary">
+       Select Another Profile 
+   </a>

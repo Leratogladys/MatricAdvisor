@@ -7,6 +7,7 @@ using MatricConnect.Services;
 using MatricConnect.Validation;
 using MatricConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace MatricConnect.Web.Controllers
 {
@@ -95,6 +96,7 @@ namespace MatricConnect.Web.Controllers
             } // end if
 
             var savedStudent = _studentService.AddStudent(student);
+            HttpContext.Session.SetInt32("CurrentStudentId", savedStudent.Id);
 
             TempData["SuccessMessage"] =
                 $"Profile created successfully. Your Student ID is " +
@@ -147,9 +149,43 @@ namespace MatricConnect.Web.Controllers
                 return View(model);
             } // end if
 
+            HttpContext.Session.SetInt32("CurrentStudentId", student.Id);
+
             TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
 
             return RedirectToAction("Index", "Universities");
         } // end method Existing
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            //
+            // Name              : IActionResult Profile()
+            // Purpose           : Displays the student selected in the current session.
+            // Re-use            : StudentService.GetStudentById()
+            // Method Parameters : None
+            // Output Type       : IActionResult
+            //                     - selected student's profile, or redirect
+            //                       to profile lookup when no selection exists
+            //
+
+            int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
+
+            if(!studentId.HasValue)
+            {
+                return RedirectToAction(nameof(Existing));
+            } // end if
+
+            var student = _studentService.GetStudentById(studentId.Value);
+
+            if (student == null)
+            {
+                HttpContext.Session.Remove("CurrentStudentId");
+
+                return RedirectToAction(nameof(Existing));
+            } // end if
+
+            return View(student);
+        } // end method Profile
     } // end class StudentsController
 } // end namespace MatricConnect.Web.Controllers

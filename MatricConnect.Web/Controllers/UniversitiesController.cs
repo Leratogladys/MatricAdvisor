@@ -6,6 +6,7 @@ using MatricConnect.Services;
 using MatricConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using MatricConnect.Models;
+using Microsoft.AspNetCore.Http;
 
 
 namespace MatricConnect.Web.Controllers
@@ -14,24 +15,29 @@ namespace MatricConnect.Web.Controllers
     {
         private readonly UniversityService _universityService;
         private readonly EligibilityService _eligibilityService;
+        private readonly StudentService _studentService;
 
-        public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService)
+        public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService, StudentService studentService)
         {
+            //
             // Name              : UniversitiesController(
             //                     UniversityService universityService,
-            //                     EligibilityService eligibilityService)
-            // Purpose           : Receives browsing and eligibility services
-            //                     through dependency injection.
+            //                     EligibilityService eligibilityService,
+            //                     StudentService studentService)
+            // Purpose           : Receives browsing, eligibility, and student
+            //                     services through dependency injection.
             // Re-use            : None
             // Method Parameters : UniversityService universityService
-            //                     - service used to retrieve browsing data
+            //                     - retrieves universities and programmes
             //                     EligibilityService eligibilityService
-            //                     - service used to evaluate entry requirements
+            //                     - evaluates programme requirements
+            //                     StudentService studentService
+            //                     - retrieves the selected student profile
             // Output Type       : None
             //
-
             _universityService = universityService;
             _eligibilityService = eligibilityService;
+            _studentService = studentService;
         } // end constructor
 
         [HttpGet]
@@ -119,6 +125,7 @@ namespace MatricConnect.Web.Controllers
             // Purpose           : Displays a programme and its entry requirements.
             // Re-use            : UniversityService.GetProgrammeById(),
             //                     UniversityService.GetUniversityById()
+            //                     StudentService.GetStudentById()
             // Method Parameters : int id
             //                     - ID of the selected programme
             // Output Type       : IActionResult
@@ -126,7 +133,7 @@ namespace MatricConnect.Web.Controllers
             //                       when the programme or university is not found
             //
 
-            if(!ModelState.IsValid || id <= 0)
+            if (!ModelState.IsValid || id <= 0)
             {
                 return NotFound();
             } // end if
@@ -149,6 +156,27 @@ namespace MatricConnect.Web.Controllers
                 Programme = programme,
                 University = university
             };
+
+            int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
+
+            if(studentId.HasValue)
+            {
+                var student = _studentService.GetStudentById(studentId.Value);
+
+                if(student != null)
+                {
+                    model.EligibilityInput = new EligibilityInputViewModel
+                    {
+                        APSScore = student.APSScore,
+                        MathematicsMark = student.MathematicsMark,
+                        PhysicalScienceMark = student.PhysicalScienceMark
+                    };
+                } // end if
+                else
+                {
+                    HttpContext.Session.Remove("CurrentStudentId");
+                }
+            }
 
             return View(model);
         } // end method ProgrammeDetails

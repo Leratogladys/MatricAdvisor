@@ -32,6 +32,16 @@ builder.Services.AddScoped<SavedProgrammeService>();
 builder.Services.AddScoped<EligibilityService>();
 builder.Services.AddScoped<StudentValidator>();
 
+//Configure temporary session storage for selected student.
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();  
 
 // Apply existing migrations ans initialise data during local development.
@@ -57,6 +67,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

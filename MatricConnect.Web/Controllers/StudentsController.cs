@@ -102,5 +102,54 @@ namespace MatricConnect.Web.Controllers
 
             return RedirectToAction("Index", "Universities");
         } // end method Create
+
+        [HttpGet]
+        public IActionResult Existing()
+        {
+            //
+            // Name              : IActionResult Existing()
+            // Purpose           : Displays the existing student lookup form.
+            // Re-use            : None
+            // Method Parameters : None
+            // Output Type       : IActionResult - student lookup form
+            //
+            
+            return View(new ExistingStudentViewModel());
+        }// end method Exisiting
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Existing(ExistingStudentViewModel model)
+        {
+            //
+            // Name              : IActionResult Existing(
+            //                     ExistingStudentViewModel model)
+            // Purpose           : Finds an existing student using the entered ID.
+            // Re-use            : StudentService.GetStudentById()
+            // Method Parameters : ExistingStudentViewModel model
+            //                     - student ID submitted through the form
+            // Output Type       : IActionResult
+            //                     - form with errors, or redirect when found
+            //
+
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            } // end if
+
+            var student = _studentService.GetStudentById(model.StudentId!.Value);
+
+            if(student == null)
+            {
+                ModelState.AddModelError(nameof(ExistingStudentViewModel.StudentId),
+                    "No student profile was found with that ID.");
+
+                return View(model);
+            } // end if
+
+            TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
+
+            return RedirectToAction("Index", "Universities");
+        } // end method Existing
     } // end class StudentsController
 } // end namespace MatricConnect.Web.Controllers

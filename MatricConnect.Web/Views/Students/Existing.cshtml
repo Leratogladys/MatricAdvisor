@@ -1,0 +1,43 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays the existing student profile lookup form.
+*@
+
+@model MatricConnect.Web.Models.ExistingStudentViewModel
+
+@{
+    ViewData["Title"] = "Existing Student";
+}
+
+<h1>Existing Student</h1>
+
+<p>Enter the Student Id you received when creating your profile.</p>
+
+<form asp-controller="Students" asp-action="Existing" method="post">
+    <div class="mb-3">
+        <label asp-for="StudentId" class="form-label"></label>
+
+        <input asp-for="StudentId"
+               class="form-control"
+               type="number"
+               min="1"
+               step="1" />
+
+        <span asp-validation-for="StudentId"
+               class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Find Profile
+    </button>
+
+    <a asp-controller="Students"
+       asp-action="Create"
+       class="btn btn-outline-secondary">
+       Create New Profile
+   </a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

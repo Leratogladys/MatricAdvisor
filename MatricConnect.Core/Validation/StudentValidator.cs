@@ -35,12 +35,12 @@ namespace MatricConnect.Validation
 
             if (string.IsNullOrWhiteSpace(student.Province))
             {
-                errors.Add("Home provinde is required.");
+                errors.Add("Home province is required.");
             } // end if
 
             if(student.APSScore < 0 || student.APSScore > 57)
             {
-                errors.Add("APS score must be betweeen 0 and 57.");
+                errors.Add("APS score must be between 0 and 57.");
             } // end if
 
             if(student.MathematicsMark < 0 || student.MathematicsMark > 100)
@@ -52,7 +52,7 @@ namespace MatricConnect.Validation
             {
                 decimal scienceMark = student.PhysicalScienceMark.Value;
                 
-                if(scienceMark > 0 || scienceMark > 100)
+                if(scienceMark < 0 || scienceMark > 100)
                 {
                     errors.Add("Physical Science mark must be between 0 and 100.");
                 } // end if

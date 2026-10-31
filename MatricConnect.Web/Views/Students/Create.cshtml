@@ -1,0 +1,119 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays the student profile creation form.
+*@
+
+@model MatricConnect.Web.Models.CreateStudentViewModel
+
+@{
+
+    ViewData["Title"] = "Create Student Profile";
+}
+
+<h1>Create Student Profile</h1>
+
+<p>Enter your details and academic results.</p>
+
+<form accept-charset="Students" asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly"
+    class="text-danger"></div>
+
+    <div class="col-md-6">
+    <label asp-for="FirstName" class="form-label"></label>
+    <input asp-for="FirstName"
+     class="form-control"
+     autocomplete="given-name" />
+     <span asp-validation-for="FirstName"
+     class="text-danger"></span>
+
+    </div>
+    <div class="col-md-6">
+        <label asp-for="LastName" class="form-label">
+            Last name
+        </label>
+
+        <input asp-for="LastName"
+               type="text"
+               class="form-control"
+               autocomplete="family-name" />
+
+        <span asp-validation-for="LastName"
+              class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Province" class="form-label"></label>
+        <select asp-for="Province" class="form-select">
+            <option value="Select your home province"></option>
+            <option value="Eastern Cape">Eastern Cape</option>
+            <option value="Free State">Free State</option>
+            <option value="Gauteng">Gauteng</option>
+            <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+            <option value="Limpopo">Limpopo</option>
+            <option value="Mpumalanga">Mpumalanga</option>
+            <option value="North West">North West</option>
+            <option value="Nothern Cape">Nothern Cape</option>
+            <option value="Western Cape">Western Cape</option>
+        </select>
+
+        <span asp-validation-for="Province" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="APSScore" class="form-label"></label>
+        <input asp-for="APSScore"
+               class="form-control"
+               type="number"
+               min="0"
+               max="57"
+               step="1" />
+
+        <span asp-validation-for="APSScore"
+              class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="MathematicsMark" class="form-label"></label>
+        <input asp-for="MathematicsMark"
+            class="form-control"
+            type="number"
+            min="0"
+            max="100"
+           step="0.01" />
+        <span asp-validation-for="MathematicsMark"
+        class="text-danger"></span>
+
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PhysicalScienceMark"
+               class="form-label"></label>
+        <input asp-for="PhysicalScienceMark"
+               class="form-control"
+               type="number"
+               min="0"
+               max="100"
+               step="0.01" />
+        <div class="form-text">
+            Leave blank if you do not take Physical Science.
+        </div>
+        <span asp-validation-for="PhysicalScienceMark"
+              class="text-danger"></span>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">
+            Create Profile
+        </button>
+
+        <a asp-controller="Universities"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+           Back to Universities
+       </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

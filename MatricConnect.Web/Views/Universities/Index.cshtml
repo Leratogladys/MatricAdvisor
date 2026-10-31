@@ -12,6 +12,13 @@
 
 <h1>Search Universities</h1>
 
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="status">
+        @successMessage
+    </div>
+}
+
 <p>Select a province to begin browsing universities.</p>
 
 <form asp-controller="Universities" asp-action="Index" method="get">

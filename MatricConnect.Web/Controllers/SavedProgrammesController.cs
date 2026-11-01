@@ -6,6 +6,7 @@
 using MatricConnect.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MatricConnect.Web.Models;
 
 namespace MatricConnect.Web.Controllers
 {
@@ -71,10 +72,14 @@ namespace MatricConnect.Web.Controllers
                 return RedirectToAction("Existing", "Students");
             } // end if
 
-            var savedProgrammes = _savedProgrammeService
-                .GetSavedProgrammesByStudent(student.Id);
+            var model = new SavedProgrammesViewModel
+            {
+                Student = student,
+                SavedProgrammes = _savedProgrammeService.
+                GetSavedProgrammesByStudent(student.Id)
+            };
 
-            return View(savedProgrammes);
+            return View(model);
         } // end method Index
 
         [HttpPost]
@@ -126,7 +131,9 @@ namespace MatricConnect.Web.Controllers
 
             bool saved = _savedProgrammeService.SaveProgramme(student.Id, programme.Id);
 
-            TempData["SaveMessage"] = saved ? "Programme saved successfully." : "This programmed is already saved.";
+            TempData["SaveMessage"] = saved 
+                ? "Programme saved successfully." 
+                : "This programme is already saved.";
 
             return RedirectToAction("ProgrammeDetails", "Universities",
                                      new { id = programme.Id });

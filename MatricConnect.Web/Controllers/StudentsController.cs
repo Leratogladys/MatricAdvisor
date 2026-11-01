@@ -106,17 +106,25 @@ namespace MatricConnect.Web.Controllers
         } // end method Create
 
         [HttpGet]
-        public IActionResult Existing()
+        public IActionResult Existing(string? returnUrl)
         {
+
             //
-            // Name              : IActionResult Existing()
-            // Purpose           : Displays the existing student lookup form.
+            // Name              : IActionResult Existing(string? returnUrl)
+            // Purpose           : Displays the student lookup form and retains
+            //                     a local destination after profile selection.
             // Re-use            : None
-            // Method Parameters : None
+            // Method Parameters : string? returnUrl
+            //                     - requested destination after lookup
             // Output Type       : IActionResult - student lookup form
             //
-            
-            return View(new ExistingStudentViewModel());
+
+            var model = new ExistingStudentViewModel
+            {
+                ReturnUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : null
+            };
+
+            return View(model);
         }// end method Exisiting
 
         [HttpPost]
@@ -153,6 +161,11 @@ namespace MatricConnect.Web.Controllers
 
             TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
 
+            if(Url.IsLocalUrl(model.ReturnUrl!))
+            {
+                return LocalRedirect(model.ReturnUrl);
+            } // end if
+
             return RedirectToAction("Index", "Universities");
         } // end method Existing
 
@@ -173,7 +186,8 @@ namespace MatricConnect.Web.Controllers
 
             if(!studentId.HasValue)
             {
-                return RedirectToAction(nameof(Existing));
+                return RedirectToAction(nameof(Existing),
+                       new { returnUrl = Url.Action(nameof(Profile), "Students")});
             } // end if
 
             var student = _studentService.GetStudentById(studentId.Value);
@@ -182,7 +196,8 @@ namespace MatricConnect.Web.Controllers
             {
                 HttpContext.Session.Remove("CurrentStudentId");
 
-                return RedirectToAction(nameof(Existing));
+                return RedirectToAction(nameof(Existing),
+                       new { returnUrl = Url.Action(nameof(Profile), "Students")});
             } // end if
 
             return View(student);

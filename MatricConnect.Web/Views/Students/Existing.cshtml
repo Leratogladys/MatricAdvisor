@@ -21,6 +21,7 @@
 
 <form asp-controller="Students" asp-action="Existing" method="post">
     <div class="mb-3">
+        <input asp-for="ReturnUrl" type="hidden" />
         <label asp-for="StudentId" class="form-label"></label>
 
         <input asp-for="StudentId"

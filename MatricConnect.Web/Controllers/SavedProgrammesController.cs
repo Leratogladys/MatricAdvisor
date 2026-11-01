@@ -60,7 +60,8 @@ namespace MatricConnect.Web.Controllers
                 TempData["SuccessMessage"] =
                     "Select a student profile to view saved programmes.";
 
-                return RedirectToAction("Existing", "Students");
+                return RedirectToAction("Existing", "Students",
+                       new { returnUrl = Url.Action("Index", "SavedProgrammes")});
             } // end if
 
             var student = _studentService.GetStudentById(studentId.Value);
@@ -69,7 +70,8 @@ namespace MatricConnect.Web.Controllers
             {
                 HttpContext.Session.Remove("CurrentStudentId");
 
-                return RedirectToAction("Existing", "Students");
+                return RedirectToAction("Existing", "Students",
+                       new { returnUrl = Url.Action("Index", "SavedProgrammes")});
             } // end if
 
             var model = new SavedProgrammesViewModel

@@ -1,8 +1,99 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Introduces Matric Connect and provides access
+                     to student profiles and university browsing.
+*@
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="py-4">
+    <h1 class="display-5 fw-bold">
+        Explore your university options
+    </h1>
+
+    <p class="lead">
+        Browse universities, compare programme entry requirements with your 
+        academic results, and save programmes you want to explore further.
+    </p>
+
+    <div class="d-flex flex-wrap gap-2 mt-4">
+        <a asp-controller="Students"
+           asp-action="Create"
+           class="btn btn-primary">
+           Create Student Profile
+       </a>
+
+        <a asp-controller="Students"
+           asp-action="Existing"
+           class="btn btn-outline-secondary">
+           Use Existing Profile
+      </a>
+
+      <a asp-controller="Universities"
+         asp-action="Index"
+         class="btn btn-outline-primary">
+         Browse Universities
+      </a>
+
+    </div>
+
+    <p class="Text-muted mt-3">
+        You can browse without a profile. Create or select a 
+        profile to reuse your academic results and save programmes.
+    </p>
+</section>
+
+<section class="mt-4" aria-labelledby="how-it-works">
+    <h2 id="how-it-works" class="h3 mb-3">How it works</h2>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5">1. Find a programme</h3>
+
+                    <p class="card-text">
+                        Select a province, explore its universities, 
+                        and view the programmes they offer.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5">2. Check your eligibility</h3>
+
+                    <p class="card-text">
+                        Compare yur APS score, Mathematics mark,
+                        and Physical Science mark where required
+                        with a programme's minimum requirements.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5">3. Save your options</h3>
+
+                    <p class="card-text">
+                        After checking eligibility, save programmes
+                        to your selected profile and revisit them
+                        from Saved Programmes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <div class="alert alert-info mt-4">
+            Meeting the requirements evaluated by Matric Connect does 
+            not guarantee admission. Confirm current entry requirements
+            and application deadlines directly with the university.
+        </div>

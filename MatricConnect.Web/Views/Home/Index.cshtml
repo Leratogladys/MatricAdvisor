@@ -8,6 +8,16 @@
     ViewData["Title"] = "Home";
 }
 
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success" role="status">
+
+        @successMessage
+
+    </div>
+}
+
+
 <section class="py-4">
     <h1 class="display-5 fw-bold">
         Explore your university options

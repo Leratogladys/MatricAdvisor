@@ -187,5 +187,25 @@ namespace MatricConnect.Web.Controllers
 
             return View(student);
         } // end method Profile
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ClearProfile()
+        {
+            //
+            // Name              : IActionResult ClearProfile()
+            // Purpose           : Clears the selected student from the session.
+            // Re-use            : None
+            // Method Parameters : None
+            // Output Type       : IActionResult
+            //                     - redirect to the home page
+            //
+
+            HttpContext.Session.Remove("CurrentStudentId");
+
+            TempData["SuccessMessage"] = "Your profile selection has been cleared.";
+
+            return RedirectToAction("Index", "Home");
+        } // end method ClearProfile
     } // end class StudentsController
 } // end namespace MatricConnect.Web.Controllers

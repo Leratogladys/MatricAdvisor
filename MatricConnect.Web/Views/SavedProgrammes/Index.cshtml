@@ -1,0 +1,74 @@
+﻿@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Displays programmes saved by the selected student.
+*@
+
+@model List<MatricConnect.Models.SavedProgramme>
+
+@{
+    ViewData["Title"] = "Saved Programmes";
+}
+
+<h1>Saved Programmes</h1>
+
+@if (TempData["SavedProgrammesMessage"] is string message)
+{
+    <div class="alert alert-info" role="status">
+        @message
+    </div>
+}
+
+<p>Programmes saved to your selected student profile.</p>
+
+<a asp-controller="Universities"
+   asp-action="Index"
+   class="btn btn-primary mb-4">
+    Find More Programmes
+</a>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info" role="status">
+        You have no saved programmes yet.
+        Browse universities and check a programme's eligibility to save it.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var savedProgramme in Model)
+        {
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">
+                            <a asp-controller="Universities"
+                               asp-action="ProgrammeDetails"
+                               asp-route-id="@savedProgramme.ProgrammeId">
+                                @savedProgramme.Programme.Name
+                            </a>
+                        </h2>
+
+                        <p class="card-text">
+                            @savedProgramme.Programme.University.Name
+                        </p>
+
+                        <p class="text-muted mb-0">
+                           @savedProgramme.Programme.University.Province
+                        </p>
+
+                        <form asp-controller="SavedProgrammes"
+                              asp-action="Remove"
+                              asp-route-id="@savedProgramme.ProgrammeId"
+                              method="post"
+                              class="mt-3">
+                            <button type="submit" class="btn btn-outline-danger">
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

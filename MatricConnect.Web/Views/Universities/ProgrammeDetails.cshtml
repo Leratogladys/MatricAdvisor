@@ -1,6 +1,7 @@
 ﻿@* Programmer name : Lerato Molefe
    Project name    : Matric Connect
-   Purpose         : Displays programme details and entry requirements.
+   Purpose         : Displays programme details, eligibility checking,
+                     and the option to save after viewing the result.
 *@
 
 @model MatricConnect.Web.Models.ProgrammeDetailsViewModel
@@ -25,7 +26,7 @@
    asp-action="Programmes"
    asp-route-id="@Model.University.Id"
    class="btn btn-outline-secondary mb-4">
-   Back to Programmes
+    Back to Programmes
 </a>
 
 <div class="card">
@@ -33,29 +34,29 @@
         <h2 class="h4">Entry Requirements</h2>
 
         <dl class="row">
-            <dt class="col-sm-4">Minimum APS</dt>
-            <dd class="col-sm-8">@Model.Programme.RequiredAPS</dd>
+            <dt class="col-5">Minimum APS</dt>
+            <dd class="col-7">@Model.Programme.RequiredAPS</dd>
 
-            <dt class="col-sm-4">Mathematics</dt>
-            <dd class="col-sm-8">@Model.Programme.RequiredMathematics.ToString("0.##")%</dd>
+            <dt class="col-5">Mathematics</dt>
+            <dd class="col-7">
+                @Model.Programme.RequiredMathematics.ToString("0.##")%
+            </dd>
 
-                <dt class="col-sm-4">Physical Science</dt>
-                <dd class="col-sm-8">
-                    @if(Model.Programme.RequiredPhysicalScience.HasValue)
+            <dt class="col-5">Physical Science</dt>
+            <dd class="col-7">
+                @if (Model.Programme.RequiredPhysicalScience.HasValue)
                 {
-                    <span>
-                        @Model.Programme.RequiredPhysicalScience.Value.ToString("0.##")%
-                    </span>
+                    <span>@Model.Programme.RequiredPhysicalScience.Value.ToString("0.##")%</span>
                 }
                 else
                 {
-                    <span>Not Required</span>
+                    <span>Not required</span>
                 }
             </dd>
 
-            <dt class="col-sm-4">Applications Deadline</dt>
-            <dd class="col-sm-8">
-                @Model.Programme.ApplicationDeadline.ToString(" dd MMMM yyyy")
+            <dt class="col-5">Application deadline</dt>
+            <dd class="col-7">
+                @Model.Programme.ApplicationDeadline.ToString("dd MMMM yyyy")
             </dd>
         </dl>
 
@@ -65,46 +66,59 @@
         </p>
     </div>
 </div>
+
+@if (TempData["SaveMessage"] is string saveMessage)
+{
+    <div class="alert alert-info mt-4" role="status">
+        @saveMessage
+    </div>
+}
+
 <div class="card mt-4">
-    <div  class="card-body">
+    <div class="card-body">
         <h2 class="h4">Check Your Eligibility</h2>
 
-        <p>Enter your academic results to compare them with this programme.</p>
+        <p>
+            Review or enter your academic results, then check your eligibility.
+        </p>
 
         <form asp-controller="Universities"
               asp-action="CheckEligibility"
               asp-route-id="@Model.Programme.Id"
               method="post">
-          
-          <div class="mb-3">
-              <label asp-for="EligibilityInput.APSScore"
-              class="form-label"></label>
 
-              <input asp-for="EligibilityInput.APSScore"
-              class="form-control" type="number" min="0" max="57" step="1" />
+            <div class="mb-3">
+                <label asp-for="EligibilityInput.APSScore"
+                       class="form-label"></label>
 
-              <span asp-validation-for="EligibilityInput.APSScore" 
-              class="text-danger"></span>
+                <input asp-for="EligibilityInput.APSScore"
+                       class="form-control"
+                       type="number"
+                       min="0"
+                       max="57"
+                       step="1" />
 
-          </div>
+                <span asp-validation-for="EligibilityInput.APSScore"
+                      class="text-danger"></span>
+            </div>
 
-          <div class="mb-3">
-              <label asp-for="EligibilityInput.MathematicsMark"
-               class="form-label"></label>
+            <div class="mb-3">
+                <label asp-for="EligibilityInput.MathematicsMark"
+                       class="form-label"></label>
 
-               <input asp-for="EligibilityInput.MathematicsMark"
-                  asp-format="{0:0.##}"
-                   class="form-control"
-                   type="number"
-                   min="0"
-                   max="100"
-                   step="0.01" />
+                <input asp-for="EligibilityInput.MathematicsMark"
+                       asp-format="{0:0.##}"
+                       class="form-control"
+                       type="number"
+                       min="0"
+                       max="100"
+                       step="0.01" />
 
-                   <span  asp-validation-for="EligibilityInput.MathematicsMark"
-                          class="text-danger"></span>
-          </div>
+                <span asp-validation-for="EligibilityInput.MathematicsMark"
+                      class="text-danger"></span>
+            </div>
 
-           <div class="mb-3">
+            <div class="mb-3">
                 <label asp-for="EligibilityInput.PhysicalScienceMark"
                        class="form-label"></label>
 
@@ -131,30 +145,52 @@
 
         @if (Model.EligibilityChecked)
         {
-            <div id="eligibility-result" class="mt-4" role="status">
-                @if (Model.EligibilityIssues.Count == 0)
-                {
-                    <div class="alert alert-success">
-                        You MEET the requirements currently evaluated
-                        by Matric Connect.
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-warning">
-                        <p>
-                            You do not meet all the requirements currently
-                            evaluated by Matric Connect:
-                        </p>
+            <div id="eligibility-result" class="mt-4">
+                <div role="status">
+                    @if (Model.EligibilityIssues.Count == 0)
+                    {
+                        <div class="alert alert-success">
+                            You MEET the requirements currently evaluated
+                            by Matric Connect.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <p>
+                                You do not meet all the requirements currently
+                                evaluated by Matric Connect:
+                            </p>
 
-                        <ul class="mb-0">
-                            @foreach (var issue in Model.EligibilityIssues)
-                            {
-                                <li>@issue</li>
-                            }
-                        </ul>
-                    </div>
-                }
+                            <ul class="mb-0">
+                                @foreach (var issue in Model.EligibilityIssues)
+                                {
+                                    <li>@issue</li>
+                                }
+                            </ul>
+                        </div>
+
+                        <p>
+                            You can still save this programme to keep it
+                            among your options.
+                        </p>
+                    }
+                </div>
+
+                <form asp-controller="SavedProgrammes"
+                      asp-action="Save"
+                      asp-route-id="@Model.Programme.Id"
+                      method="post">
+                    <button type="submit" class="btn btn-outline-primary">
+                        Save Programme
+                    </button>
+                </form>
+
+                <a asp-controller="SavedProgrammes"
+                   asp-action="Index"
+                   class="btn btn-link mt-2">
+                    View Saved Programmes
+                </a>
             </div>
         }
     </div>
@@ -164,13 +200,14 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
+        // Hide the previous result and save button when academic input changes.
         document.querySelectorAll(
             'input[name^="EligibilityInput."]'
-        ).forEach(function (input){
-           input.addEventListener('input', function () {
+        ).forEach(function (input) {
+            input.addEventListener('input', function () {
                 const result = document.getElementById('eligibility-result');
 
-                if(result) {
+                if (result) {
                     result.hidden = true;
                 }
             });

@@ -90,7 +90,9 @@ namespace MatricConnect.Web.Controllers
         {
             //
             // Name              : IActionResult Save(int id)
-            // Purpose           : Saves a programme for the selected student.
+            // Purpose           : Saves a programme for the selected student,
+            //                     or requests profile selection with a return
+            //                     path to the programme details.
             // Re-use            : StudentService.GetStudentById(),
             //                     UniversityService.GetProgrammeById(),
             //                     SavedProgrammeService.SaveProgramme()
@@ -101,45 +103,50 @@ namespace MatricConnect.Web.Controllers
             //                       selection, or 404 for an invalid programme
             //
 
-            if (!ModelState.IsValid || id <= 0)
+            if(!ModelState.IsValid || id <=  0)
             {
                 return NotFound();
             } // end if
 
             var programme = _universityService.GetProgrammeById(id);
 
-            if (programme == null)
+            if(programme == null)
             {
                 return NotFound();
             } // end if
 
+            var returnUrl = Url.Action(
+                            "ProgrammeDetails",
+                            "Universities",
+                            new { id = programme.Id });
+
             int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
-
-            if (!studentId.HasValue)
+            if(!studentId.HasValue)
             {
-                TempData["SuccessMessage"] = "Select a student profile, then return to the programme to save it.";
+                TempData["SuccessMessage"] = "Select a student profile. You will return to this " +
+                                              "programme to review your results and save it.";
 
-                return RedirectToAction("Existing", "Students");
-            } // end if
+                return RedirectToAction("Existing", "Students", new { returnUrl });
+            } // end if 
 
             var student = _studentService.GetStudentById(studentId.Value);
-
-            if (student == null)
+            if(student == null)
             {
                 HttpContext.Session.Remove("CurrentStudentId");
 
-                return RedirectToAction("Existing", "Students");
+                TempData["SuccessMessage"] = "Your selected profile could not be found. Select a " +
+                                             "profile to return to this programme.";
+
+                return RedirectToAction("Existing", "Students", new {returnUrl});
+
             } // end if
 
             bool saved = _savedProgrammeService.SaveProgramme(student.Id, programme.Id);
 
-            TempData["SaveMessage"] = saved 
-                ? "Programme saved successfully." 
-                : "This programme is already saved.";
+            TempData["SaveMessage"] = saved ? "Programme saved successfully."
+                                            : "This programme is already saved.";
 
-            return RedirectToAction("ProgrammeDetails", "Universities",
-                                     new { id = programme.Id });
-
+            return RedirectToAction("ProgrammeDetails", "Universities", new { id = programme.Id });
         } // end method Save
 
         [HttpPost]
@@ -171,7 +178,8 @@ namespace MatricConnect.Web.Controllers
                 TempData["SuccessMessage"] =
                     "Select a student profile to manage saved programmes.";
 
-                return RedirectToAction("Existing", "Students");
+                return RedirectToAction("Existing", "Students",
+                       new { returnUrl = Url.Action("Index", "SavedProgrammes") });
             } // end if
 
             var student = _studentService.GetStudentById(studentId.Value);
@@ -180,7 +188,8 @@ namespace MatricConnect.Web.Controllers
             {
                 HttpContext.Session.Remove("CurrentStudentId");
 
-                return RedirectToAction("Existing", "Students");
+                return RedirectToAction("Existing", "Students",
+                       new { returnUrl = Url.Action("Index", "SavedProgrammes") });
             } // end if
 
             bool removed = _savedProgrammeService

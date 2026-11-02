@@ -159,12 +159,14 @@ namespace MatricConnect.Web.Controllers
 
             HttpContext.Session.SetInt32("CurrentStudentId", student.Id);
 
-            TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
 
-            if(Url.IsLocalUrl(model.ReturnUrl!))
+
+            if (Url.IsLocalUrl(model.ReturnUrl!))
             {
                 return LocalRedirect(model.ReturnUrl);
             } // end if
+
+            TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
 
             return RedirectToAction("Index", "Universities");
         } // end method Existing

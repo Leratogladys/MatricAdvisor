@@ -48,9 +48,10 @@
 
     <a asp-controller="Students"
        asp-action="Existing"
+       asp-route-returnUrl="@Url.Action("Profile", "Students")"
        class="btn btn-outline-secondary">
-       Select Another Profile 
-   </a>
+        Select Another Profile
+    </a>
 
     <a asp-controller="SavedProgrammes"
        asp-action="Index"

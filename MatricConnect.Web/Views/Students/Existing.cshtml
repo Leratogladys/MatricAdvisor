@@ -40,9 +40,10 @@
 
     <a asp-controller="Students"
        asp-action="Create"
+       asp-route-returnUrl="@Model.ReturnUrl"
        class="btn btn-outline-secondary">
-       Create New Profile
-   </a>
+        Create New Profile
+    </a>
 </form>
 
 @section Scripts {

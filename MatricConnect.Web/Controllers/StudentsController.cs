@@ -39,17 +39,24 @@ namespace MatricConnect.Web.Controllers
         } // end constructor
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(string? returnUrl)
         {
             //
-            // Name              : IActionResult Create()
-            // Purpose           : Displays an empty student profile form.
+            // Name              : IActionResult Create(string? returnUrl)
+            // Purpose           : Displays the profile creation form and retains
+            //                     a local destination after creation.
             // Re-use            : None
-            // Method Parameters : None
+            // Method Parameters : string? returnUrl
+            //                     - requested destination after creation
             // Output Type       : IActionResult - student profile form
             //
 
-            return View(new CreateStudentViewModel());
+            var model = new CreateStudentViewModel
+            {
+                ReturnUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : null
+            };
+
+            return View(model);
         } // end method Create
 
         [HttpPost]
@@ -96,13 +103,17 @@ namespace MatricConnect.Web.Controllers
             } // end if
 
             var savedStudent = _studentService.AddStudent(student);
-            HttpContext.Session.SetInt32("CurrentStudentId", savedStudent.Id);
 
-            TempData["SuccessMessage"] =
-                $"Profile created successfully. Your Student ID is " +
-                $"{savedStudent.Id}. Keep this ID for future reference.";
+            HttpContext.Session.SetInt32("CurrentStudentId", savedStudent.Id);
+            TempData["ProfileCreatedMessage"] = $"Profile created successfully. Your Student ID is" +
+                                                $" {savedStudent.Id}. Keep this ID for future reference.";
+            if(Url.IsLocalUrl(model.ReturnUrl))
+            {
+                return LocalRedirect(model.ReturnUrl!);
+            } // end if
 
             return RedirectToAction("Index", "Universities");
+
         } // end method Create
 
         [HttpGet]

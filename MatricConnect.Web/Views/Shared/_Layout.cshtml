@@ -90,6 +90,12 @@
 
     <div class="container">
         <main role="main" class="pb-3">
+            @if(TempData["ProfileCreatedMessage"] is string profileCreatedMessage)
+            {
+                <div class="alert alert-success" role="status">
+                    @profileCreatedMessage
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

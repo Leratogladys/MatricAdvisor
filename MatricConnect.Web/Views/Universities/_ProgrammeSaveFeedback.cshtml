@@ -1,0 +1,43 @@
+@model MatricConnect.Web.Models.ProgrammeDetailsViewModel
+@using MatricConnect.Web.Models
+@inject MatricConnect.Web.Services.SelectedStudentContext SelectedStudent
+
+@{
+    var outcome = Model.SaveOutcome;
+    var student = SelectedStudent.GetStudent(Context);
+    bool failed = outcome == ProgrammeSaveOutcome.Failed;
+    var title = outcome switch
+    {
+        ProgrammeSaveOutcome.Saved => "Programme saved",
+        ProgrammeSaveOutcome.AlreadySaved => "Already in your saved programmes",
+        _ => "Couldn’t save this programme"
+    };
+    var message = outcome switch
+    {
+        ProgrammeSaveOutcome.Saved => $"Saved to Student ID {student?.Id}. You can return to it in View Saved Programmes.",
+        ProgrammeSaveOutcome.AlreadySaved => $"This programme is already saved to Student ID {student?.Id}. A duplicate was not added.",
+        _ => "Your programme was not saved. Try again."
+    };
+}
+
+<div class="mc-browse-flow mc-save-feedback">
+    <p class="mc-browse-eyebrow">Saved programmes</p>
+    <h1 class="mc-browse-title @(outcome == ProgrammeSaveOutcome.Saved ? "mc-save-title-success" : null)">@title</h1>
+    <p class="mc-save-programme-name">@Model.Programme.Name<br />@Model.University.Name</p>
+    <div class="mc-save-feedback-message @(failed ? "mc-requirement-unmet" : "mc-requirement-met")" role="status">
+        @message
+    </div>
+    @if (failed)
+    {
+        <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@Model.Programme.Id" method="post">
+            <button type="submit" class="btn mc-browse-button">Try saving again</button>
+        </form>
+    }
+    else
+    {
+        <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button">View saved programmes</a>
+    }
+    <a asp-controller="Universities" asp-action="ProgrammeDetails" asp-route-id="@Model.Programme.Id"
+       class="btn mc-browse-button mc-browse-button-secondary">Back to programme</a>
+    <p class="mc-browse-note">Saving keeps a programme for later. It does not submit an application.</p>
+</div>

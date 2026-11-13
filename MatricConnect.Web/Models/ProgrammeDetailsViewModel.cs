@@ -52,34 +52,13 @@ namespace MatricConnect.Web.Models
             get; set;
         } = new EligibilityInputViewModel(); // end property EligibilityInput
 
-        public bool EligibilityChecked
-        {
-            //
-            // Name            : property bool EligibilityChecked
-            // Purpose         : Indicates whether valid results have been evaluated.
-            // Re-use          : None
-            // Input Parameter : bool value
-            //                   - whether an eligibility check has completed
-            // Output Type     : bool
-            //                   - true after evaluation; otherwise false
-            //
-            get; set;
-        } // end property EligibilityChecked
+        public IReadOnlyList<EligibilityRequirement> EligibilityRequirements { get; set; } = [];
 
-        public List<string> EligibilityIssues
-        {
-            //
-            // Name            : property List<string> EligibilityIssues
-            // Purpose         : Stores requirements the entered results do not meet.
-            // Re-use          : None
-            // Input Parameter : List<string> value
-            //                   - issues returned by the shared eligibility service
-            // Output Type     : List<string>
-            //                   - unmet requirements, or an empty list when all are met
-            //
+        public bool EligibilityChecked => EligibilityRequirements.Count > 0;
 
-            get; set;
-        } = new List<string>(); // end property EligibilityIssues
+        public bool MeetsEvaluatedRequirements => EligibilityChecked &&
+            EligibilityRequirements.All(requirement => requirement.Issue == null);
 
+        public ProgrammeSaveOutcome? SaveOutcome { get; set; }
     } // end class ProgrammeDetailsViewModel
 } // end namespace MatricConnect.Web.Models

@@ -811,3 +811,226 @@
         width: 100%;
     }
 }
+
+.mc-programme-details-page {
+    max-width: 1080px;
+    padding-top: 48px;
+    padding-bottom: 64px;
+}
+
+.mc-details-flow .mc-browse-title {
+    text-wrap: initial;
+    overflow-wrap: anywhere;
+}
+
+.mc-details-back {
+    width: min(100%, 260px);
+    justify-self: center;
+}
+
+.mc-details-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    gap: 16px 24px;
+    align-items: start;
+}
+
+.mc-details-requirements {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+    min-height: 520px;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--mc-radius-card);
+    background: var(--mc-surface);
+}
+
+.mc-details-profile,
+.mc-details-check,
+.mc-details-actions {
+    grid-column: 2;
+    min-width: 0;
+}
+
+.mc-details-profile { grid-row: 1; }
+.mc-details-check { grid-row: 2; }
+.mc-details-actions { grid-row: 3; }
+
+.mc-details-profile,
+.mc-details-check,
+.mc-details-check form,
+.mc-details-actions,
+.mc-details-actions > div,
+.mc-details-fields,
+.mc-requirement-list {
+    display: grid;
+    gap: 16px;
+}
+
+.mc-details-profile p {
+    overflow-wrap: anywhere;
+}
+
+.mc-details-field,
+.mc-requirement {
+    display: grid;
+    gap: 8px;
+}
+
+.mc-details-inputs summary,
+.mc-details-field label,
+.mc-requirement dt {
+    font: 600 14px / 20px var(--mc-font-body);
+}
+
+.mc-details-inputs summary {
+    padding: 8px 0;
+    color: var(--mc-teal);
+    cursor: pointer;
+}
+
+.mc-details-fields {
+    margin-top: 8px;
+}
+
+.mc-details-field input {
+    min-height: 48px;
+    border-color: var(--mc-border);
+    border-radius: 8px;
+}
+
+.mc-details-field .field-validation-valid,
+.mc-details-grid [hidden] {
+    display: none;
+}
+
+.mc-details-actions .mc-browse-button,
+.mc-save-feedback form .mc-browse-button {
+    width: 100%;
+}
+
+.mc-requirement-list,
+.mc-requirement dd {
+    margin: 0;
+}
+
+.mc-requirement {
+    min-height: 100px;
+    align-content: start;
+    padding: 12px;
+    border-radius: var(--mc-radius-card);
+    background: var(--mc-surface);
+}
+
+.mc-requirement dd span {
+    display: block;
+}
+
+.mc-eligibility-banner,
+.mc-save-feedback-message {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+    padding: 24px;
+    border-radius: var(--mc-radius-card);
+}
+
+.mc-requirement-met {
+    background: var(--mc-teal-tint);
+}
+
+.mc-requirement-unmet {
+    background: var(--mc-terracotta-tint);
+}
+
+.mc-details-disclaimer {
+    grid-column: 1 / -1;
+}
+
+.mc-save-feedback {
+    width: min(100%, 480px);
+    margin-inline: auto;
+    gap: 16px;
+}
+
+.mc-save-programme-name {
+    min-height: 72px;
+}
+
+.mc-save-feedback-message {
+    min-height: 176px;
+}
+
+@media (max-width: 991.98px) {
+    .mc-programme-details-page {
+        max-width: 680px;
+        padding: 24px 24px 56px;
+    }
+
+    .mc-details-flow,
+    .mc-details-grid {
+        gap: 16px;
+    }
+
+    .mc-details-flow > .mc-browse-eyebrow {
+        min-height: 40px;
+    }
+
+    .mc-details-flow .mc-browse-title,
+    .mc-save-feedback .mc-browse-title {
+        min-height: 120px;
+        max-width: none;
+    }
+
+    .mc-save-feedback .mc-browse-title {
+        max-width: 285px;
+    }
+
+    .mc-save-feedback .mc-save-title-success {
+        max-width: 245px;
+    }
+
+    .mc-details-intro {
+        margin-top: -8px;
+    }
+
+    .mc-details-back {
+        width: 100%;
+    }
+
+    .mc-details-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+    }
+
+    .mc-details-profile,
+    .mc-details-check,
+    .mc-details-actions {
+        grid-column: 1;
+    }
+
+    .mc-details-profile { grid-row: 1; }
+    .mc-details-requirements { grid-row: 2; }
+    .mc-details-check { grid-row: 3; }
+    .mc-details-disclaimer { grid-row: 4; }
+    .mc-details-actions { grid-row: 5; }
+
+    .mc-details-profile h2 {
+        font: 600 14px / 20px var(--mc-font-body);
+    }
+
+    .mc-details-requirements {
+        min-height: 0;
+        padding: 0;
+        background: transparent;
+    }
+
+    .mc-eligibility-banner {
+        min-height: 236px;
+        gap: 32px;
+    }
+}

@@ -4,14 +4,13 @@
 //                   for a programme eligibility check.
 
 using System.ComponentModel.DataAnnotations;
-using System.Transactions;
 
 namespace MatricConnect.Web.Models
 {
     public class EligibilityInputViewModel
     {
         [Required(ErrorMessage = "Enter your APS score.")]
-        [Range(0, 57, ErrorMessage = "Your APS must be between 0 and 57")]
+        [Range(0, 57, ErrorMessage = "Your APS must be between 0 and 57.")]
         [Display(Name = "APS score")]
         public int? APSScore
         {
@@ -28,8 +27,8 @@ namespace MatricConnect.Web.Models
             get; set;
         } // end property APSScore
 
-        [Required(ErrorMessage = "Enter your Mathematics marks.")]
-        [Range(typeof(decimal), "0", "100", ErrorMessage = "Mathematics marks must be be tween 0 and 100.")]
+        [Required(ErrorMessage = "Enter your Mathematics mark.")]
+        [Range(typeof(decimal), "0", "100", ErrorMessage = "Mathematics mark must be between 0 and 100.")]
         [Display(Name = "Mathematics mark (%)")]
         public decimal? MathematicsMark
         {
@@ -47,7 +46,7 @@ namespace MatricConnect.Web.Models
             get; set;
         } // end property MathematicsMark
 
-        [Range(typeof(decimal), "0", "100", ErrorMessage = "Physical Science mark must be between 0 and 100")]
+        [Range(typeof(decimal), "0", "100", ErrorMessage = "Physical Science mark must be between 0 and 100.")]
         [Display(Name = "Physical Science mark (%) - optional")]
         public decimal? PhysicalScienceMark
         {

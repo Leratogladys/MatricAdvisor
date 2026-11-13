@@ -13,10 +13,12 @@
     var isDashboard = controller == "Home" && action == "Index";
     var isUniversitySearch = controller == "Universities" && action == "Index";
     var isProgrammeList = controller == "Universities" && action == "Programmes";
-    var isCatalogueBrowse = isUniversitySearch || isProgrammeList;
+    var isProgrammeDetails = controller == "Universities" && (action == "ProgrammeDetails" || action == "CheckEligibility");
+    var isCatalogueBrowse = isUniversitySearch || isProgrammeList || isProgrammeDetails;
     var mainClass = isDashboard ? "mc-dashboard-main"
         : isUniversitySearch ? "mc-page mc-search-page"
         : isProgrammeList ? "mc-page mc-programmes-page"
+        : isProgrammeDetails ? "mc-page mc-programme-details-page"
         : "mc-page";
 }
 

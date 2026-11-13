@@ -7,6 +7,8 @@ using MatricConnect.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MatricConnect.Web.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 
 namespace MatricConnect.Web.Controllers
 {
@@ -17,7 +19,10 @@ namespace MatricConnect.Web.Controllers
         private readonly StudentService _studentService;
         private readonly UniversityService _universityService;
 
-        public SavedProgrammesController(SavedProgrammeService savedProgrammeService, StudentService studentService, UniversityService universityService)
+        private readonly ILogger<SavedProgrammesController> _logger;
+
+        public SavedProgrammesController(SavedProgrammeService savedProgrammeService, StudentService studentService,
+            UniversityService universityService, ILogger<SavedProgrammesController> logger)
         {
             //
             // Name              : SavedProgrammesController
@@ -29,12 +34,15 @@ namespace MatricConnect.Web.Controllers
             //                     - retrieves the selected student
             //                     UniversityService universityService
             //                     - retrieves programme information
+            //                     ILogger<SavedProgrammesController> logger
+            //                     - records unexpected storage failures
             // Output Type       : None
             //
 
             _savedProgrammeService = savedProgrammeService;
             _studentService = studentService;
             _universityService = universityService;
+            _logger = logger;
         } // end constructor
 
         [HttpGet]
@@ -141,10 +149,25 @@ namespace MatricConnect.Web.Controllers
 
             } // end if
 
-            bool saved = _savedProgrammeService.SaveProgramme(student.Id, programme.Id);
+            ProgrammeSaveOutcome outcome;
+            try
+            {
+                outcome = _savedProgrammeService.SaveProgramme(student.Id, programme.Id)
+                    ? ProgrammeSaveOutcome.Saved
+                    : ProgrammeSaveOutcome.AlreadySaved;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqliteException { SqliteExtendedErrorCode: 1555 })
+            {
+                // The composite primary key also protects against simultaneous saves.
+                outcome = ProgrammeSaveOutcome.AlreadySaved;
+            }
+            catch (Exception ex) when (ex is DbUpdateException or SqliteException)
+            {
+                _logger.LogError(ex, "Unable to save programme {ProgrammeId}.", programme.Id);
+                outcome = ProgrammeSaveOutcome.Failed;
+            }
 
-            TempData["SaveMessage"] = saved ? "Programme saved successfully."
-                                            : "This programme is already saved.";
+            TempData[ProgrammeSaveFeedback.Key(student.Id, programme.Id)] = outcome.ToString();
 
             return RedirectToAction("ProgrammeDetails", "Universities", new { id = programme.Id });
         } // end method Save

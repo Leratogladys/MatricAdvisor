@@ -165,6 +165,13 @@ namespace MatricConnect.Web.Controllers
 
                 if(student != null)
                 {
+                    var saveKey = ProgrammeSaveFeedback.Key(student.Id, programme.Id);
+                    if (TempData[saveKey] is string feedback &&
+                        Enum.TryParse<ProgrammeSaveOutcome>(feedback, out var outcome))
+                    {
+                        model.SaveOutcome = outcome;
+                    }
+
                     model.EligibilityInput = new EligibilityInputViewModel
                     {
                         APSScore = student.APSScore,
@@ -193,7 +200,7 @@ namespace MatricConnect.Web.Controllers
             //                     against the selected programme's requirements.
             // Re-use            : UniversityService.GetProgrammeById(),
             //                     UniversityService.GetUniversityById(),
-            //                     EligibilityService.GetEligibilityIssues()
+            //                     EligibilityService.EvaluateRequirements()
             // Method Parameters : int id
             //                     - ID of the programme being evaluated
             //                     EligibilityInputViewModel input
@@ -242,10 +249,7 @@ namespace MatricConnect.Web.Controllers
                 PhysicalScienceMark = input.PhysicalScienceMark
             };
 
-            model.EligibilityIssues = _eligibilityService
-                .GetEligibilityIssues(student, programme);
-
-            model.EligibilityChecked = true;
+            model.EligibilityRequirements = _eligibilityService.EvaluateRequirements(student, programme);
 
             return View("ProgrammeDetails", model);
         } // end method CheckEligibility

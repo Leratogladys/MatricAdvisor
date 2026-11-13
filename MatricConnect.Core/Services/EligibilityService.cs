@@ -29,47 +29,37 @@ namespace MatricConnect.Services
             //                       are met
             //
 
-            var issues = new List<string>();
+            return EvaluateRequirements(student, programme)
+                .Where(requirement => requirement.Issue != null)
+                .Select(requirement => requirement.Issue!)
+                .ToList();
+        } // end method GetEligibilityIssues
 
-            if (student.APSScore < programme.RequiredAPS)
+        public List<EligibilityRequirement> EvaluateRequirements(Student student, Programme programme)
+        {
+            var requiredScience = programme.RequiredPhysicalScience;
+            var scienceMark = student.PhysicalScienceMark;
+
+            return new List<EligibilityRequirement>
             {
-                issues.Add(
-                    $"Your APS score ({student.APSScore}) " +
-                    $"is below the required minimum APS " +
-                    $"({programme.RequiredAPS}).");
-            } // end if
-
-            if (student.MathematicsMark <
-                programme.RequiredMathematics)
-            {
-                issues.Add(
-                    $"Your Mathematics mark " +
-                    $"({student.MathematicsMark:0}) " +
-                    $"is below the required minimum mark " +
-                    $"({programme.RequiredMathematics:0}).");
-            } // end if
-
-            if (programme.RequiredPhysicalScience.HasValue)
-            {
-                if (student.PhysicalScienceMark == null)
-                {
-                    issues.Add(
-                        "A Physical Science mark is required " +
-                        "for this programme.");
-                } // end if
-                else if (student.PhysicalScienceMark <
-                         programme.RequiredPhysicalScience.Value)
-                {
-                    issues.Add(
-                        $"Your Physical Science mark " +
-                        $"({student.PhysicalScienceMark:0}) " +
-                        $"is below the required minimum mark " +
-                        $"({programme.RequiredPhysicalScience.Value:0}).");
-                } // end else if
-            } // end if
-
-            return issues;
-        } // end method
+                new("APS score", programme.RequiredAPS, student.APSScore, false,
+                    student.APSScore < programme.RequiredAPS
+                        ? $"Your APS score ({student.APSScore}) is below the required minimum APS ({programme.RequiredAPS})."
+                        : null),
+                new("Mathematics", programme.RequiredMathematics, student.MathematicsMark, true,
+                    student.MathematicsMark < programme.RequiredMathematics
+                        ? $"Your Mathematics mark ({student.MathematicsMark:0.##}) is below the required minimum mark ({programme.RequiredMathematics:0.##})."
+                        : null),
+                new("Physical Science", requiredScience, scienceMark, true,
+                    requiredScience.HasValue
+                        ? scienceMark == null
+                            ? "A Physical Science mark is required for this programme."
+                            : scienceMark < requiredScience
+                                ? $"Your Physical Science mark ({scienceMark:0.##}) is below the required minimum mark ({requiredScience:0.##})."
+                                : null
+                        : null)
+            };
+        } // end method EvaluateRequirements
 
         public bool IsEligible(
             Student student,

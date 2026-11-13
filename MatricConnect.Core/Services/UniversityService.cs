@@ -62,6 +62,11 @@ namespace MatricConnect.Services
                 .GetUniversitiesByProvince(province);
         } // end method GetUniversitiesByProvince
 
+        public List<UniversitySearchResult> GetUniversitySearchResults(string province)
+        {
+            return _universityRepository.GetUniversitySearchResults(province);
+        } // end method GetUniversitySearchResults
+
         public List<Programme> GetProgrammesByUniversity(
             int universityId)
         {

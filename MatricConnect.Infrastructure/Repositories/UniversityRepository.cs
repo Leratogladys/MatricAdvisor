@@ -75,6 +75,16 @@ namespace MatricConnect.Infrastructure.Repositories
                 .ToList();
         } // end method
 
+        public List<UniversitySearchResult> GetUniversitySearchResults(string province)
+        {
+            return _context.Universities
+                .Where(university => university.Province == province)
+                .OrderBy(university => university.Name)
+                .Select(university => new UniversitySearchResult(
+                    university.Id, university.Name, university.Province, university.Programmes.Count))
+                .ToList();
+        } // end method GetUniversitySearchResults
+
         public List<Programme> GetProgrammesByUniversity(
             int universityId)
         {

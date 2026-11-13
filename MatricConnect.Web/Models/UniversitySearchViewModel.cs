@@ -40,7 +40,7 @@ namespace MatricConnect.Web.Models
             get; set;
         } // end property SelectedProvince
 
-        public List<University> Universities
+        public List<UniversitySearchResult> Universities
         {
             //
             // Name            : property List<University> Universities
@@ -48,11 +48,11 @@ namespace MatricConnect.Web.Models
             // Re-use          : None
             // Input Parameter : List<University> value
             //                   - matching universities
-            // Output Type     : List<University>
+            // Output Type     : List<UniversitySearchResult>
             //                   - university search results
             //
 
             get; set;
-        } = new List<University>(); // end property Universities
+        } = new List<UniversitySearchResult>(); // end property Universities
     } // end class UniversitySearchViewModel
 } // end namespace MatricConnect.Web.Models

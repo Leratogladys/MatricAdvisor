@@ -48,7 +48,7 @@ namespace MatricConnect.Web.Controllers
             // Purpose           : Displays province options and retrieves
             //                     universities for a valid province selection.
             // Re-use            : UniversityService.GetProvince(),
-            //                     UniversityService.GetUniversitiesByProvince()
+            //                     UniversityService.GetUniversitySearchResults()
             // Method Parameters : string? selectedProvince
             //                     - province selected for searching
             // Output Type       : IActionResult
@@ -72,7 +72,7 @@ namespace MatricConnect.Web.Controllers
                 } // end if
                 else
                 {
-                    model.Universities = _universityService.GetUniversitiesByProvince(selectedProvince);
+                    model.Universities = _universityService.GetUniversitySearchResults(selectedProvince);
                 } // end else
             } // end if
 

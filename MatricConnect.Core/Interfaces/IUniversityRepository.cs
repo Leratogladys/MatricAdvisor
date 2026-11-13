@@ -31,6 +31,9 @@ namespace MatricConnect.Core.Interfaces
         //
         List<University> GetUniversitiesByProvince(string province);
 
+        // Retrieves university cards with their programme counts in the catalogue.
+        List<UniversitySearchResult> GetUniversitySearchResults(string province);
+
         //
         // Name              : List<Programme>
         //                     GetProgrammesByUniversity(int universityId)

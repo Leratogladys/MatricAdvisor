@@ -10,6 +10,8 @@
     var studentName = student == null ? "My Profile" : $"{student.FirstName} {student.LastName}";
     var isDashboard = ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
         && ViewContext.RouteData.Values["action"]?.ToString() == "Index";
+    var isUniversitySearch = ViewContext.RouteData.Values["controller"]?.ToString() == "Universities"
+        && ViewContext.RouteData.Values["action"]?.ToString() == "Index";
 }
 
 <!DOCTYPE html>
@@ -42,13 +44,16 @@
         </aside>
 
         <div class="mc-content">
-            <header class="mc-topbar d-none d-lg-flex">
-                <p>Your path. More possibilities.</p>
+            <header class="mc-topbar d-none d-lg-flex @(isUniversitySearch ? "mc-search-topbar" : null)">
+                <p>@(isUniversitySearch ? "YOUR NEXT CHAPTER" : "Your path. More possibilities.")</p>
 
                 <div class="mc-account">
                     <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">
-                        <img src="~/images/dashboard/account.svg" alt="" />
-                        <span>@studentName</span>
+                        @if (!isUniversitySearch)
+                        {
+                            <img src="~/images/dashboard/account.svg" alt="" />
+                        }
+                        <span>@(isUniversitySearch && student != null ? $"{studentName} · Student ID {student.Id}" : studentName)</span>
                     </a>
 
                     @if (student != null)
@@ -83,7 +88,7 @@
                 </div>
             </header>
 
-            <main id="main-content" class="@(isDashboard ? "mc-dashboard-main" : "mc-page")" tabindex="-1">
+            <main id="main-content" class="@(isDashboard ? "mc-dashboard-main" : "mc-page") @(isUniversitySearch ? "mc-search-page" : null)" tabindex="-1">
                 @if (TempData["ProfileCreatedMessage"] is string profileCreatedMessage)
                 {
                     <div class="alert alert-success @(isDashboard ? "mc-dashboard-alert" : null)" role="status">

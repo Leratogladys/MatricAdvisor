@@ -6,9 +6,10 @@
 @{
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var homeIcon = controller == "Universities" && action == "Index" ? "nav-home-inactive.svg" : "nav-home.svg";
     var links = new[]
     {
-        (Label: "Dashboard", Controller: "Home", Action: "Index", Icon: "nav-home.svg", Active: controller == "Home" && action == "Index"),
+        (Label: "Dashboard", Controller: "Home", Action: "Index", Icon: homeIcon, Active: controller == "Home" && action == "Index"),
         (Label: "Create Student Profile", Controller: "Students", Action: "Create", Icon: "nav-profile.svg", Active: controller == "Students" && action == "Create"),
         (Label: "Existing Student", Controller: "Students", Action: "Existing", Icon: "nav-students.svg", Active: controller == "Students" && action == "Existing"),
         (Label: "Search Universities", Controller: "Universities", Action: "Index", Icon: "nav-search.svg", Active: controller == "Universities"),

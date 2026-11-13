@@ -552,3 +552,216 @@
         background: transparent;
     }
 }
+
+.mc-search-topbar {
+    padding-inline: 16px;
+    background: var(--mc-navy);
+}
+
+.mc-search-topbar > p {
+    font-weight: 600;
+}
+
+.mc-search-page {
+    max-width: 1080px;
+    padding-top: 96px;
+    padding-bottom: 64px;
+}
+
+.mc-search-flow {
+    display: grid;
+    gap: 24px;
+}
+
+.mc-search-flow :where(h1, h2, h3, p) {
+    margin: 0;
+}
+
+.mc-search-eyebrow,
+.mc-province-label,
+.mc-province-help {
+    font: 600 14px / 20px var(--mc-font-body);
+}
+
+.mc-search-eyebrow {
+    color: var(--mc-teal);
+    text-transform: uppercase;
+}
+
+.mc-search-title {
+    font: 700 48px / 58px var(--mc-font-heading);
+    text-wrap: balance;
+}
+
+.mc-search-description,
+.mc-search-empty-description,
+.mc-search-note {
+    font: 400 16px / 24px var(--mc-font-body);
+}
+
+.mc-search-description {
+    min-height: 48px;
+}
+
+.mc-search-note,
+.mc-province-help {
+    color: var(--mc-muted);
+}
+
+.mc-province-form {
+    display: grid;
+    grid-template-columns: minmax(0, 540px) minmax(180px, 260px);
+    align-items: start;
+    gap: 16px;
+}
+
+.mc-province-field {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+    min-height: 116px;
+    align-content: start;
+}
+
+.mc-province-select {
+    min-height: 48px;
+    padding-left: 16px;
+    border: 1px solid var(--mc-border);
+    border-radius: 8px;
+    background-color: var(--mc-surface);
+    color: var(--mc-muted);
+}
+
+.mc-province-select[aria-invalid="true"] {
+    border-color: var(--bs-danger);
+}
+
+.mc-province-field .field-validation-valid {
+    display: none;
+}
+
+.mc-browse-button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: var(--mc-teal);
+    color: var(--mc-surface);
+    font: 600 14px / 20px var(--mc-font-body);
+}
+
+.mc-browse-button:hover,
+.mc-browse-button:active,
+.mc-browse-button:focus-visible {
+    background: #275952;
+    color: var(--mc-surface);
+}
+
+.mc-province-form > .mc-browse-button {
+    margin-top: 28px;
+}
+
+.mc-browse-heading {
+    font: 700 22px / 28px var(--mc-font-heading);
+    overflow-wrap: anywhere;
+}
+
+.mc-university-results {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mc-university-card {
+    display: flex;
+    min-width: 0;
+    min-height: 260px;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    border: 1px solid var(--mc-border);
+    border-radius: var(--mc-radius-card);
+    background: var(--mc-surface);
+}
+
+.mc-university-card .mc-browse-heading {
+    min-height: 84px;
+    max-width: 205px;
+}
+
+.mc-university-card .mc-search-note {
+    min-height: 48px;
+}
+
+.mc-university-card .mc-browse-button {
+    margin-top: auto;
+}
+
+.mc-search-empty-description {
+    max-width: 42ch;
+}
+
+.mc-search-reset {
+    width: min(100%, 260px);
+}
+
+@media (min-width: 600px) and (max-width: 1199.98px) {
+    .mc-university-results {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 991.98px) {
+    .mc-search-page {
+        max-width: 680px;
+        padding: 24px 24px 56px;
+    }
+
+    .mc-search-title {
+        max-width: 305px;
+        min-height: 84px;
+        font-size: 32px;
+        line-height: 40px;
+        text-wrap: initial;
+    }
+
+    .mc-search-empty .mc-search-title {
+        max-width: 280px;
+    }
+
+    .mc-search-description {
+        min-height: 72px;
+    }
+
+    .mc-search-empty-description {
+        min-height: 120px;
+    }
+
+    .mc-search-reset {
+        width: 100%;
+    }
+
+    .mc-province-form {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+
+    .mc-search-with-results .mc-province-form {
+        gap: 16px;
+    }
+
+    .mc-province-form > .mc-browse-button {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 599.98px) {
+    .mc-university-results {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

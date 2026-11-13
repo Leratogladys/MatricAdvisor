@@ -7,83 +7,55 @@
 
 @{
     ViewData["Title"] = "Saved Programmes";
+    var savedCount = Model.SavedProgrammes.Count;
+    var programmeLabel = savedCount == 1 ? "programme" : "programmes";
 }
 
-<h1>Saved Programmes</h1>
+<div class="mc-browse-flow">
+    <p class="mc-browse-eyebrow">Your shortlist</p>
+    <h1 class="mc-browse-title">Saved programmes</h1>
+    <p class="mc-browse-note">Saved by <strong>@Model.Student.FirstName @Model.Student.LastName</strong> · Student ID @Model.Student.Id</p>
 
-@if (TempData["SavedProgrammesMessage"] is string message)
-{
-    <div class="alert alert-info" role="status">
-        @message
+    <div class="mc-saved-actions">
+        <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button">Find more programmes</a>
+        <a asp-controller="Students" asp-action="Existing" asp-route-returnUrl="@Url.Action("Index", "SavedProgrammes")"
+           class="btn mc-browse-button mc-browse-button-secondary">Select another profile</a>
     </div>
-}
 
-   <p>Programmes saved by
-    <strong> @Model.Student.FirstName @Model.Student.LastName</strong>.
-     <span class="text-muted">
-        Student ID: @Model.Student.Id
-    </span> 
-    </p>
+    @if (TempData["SavedProgrammesMessage"] is string message)
+    {
+        <p class="mc-saved-status" role="status">@message</p>
+    }
 
-<div class="d-flex flex-wrap gap-2 mb-4">
-    <a asp-controller="Universities"
-       asp-action="Index"
-       class="btn btn-primary">
-        Find More Programmes
-    </a>
-
-    <a asp-controller="Students"
-       asp-action="Existing"
-       asp-route-returnUrl="@Url.Action("Index", "SavedProgrammes")"
-       class="btn btn-outline-secondary">
-        Select Another Profile
-    </a>
+    @if (savedCount == 0)
+    {
+        <section class="mc-saved-empty" aria-labelledby="saved-empty-title">
+            <h2 id="saved-empty-title" class="mc-browse-heading">No saved programmes yet</h2>
+            <p class="mc-browse-note">Browse universities, check a programme’s requirements, and save it here to revisit later.</p>
+        </section>
+    }
+    else
+    {
+        <section class="mc-browse-flow" aria-labelledby="saved-programmes-heading">
+            <h2 id="saved-programmes-heading" class="mc-browse-heading">@savedCount saved @programmeLabel</h2>
+            <ul class="mc-browse-results">
+                @foreach (var saved in Model.SavedProgrammes)
+                {
+                    <li class="mc-browse-card mc-saved-card">
+                        <h3 class="mc-browse-heading">@saved.Programme.Name</h3>
+                        <p class="mc-browse-note">@saved.Programme.University.Name · @saved.Programme.University.Province</p>
+                        <div class="mc-saved-card-actions">
+                            <a asp-controller="Universities" asp-action="ProgrammeDetails" asp-route-id="@saved.ProgrammeId"
+                               class="btn mc-browse-button" aria-label="View requirements for @saved.Programme.Name">View requirements</a>
+                            <form asp-controller="SavedProgrammes" asp-action="Remove" asp-route-id="@saved.ProgrammeId" method="post">
+                                <button type="submit" class="btn mc-browse-button mc-browse-button-secondary mc-saved-remove"
+                                        aria-label="Remove @saved.Programme.Name from saved programmes">Remove</button>
+                            </form>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <p class="mc-browse-note">Saving keeps a programme for later. It does not submit an application.</p>
+        </section>
+    }
 </div>
-
-@if (Model.SavedProgrammes.Count == 0)
-{
-    <div class="alert alert-info" role="status">
-        You have no saved programmes yet.
-        Browse universities and check a programme's eligibility to save it.
-    </div>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var savedProgramme in Model.SavedProgrammes)
-        {
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h2 class="h5 card-title">
-                            <a asp-controller="Universities"
-                               asp-action="ProgrammeDetails"
-                               asp-route-id="@savedProgramme.ProgrammeId">
-                                @savedProgramme.Programme.Name
-                            </a>
-                        </h2>
-
-                        <p class="card-text">
-                            @savedProgramme.Programme.University.Name
-                        </p>
-
-                        <p class="text-muted mb-0">
-                            @savedProgramme.Programme.University.Province
-                        </p>
-
-                        <form asp-controller="SavedProgrammes"
-                              asp-action="Remove"
-                              asp-route-id="@savedProgramme.ProgrammeId"
-                              method="post"
-                              class="mt-3">
-                            <button type="submit"
-                                    class="btn btn-outline-danger">
-                                Remove
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-}

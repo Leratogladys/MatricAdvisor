@@ -14,11 +14,13 @@
     var isUniversitySearch = controller == "Universities" && action == "Index";
     var isProgrammeList = controller == "Universities" && action == "Programmes";
     var isProgrammeDetails = controller == "Universities" && (action == "ProgrammeDetails" || action == "CheckEligibility");
-    var isCatalogueBrowse = isUniversitySearch || isProgrammeList || isProgrammeDetails;
+    var isSavedProgrammes = controller == "SavedProgrammes" && action == "Index";
+    var usesBrowseHeader = isUniversitySearch || isProgrammeList || isProgrammeDetails || isSavedProgrammes;
     var mainClass = isDashboard ? "mc-dashboard-main"
         : isUniversitySearch ? "mc-page mc-search-page"
         : isProgrammeList ? "mc-page mc-programmes-page"
         : isProgrammeDetails ? "mc-page mc-programme-details-page"
+        : isSavedProgrammes ? "mc-page mc-saved-page"
         : "mc-page";
 }
 
@@ -52,16 +54,16 @@
         </aside>
 
         <div class="mc-content">
-            <header class="mc-topbar d-none d-lg-flex @(isCatalogueBrowse ? "mc-browse-topbar" : null)">
-                <p>@(isCatalogueBrowse ? "YOUR NEXT CHAPTER" : "Your path. More possibilities.")</p>
+            <header class="mc-topbar d-none d-lg-flex @(usesBrowseHeader ? "mc-browse-topbar" : null)">
+                <p>@(usesBrowseHeader ? "YOUR NEXT CHAPTER" : "Your path. More possibilities.")</p>
 
                 <div class="mc-account">
                     <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">
-                        @if (!isCatalogueBrowse)
+                        @if (!usesBrowseHeader)
                         {
                             <img src="~/images/dashboard/account.svg" alt="" />
                         }
-                        <span>@(isCatalogueBrowse && student != null ? $"{studentName} · Student ID {student.Id}" : studentName)</span>
+                        <span>@(usesBrowseHeader && student != null ? $"{studentName} · Student ID {student.Id}" : studentName)</span>
                     </a>
 
                     @if (student != null)

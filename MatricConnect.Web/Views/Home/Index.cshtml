@@ -1,109 +1,74 @@
-﻿@* Programmer name : Lerato Molefe
+@* Programmer name : Lerato Molefe
    Project name    : Matric Connect
-   Purpose         : Introduces Matric Connect and provides access
-                     to student profiles and university browsing.
+   Purpose         : Presents the dashboard and links to the main student journeys.
 *@
 
+@inject MatricConnect.Web.Services.SelectedStudentContext SelectedStudent
+
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Dashboard";
+
+    var student = SelectedStudent.GetStudent(Context);
+    var actions = new[]
+    {
+        (Title: "Create Student Profile", Description: "Add your matric results to check programme requirements.", Controller: "Students", Action: "Create", Tone: "teal", Icon: "profile"),
+        (Title: "Existing Student", Description: "Access your saved profile using your Student ID.", Controller: "Students", Action: "Existing", Tone: "blue", Icon: "students"),
+        (Title: "Search Universities", Description: "Browse universities by province and explore programmes.", Controller: "Universities", Action: "Index", Tone: "terracotta", Icon: "search"),
+        (Title: "View Saved Programmes", Description: "View and manage your saved programmes.", Controller: "SavedProgrammes", Action: "Index", Tone: "gold", Icon: "bookmark")
+    };
 }
 
 @if (TempData["SuccessMessage"] is string successMessage)
 {
-    <div class="alert alert-success" role="status">
-
+    <div class="alert alert-success mc-dashboard-alert" role="status">
         @successMessage
-
     </div>
 }
 
+<section class="mc-hero" aria-labelledby="dashboard-title">
+    <picture class="mc-hero-image">
+        <source media="(max-width: 991.98px)" srcset="@Url.Content("~/images/dashboard/mobile-hero.jpg")" />
+        <img src="~/images/dashboard/hero.jpg" alt="" />
+    </picture>
 
-<section class="py-4">
-    <h1 class="display-5 fw-bold">
-        Explore your university options
-    </h1>
-
-    <p class="lead">
-        Browse universities, compare programme entry requirements with your 
-        academic results, and save programmes you want to explore further.
-    </p>
-
-    <div class="d-flex flex-wrap gap-2 mt-4">
-        <a asp-controller="Students"
-           asp-action="Create"
-           class="btn btn-primary">
-           Create Student Profile
-       </a>
-
-        <a asp-controller="Students"
-           asp-action="Existing"
-           class="btn btn-outline-secondary">
-           Use Existing Profile
-      </a>
-
-      <a asp-controller="Universities"
-         asp-action="Index"
-         class="btn btn-outline-primary">
-         Browse Universities
-      </a>
-
+    <div class="mc-welcome">
+        <p class="mc-eyebrow">Dashboard</p>
+        <h1 id="dashboard-title">
+            @if (student == null)
+            {
+                <text>Welcome to Matric Connect</text>
+            }
+            else
+            {
+                <text>Welcome back, <span class="mc-welcome-name">@(student.FirstName)!</span></text>
+            }
+        </h1>
+        <p>Find the right university programmes for your future.</p>
     </div>
 
-    <p class="Text-muted mt-3">
-        You can browse without a profile. Create or select a 
-        profile to reuse your academic results and save programmes.
-    </p>
+    <p class="mc-hero-motto">Same<br />Matric.<br />More<br />Possibilities.</p>
 </section>
 
-<section class="mt-4" aria-labelledby="how-it-works">
-    <h2 id="how-it-works" class="h3 mb-3">How it works</h2>
+<nav class="mc-dashboard-actions" aria-label="Dashboard actions">
+    @foreach (var item in actions)
+    {
+        <a class="mc-action mc-action--@item.Tone"
+           asp-controller="@item.Controller"
+           asp-action="@item.Action">
+            <span class="mc-action-icon">
+                <img class="d-none d-lg-block" src="~/images/dashboard/card-@(item.Icon).svg" alt="" />
+                <img class="d-lg-none" src="~/images/dashboard/mobile-card-@(item.Icon).svg" alt="" />
+            </span>
 
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h3 class="h5">1. Find a programme</h3>
+            <span class="mc-action-copy">
+                <span class="mc-action-title">@item.Title</span>
+                <span class="mc-action-description">@item.Description</span>
+            </span>
 
-                    <p class="card-text">
-                        Select a province, explore its universities, 
-                        and view the programmes they offer.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h3 class="h5">2. Check your eligibility</h3>
-
-                    <p class="card-text">
-                        Compare yur APS score, Mathematics mark,
-                        and Physical Science mark where required
-                        with a programme's minimum requirements.
-                    </p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h3 class="h5">3. Save your options</h3>
-
-                    <p class="card-text">
-                        After checking eligibility, save programmes
-                        to your selected profile and revisit them
-                        from Saved Programmes.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-        <div class="alert alert-info mt-4">
-            Meeting the requirements evaluated by Matric Connect does 
-            not guarantee admission. Confirm current entry requirements
-            and application deadlines directly with the university.
-        </div>
+            <span class="mc-action-arrow">
+                <img class="d-none d-lg-block" src="~/images/dashboard/card-arrow.svg" alt="" />
+                <img class="d-lg-none" src="~/images/dashboard/mobile-chevron.svg" alt="" />
+            </span>
+        </a>
+    }
+</nav>

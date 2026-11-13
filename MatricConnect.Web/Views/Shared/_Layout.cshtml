@@ -1,7 +1,16 @@
-﻿@* Programmer name : Lerato Molefe
+@* Programmer name : Lerato Molefe
    Project name    : Matric Connect
    Purpose         : Provides the shared page layout and website navigation.
 *@
+
+@inject MatricConnect.Web.Services.SelectedStudentContext SelectedStudent
+
+@{
+    var student = SelectedStudent.GetStudent(Context);
+    var studentName = student == null ? "My Profile" : $"{student.FirstName} {student.LastName}";
+    var isDashboard = ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+        && ViewContext.RouteData.Values["action"]?.ToString() == "Index";
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,111 +20,90 @@
 
     <title>@ViewData["Title"] - Matric Connect</title>
 
-    <link rel="stylesheet"
-          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <link rel="stylesheet"
-          href="~/css/site.css"
-          asp-append-version="true" />
-
-    <link rel="stylesheet"
-          href="~/MatricConnect.Web.styles.css"
-          asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand"
-                   asp-area=""
-                   asp-controller="Home"
-                   asp-action="Index">
-                    Matric Connect
-                </a>
+<body class="mc-app">
+    <a class="visually-hidden-focusable mc-skip-link" href="#main-content">Skip to content</a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#mainNavigation"
-                        aria-controls="mainNavigation"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div id="mainNavigation"
-                     class="collapse navbar-collapse">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Home
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Universities"
-                               asp-action="Index">
-                                Search Universities
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Students"
-                               asp-action="Profile">
-                                My Profile
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="SavedProgrammes"
-                               asp-action="Index">
-                                Saved Programmes
-                            </a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @if(TempData["ProfileCreatedMessage"] is string profileCreatedMessage)
-            {
-                <div class="alert alert-success" role="status">
-                    @profileCreatedMessage
-                </div>
-            }
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Matric Connect -
-            <a asp-area=""
-               asp-controller="Home"
-               asp-action="Privacy">
-                Privacy
+    <div class="mc-shell">
+        <aside class="mc-sidebar d-none d-lg-flex">
+            <a class="mc-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/images/dashboard/brand.svg" alt="" />
+                <span><strong>Matric</strong><span>Connect</span></span>
             </a>
+
+            <partial name="_DashboardNavigation" />
+
+            <div class="mc-sidebar-note">
+                <img src="~/images/dashboard/sidebar-mountains.svg" alt="" />
+                <p>South African futures<br />start here.</p>
+            </div>
+        </aside>
+
+        <div class="mc-content">
+            <header class="mc-topbar d-none d-lg-flex">
+                <p>Your path. More possibilities.</p>
+
+                <div class="mc-account">
+                    <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">
+                        <img src="~/images/dashboard/account.svg" alt="" />
+                        <span>@studentName</span>
+                    </a>
+
+                    @if (student != null)
+                    {
+                        <form asp-area="" asp-controller="Students" asp-action="ClearProfile" method="post">
+                            <button class="mc-clear-profile" type="submit">Clear profile</button>
+                        </form>
+                    }
+                </div>
+            </header>
+
+            <header class="mc-mobile-header d-lg-none">
+                <div class="mc-mobile-bar">
+                    <button class="mc-mobile-toggle" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#mc-mobile-navigation"
+                            aria-controls="mc-mobile-navigation" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <img src="~/images/dashboard/mobile-menu.svg" alt="" />
+                    </button>
+
+                    <a class="mc-mobile-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <strong>Matric</strong> <span>Connect</span>
+                    </a>
+
+                    <a class="mc-mobile-account" asp-area="" asp-controller="Students" asp-action="Profile" aria-label="My Profile">
+                        <img src="~/images/dashboard/mobile-account.svg" alt="" />
+                    </a>
+                </div>
+
+                <div id="mc-mobile-navigation" class="collapse mc-mobile-navigation">
+                    <partial name="_DashboardNavigation" />
+                </div>
+            </header>
+
+            <main id="main-content" class="@(isDashboard ? "mc-dashboard-main" : "mc-page")" tabindex="-1">
+                @if (TempData["ProfileCreatedMessage"] is string profileCreatedMessage)
+                {
+                    <div class="alert alert-success @(isDashboard ? "mc-dashboard-alert" : null)" role="status">
+                        @profileCreatedMessage
+                    </div>
+                }
+
+                @RenderBody()
+            </main>
+
+            <footer class="mc-footer">
+                &copy; @DateTime.Now.Year Matric Connect
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </footer>
         </div>
-    </footer>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/js/site.js"
-            asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

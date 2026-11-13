@@ -8,6 +8,7 @@ using MatricConnect.Data;
 using MatricConnect.Infrastructure.Repositories;
 using MatricConnect.Services;
 using MatricConnect.Validation;
+using MatricConnect.Web.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,7 @@ builder.Services.AddScoped<UniversityService>();
 builder.Services.AddScoped<SavedProgrammeService>();
 builder.Services.AddScoped<EligibilityService>();
 builder.Services.AddScoped<StudentValidator>();
+builder.Services.AddScoped<SelectedStudentContext>();
 
 //Configure temporary session storage for selected student.
 builder.Services.AddDistributedMemoryCache();

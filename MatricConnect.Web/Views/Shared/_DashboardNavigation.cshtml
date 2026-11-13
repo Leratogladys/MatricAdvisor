@@ -1,0 +1,35 @@
+@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Renders the same navigation in the sidebar and mobile menu.
+*@
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var links = new[]
+    {
+        (Label: "Dashboard", Controller: "Home", Action: "Index", Icon: "nav-home.svg", Active: controller == "Home" && action == "Index"),
+        (Label: "Create Student Profile", Controller: "Students", Action: "Create", Icon: "nav-profile.svg", Active: controller == "Students" && action == "Create"),
+        (Label: "Existing Student", Controller: "Students", Action: "Existing", Icon: "nav-students.svg", Active: controller == "Students" && action == "Existing"),
+        (Label: "Search Universities", Controller: "Universities", Action: "Index", Icon: "nav-search.svg", Active: controller == "Universities"),
+        (Label: "View Saved Programmes", Controller: "SavedProgrammes", Action: "Index", Icon: "nav-bookmark.svg", Active: controller == "SavedProgrammes")
+    };
+}
+
+<nav class="mc-nav" aria-label="Main navigation">
+    <ul>
+        @foreach (var link in links)
+        {
+            <li>
+                <a asp-area=""
+                   asp-controller="@link.Controller"
+                   asp-action="@link.Action"
+                   class="mc-nav-link @(link.Active ? "is-active" : null)"
+                   aria-current="@(link.Active ? (action == link.Action ? "page" : "location") : null)">
+                    <img src="~/images/dashboard/@link.Icon" alt="" />
+                    <span>@link.Label</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

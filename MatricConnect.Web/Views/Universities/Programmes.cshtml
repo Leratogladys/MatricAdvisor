@@ -7,62 +7,42 @@
 
 @{
     ViewData["Title"] = "Browse Programmes";
+    var programmeCount = Model.Programmes.Count;
+    var programmeLabel = programmeCount == 1 ? "programme" : "programmes";
 }
 
-<h1>Programmes at @Model.University.Name</h1>
+<div class="mc-browse-flow">
+    <p class="mc-browse-eyebrow">@Model.University.Province / @Model.University.Name</p>
+    <h1 class="mc-browse-title">Explore programmes</h1>
+    <p class="mc-browse-description">Choose a programme to view its requirements and check your results.</p>
 
-<p>@Model.University.Province</p>
+    <a asp-controller="Universities" asp-action="Index" asp-route-selectedProvince="@Model.University.Province"
+       class="btn mc-browse-button mc-browse-button-secondary mc-programmes-back">
+        Back to universities
+    </a>
 
-<a asp-controller="Universities"
-   asp-action="Index"
-   asp-route-selectedProvince="@Model.University.Province"
-   class="btn btn-outline-secondary mb-4">
-    Back to Universities
-</a>
-
-   @if (Model.Programmes.Count == 0)
-{
-    <p>No programmes are currently listed for this university.</p>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var programme in Model.Programmes)
-        {
-            <div class="card h-100">
-                <div class="card-body">
-                    <h2 class="h5 card-title">
-                        <a asp-controller="Universities"
-                           asp-action="ProgrammeDetails"
-                           asp-route-id="@programme.Id">
-                            @programme.Name
-                       </a>
-                       </h2>
-                    <p class="card-text">@programme.FieldOfStudy</p>
-
-                    <dl class="row mb-0">
-                        <dt class="col-6">Minimum APS</dt>
-                        <dd class="col-6">@programme.RequiredAPS</dd>
-
-                        <dt class="col-6">Mathematics</dt>
-                        <dd class="col-6">
-                            @programme.RequiredMathematics.ToString("0.##")%
-                        </dd>
-
-                        <dt class="col-6">Physical Science</dt>
-                        <dd class="col-6">
-                            @if (programme.RequiredPhysicalScience.HasValue)
-                            {
-                                <span>@programme.RequiredPhysicalScience.Value.ToString("0.##")%</span>
-                            }
-                            else
-                            {
-                                <span>Not required</span>
-                            }
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-        }
-    </div>
-}
+    @if (programmeCount == 0)
+    {
+        <p class="mc-browse-note">No programmes are currently listed for this university.</p>
+    }
+    else
+    {
+        <section class="mc-browse-flow" aria-labelledby="programme-results-heading">
+            <h2 id="programme-results-heading" class="mc-browse-heading">@programmeCount @programmeLabel at @Model.University.Name</h2>
+            <ul class="mc-browse-results">
+                @foreach (var programme in Model.Programmes)
+                {
+                    <li class="mc-browse-card">
+                        <h3 class="mc-browse-heading">@programme.Name</h3>
+                        <p class="mc-browse-note">@programme.FieldOfStudy · APS @programme.RequiredAPS</p>
+                        <a asp-controller="Universities" asp-action="ProgrammeDetails" asp-route-id="@programme.Id"
+                           class="btn mc-browse-button" aria-label="View requirements for @programme.Name">
+                            View requirements
+                        </a>
+                    </li>
+                }
+            </ul>
+            <p class="mc-browse-note">APS is one requirement. Open a programme to review all requirements stored in Matric Connect.</p>
+        </section>
+    }
+</div>

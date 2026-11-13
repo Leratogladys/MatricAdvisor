@@ -6,7 +6,7 @@
 @{
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var action = ViewContext.RouteData.Values["action"]?.ToString();
-    var homeIcon = controller == "Universities" && action == "Index" ? "nav-home-inactive.svg" : "nav-home.svg";
+    var homeIcon = controller == "Universities" && (action == "Index" || action == "Programmes") ? "nav-home-inactive.svg" : "nav-home.svg";
     var links = new[]
     {
         (Label: "Dashboard", Controller: "Home", Action: "Index", Icon: homeIcon, Active: controller == "Home" && action == "Index"),

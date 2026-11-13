@@ -24,25 +24,25 @@
 
 @if (isEmpty)
 {
-    <div class="mc-search-flow mc-search-empty">
-        <p class="mc-search-eyebrow">Search results</p>
-        <h1 class="mc-search-title">No universities listed yet</h1>
+    <div class="mc-browse-flow mc-search-empty">
+        <p class="mc-browse-eyebrow">Search results</p>
+        <h1 class="mc-browse-title">No universities listed yet</h1>
         <p class="mc-search-empty-description">There are no universities in our catalogue for this province. Try another province.</p>
         <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button mc-search-reset">
             Choose another province
         </a>
-        <p class="mc-search-note">This reflects our catalogue, not every university in South Africa.</p>
+        <p class="mc-browse-note">This reflects our catalogue, not every university in South Africa.</p>
     </div>
 }
 else
 {
-    <div class="mc-search-flow @(hasResults ? "mc-search-with-results" : null)">
-        <p class="mc-search-eyebrow">Explore your options</p>
-        <h1 class="mc-search-title">@(hasResults ? "Find your university" : "Where would you like to study?")</h1>
+    <div class="mc-browse-flow @(hasResults ? "mc-search-with-results" : null)">
+        <p class="mc-browse-eyebrow">Explore your options</p>
+        <h1 class="mc-browse-title">@(hasResults ? "Find your university" : "Where would you like to study?")</h1>
 
         @if (hasResults)
         {
-            <p class="mc-search-description">Choose a province to browse universities and their programmes.</p>
+            <p class="mc-browse-description">Choose a province to browse universities and their programmes.</p>
         }
 
         <form asp-controller="Universities" asp-action="Index" method="get" class="mc-province-form">
@@ -65,15 +65,15 @@ else
 
         @if (hasResults)
         {
-            <section class="mc-search-flow" aria-labelledby="university-results-heading">
+            <section class="mc-browse-flow" aria-labelledby="university-results-heading">
                 <h2 id="university-results-heading" class="mc-browse-heading">@universityCount @universityLabel in @Model.SelectedProvince</h2>
-                <ul class="mc-university-results">
+                <ul class="mc-browse-results">
                     @foreach (var university in Model.Universities)
                     {
                         var programmeLabel = university.ProgrammeCount == 1 ? "programme" : "programmes";
-                        <li class="mc-university-card">
+                        <li class="mc-browse-card mc-university-card">
                             <h3 class="mc-browse-heading">@university.Name</h3>
-                            <p class="mc-search-note">@university.Province · @university.ProgrammeCount @programmeLabel</p>
+                            <p class="mc-browse-note">@university.Province · @university.ProgrammeCount @programmeLabel</p>
                             <a asp-controller="Universities" asp-action="Programmes" asp-route-id="@university.Id"
                                class="btn mc-browse-button" aria-label="View programmes at @university.Name">
                                 View programmes
@@ -81,12 +81,12 @@ else
                         </li>
                     }
                 </ul>
-                <p class="mc-search-note">You can browse a different province without changing your home province.</p>
+                <p class="mc-browse-note">You can browse a different province without changing your home province.</p>
             </section>
         }
         else
         {
-            <p class="mc-search-note">Choose a province to see the universities listed in our catalogue.</p>
+            <p class="mc-browse-note">Choose a province to see the universities listed in our catalogue.</p>
         }
     </div>
 }

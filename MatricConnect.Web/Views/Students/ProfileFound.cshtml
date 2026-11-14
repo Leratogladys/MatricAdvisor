@@ -1,0 +1,33 @@
+@model MatricConnect.Models.Student
+
+@{
+    ViewData["Title"] = "Profile Found";
+    ViewData["StudentFlow"] = "Existing";
+}
+
+<section class="mc-student-flow mc-student-confirm mc-student-found">
+    <header class="mc-student-intro">
+        <p class="mc-browse-eyebrow">Profile found</p>
+        <h1 class="mc-browse-title">Welcome back, <br class="mc-student-break" />@Model.FirstName</h1>
+        <p>Your profile and saved programmes are ready.</p>
+    </header>
+
+    <section class="mc-student-card mc-student-found-card">
+        <h2 class="mc-browse-heading">@Model.FirstName @Model.LastName</h2>
+        <p class="mc-browse-note">Student ID @Model.Id · @Model.Province</p>
+        <dl class="mc-student-marks">
+            <div><dt>APS score:</dt> <dd>@Model.APSScore</dd></div>
+            <div><dt>Mathematics:</dt> <dd>@Model.MathematicsMark.ToString("0.##")%</dd></div>
+            <div><dt>Physical Science:</dt> <dd>@(Model.PhysicalScienceMark is decimal science ? science.ToString("0.##") + "%" : "Not provided")</dd></div>
+        </dl>
+        <p class="mc-browse-note">These are the results stored in your profile.</p>
+    </section>
+
+    <div class="mc-student-actions">
+        <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button">Browse universities</a>
+        <a asp-controller="SavedProgrammes" asp-action="Index"
+           class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>
+        <a asp-controller="Students" asp-action="Existing"
+           class="btn mc-browse-button mc-browse-button-secondary">Use a different Student ID</a>
+    </div>
+</section>

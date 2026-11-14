@@ -105,14 +105,15 @@ namespace MatricConnect.Web.Controllers
             var savedStudent = _studentService.AddStudent(student);
 
             HttpContext.Session.SetInt32("CurrentStudentId", savedStudent.Id);
-            TempData["ProfileCreatedMessage"] = $"Profile created successfully. Your Student ID is" +
-                                                $" {savedStudent.Id}. Keep this ID for future reference.";
-            if(Url.IsLocalUrl(model.ReturnUrl))
+            if (Url.IsLocalUrl(model.ReturnUrl))
             {
-                return LocalRedirect(model.ReturnUrl!);
+                TempData["ProfileCreatedMessage"] =
+                    $"Profile created successfully. Your Student ID is {savedStudent.Id}. Keep this ID for future reference.";
+                return LocalRedirect(model.ReturnUrl);
             } // end if
 
-            return RedirectToAction("Index", "Universities");
+            TempData[nameof(ProfileCreated)] = savedStudent.Id;
+            return RedirectToAction(nameof(ProfileCreated));
 
         } // end method Create
 
@@ -162,25 +163,48 @@ namespace MatricConnect.Web.Controllers
 
             if(student == null)
             {
-                ModelState.AddModelError(nameof(ExistingStudentViewModel.StudentId),
-                    "No student profile was found with that ID.");
+                ModelState.AddModelError(string.Empty,
+                    $"No profile found for ID {model.StudentId.Value}. Check your ID and try again.");
 
                 return View(model);
             } // end if
 
             HttpContext.Session.SetInt32("CurrentStudentId", student.Id);
 
-
-
-            if (Url.IsLocalUrl(model.ReturnUrl!))
+            if (Url.IsLocalUrl(model.ReturnUrl))
             {
                 return LocalRedirect(model.ReturnUrl);
             } // end if
 
-            TempData["SuccessMessage"] = $"Welcome back, {student.FirstName} {student.LastName}!";
-
-            return RedirectToAction("Index", "Universities");
+            TempData[nameof(ProfileFound)] = student.Id;
+            return RedirectToAction(nameof(ProfileFound));
         } // end method Existing
+
+        [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult ProfileCreated()
+        {
+            return ShowProfileConfirmation(nameof(ProfileCreated));
+        } // end method ProfileCreated
+
+        [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult ProfileFound()
+        {
+            return ShowProfileConfirmation(nameof(ProfileFound));
+        } // end method ProfileFound
+
+        private IActionResult ShowProfileConfirmation(string viewName)
+        {
+            if (TempData[viewName] is int confirmedId &&
+                HttpContext.Session.GetInt32("CurrentStudentId") == confirmedId &&
+                _studentService.GetStudentById(confirmedId) is Student student)
+            {
+                return View(viewName, student);
+            } // end if
+
+            return RedirectToAction(nameof(Profile));
+        } // end method ShowProfileConfirmation
 
         [HttpGet]
         public IActionResult Profile()

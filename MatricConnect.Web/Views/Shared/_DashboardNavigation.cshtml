@@ -6,12 +6,14 @@
 @{
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var action = ViewContext.RouteData.Values["action"]?.ToString();
-    var homeIcon = controller == "Universities" || controller == "SavedProgrammes" ? "nav-home-inactive.svg" : "nav-home.svg";
+    var studentFlow = ViewData["StudentFlow"] as string;
+    var studentReturnUrl = ViewData["StudentReturnUrl"] as string;
+    var homeIcon = controller is "Universities" or "SavedProgrammes" || studentFlow != null ? "nav-home-inactive.svg" : "nav-home.svg";
     var links = new[]
     {
         (Label: "Dashboard", Controller: "Home", Action: "Index", Icon: homeIcon, Active: controller == "Home" && action == "Index"),
-        (Label: "Create Student Profile", Controller: "Students", Action: "Create", Icon: "nav-profile.svg", Active: controller == "Students" && action == "Create"),
-        (Label: "Existing Student", Controller: "Students", Action: "Existing", Icon: "nav-students.svg", Active: controller == "Students" && action == "Existing"),
+        (Label: "Create Student Profile", Controller: "Students", Action: "Create", Icon: "nav-profile.svg", Active: studentFlow == "Create"),
+        (Label: "Existing Student", Controller: "Students", Action: "Existing", Icon: "nav-students.svg", Active: studentFlow == "Existing"),
         (Label: "Search Universities", Controller: "Universities", Action: "Index", Icon: "nav-search.svg", Active: controller == "Universities"),
         (Label: "View Saved Programmes", Controller: "SavedProgrammes", Action: "Index", Icon: "nav-bookmark.svg", Active: controller == "SavedProgrammes")
     };
@@ -25,6 +27,7 @@
                 <a asp-area=""
                    asp-controller="@link.Controller"
                    asp-action="@link.Action"
+                   asp-route-returnUrl="@(link.Controller == "Students" ? studentReturnUrl : null)"
                    class="mc-nav-link @(link.Active ? "is-active" : null)"
                    aria-current="@(link.Active ? (action == link.Action ? "page" : "location") : null)">
                     <img src="~/images/dashboard/@link.Icon" alt="" />

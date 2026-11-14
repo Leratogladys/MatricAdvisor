@@ -7,45 +7,58 @@
 
 @{
     ViewData["Title"] = "Existing Student";
+    ViewData["StudentFlow"] = "Existing";
+    var returnUrl = Url.IsLocalUrl(Model.ReturnUrl) ? Model.ReturnUrl : null;
+    ViewData["StudentReturnUrl"] = returnUrl;
+    var invalidId = ViewData.ModelState[nameof(Model.StudentId)]?.Errors.Count > 0;
+    var profileNotFound = ViewData.ModelState[string.Empty]?.Errors.Count > 0;
 }
 
-<h1>Existing Student</h1>
+<section class="mc-student-flow mc-student-lookup">
+    <header class="mc-student-intro">
+        <p class="mc-browse-eyebrow">Welcome back</p>
+        <h1 class="mc-browse-title">Continue your <br class="mc-student-break" />journey</h1>
+        <p>Enter the Student ID generated when you created your profile.</p>
+    </header>
 
-@if (TempData["SuccessMessage"] is string message)
-{
-    <div class="alert alert-info" role="status">
-        @message
+    @if (TempData["SuccessMessage"] is string message)
+    {
+        <p class="mc-student-message" role="status">@message</p>
+    }
+
+    <div class="mc-student-columns">
+        <div class="mc-student-card mc-lookup-card">
+            <h2 class="mc-browse-heading mc-student-card-heading">Find your student profile</h2>
+            <form asp-controller="Students" asp-action="Existing" method="post" class="mc-lookup-form" novalidate>
+                <input type="hidden" name="ReturnUrl" value="@returnUrl" />
+                <div class="mc-student-field">
+                    <label asp-for="StudentId">Student ID <span aria-hidden="true">*</span></label>
+                    <input asp-for="StudentId" class="mc-student-input" type="number" inputmode="numeric"
+                           min="1" max="@int.MaxValue" step="1" placeholder="Enter your Student ID" required
+                           aria-invalid="@(invalidId ? "true" : null)" aria-describedby="student-id-error student-id-help profile-not-found" />
+                    <span asp-validation-for="StudentId" id="student-id-error" class="mc-student-error" role="alert"></span>
+                    <span id="student-id-help" class="mc-student-field-help">Whole number greater than 0</span>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" id="profile-not-found" class="mc-student-error"
+                     role="@(profileNotFound ? "alert" : null)"></div>
+                <button type="submit" class="btn mc-browse-button">Find profile</button>
+                <p class="mc-browse-note mc-lookup-mobile-tip">Use the ID shown after you saved your profile.</p>
+            </form>
+
+            <section class="mc-lookup-secondary">
+                <h2 class="mc-browse-heading mc-lookup-mobile-tip">New to Matric Connect?</h2>
+                <a asp-controller="Students" asp-action="Create" asp-route-returnUrl="@returnUrl"
+                   class="btn mc-browse-button mc-browse-button-secondary">Create a new profile</a>
+                <p class="mc-browse-note mc-lookup-desktop-tip">No Student ID? Create a profile to get started.</p>
+                <p class="mc-browse-note mc-lookup-mobile-tip">Your profile stores the results used to check programme requirements.</p>
+            </section>
+        </div>
+
+        <aside class="mc-student-card mc-student-guide">
+            <h2 class="mc-browse-heading">Pick up where you left off</h2>
+            <p>Load your matric results and saved programmes using your Student ID.</p>
+            <p class="mc-browse-note">Your ID was shown after your profile was created. Enter it exactly as provided.</p>
+        </aside>
     </div>
-}
-<p>Enter the Student Id you received when creating your profile.</p>
-
-<form asp-controller="Students" asp-action="Existing" method="post">
-    <div class="mb-3">
-        <input asp-for="ReturnUrl" type="hidden" />
-        <label asp-for="StudentId" class="form-label"></label>
-
-        <input asp-for="StudentId"
-               class="form-control"
-               type="number"
-               min="1"
-               step="1" />
-
-        <span asp-validation-for="StudentId"
-               class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Find Profile
-    </button>
-
-    <a asp-controller="Students"
-       asp-action="Create"
-       asp-route-returnUrl="@Model.ReturnUrl"
-       class="btn btn-outline-secondary">
-        Create New Profile
-    </a>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+</section>

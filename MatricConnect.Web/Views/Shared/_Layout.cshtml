@@ -15,12 +15,16 @@
     var isProgrammeList = controller == "Universities" && action == "Programmes";
     var isProgrammeDetails = controller == "Universities" && (action == "ProgrammeDetails" || action == "CheckEligibility");
     var isSavedProgrammes = controller == "SavedProgrammes" && action == "Index";
-    var usesBrowseHeader = isUniversitySearch || isProgrammeList || isProgrammeDetails || isSavedProgrammes;
+    var studentFlow = ViewData["StudentFlow"] as string;
+    var isStudentFlow = studentFlow != null;
+    var studentReturnUrl = ViewData["StudentReturnUrl"] as string;
+    var usesBrowseHeader = isUniversitySearch || isProgrammeList || isProgrammeDetails || isSavedProgrammes || isStudentFlow;
     var mainClass = isDashboard ? "mc-dashboard-main"
         : isUniversitySearch ? "mc-page mc-search-page"
         : isProgrammeList ? "mc-page mc-programmes-page"
         : isProgrammeDetails ? "mc-page mc-programme-details-page"
         : isSavedProgrammes ? "mc-page mc-saved-page"
+        : isStudentFlow ? "mc-page mc-student-page"
         : "mc-page";
 }
 
@@ -57,26 +61,37 @@
             <header class="mc-topbar d-none d-lg-flex @(usesBrowseHeader ? "mc-browse-topbar" : null)">
                 <p>@(usesBrowseHeader ? "YOUR NEXT CHAPTER" : "Your path. More possibilities.")</p>
 
-                <div class="mc-account">
-                    <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">
-                        @if (!usesBrowseHeader)
-                        {
-                            <img src="~/images/dashboard/account.svg" alt="" />
-                        }
-                        <span>@(usesBrowseHeader && student != null ? $"{studentName} · Student ID {student.Id}" : studentName)</span>
-                    </a>
-
-                    @if (student != null)
+                @if (student == null && isStudentFlow)
+                {
+                    @if (action == "Create")
                     {
-                        <form asp-area="" asp-controller="Students" asp-action="ClearProfile" method="post">
-                            <button class="mc-clear-profile" type="submit">Clear profile</button>
-                        </form>
+                        <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Existing"
+                           asp-route-returnUrl="@studentReturnUrl">Existing student? Use your Student ID</a>
                     }
-                </div>
+                }
+                else
+                {
+                    <div class="mc-account">
+                        <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">
+                            @if (!usesBrowseHeader)
+                            {
+                                <img src="~/images/dashboard/account.svg" alt="" />
+                            }
+                            <span>@(usesBrowseHeader && student != null ? $"{studentName} · Student ID {student.Id}" : studentName)</span>
+                        </a>
+
+                        @if (student != null)
+                        {
+                            <form asp-area="" asp-controller="Students" asp-action="ClearProfile" method="post">
+                                <button class="mc-clear-profile" type="submit">Clear profile</button>
+                            </form>
+                        }
+                    </div>
+                }
             </header>
 
             <header class="mc-mobile-header d-lg-none">
-                <div class="mc-mobile-bar">
+                <div class="mc-mobile-bar @(isStudentFlow ? "mc-student-mobile-bar" : null)">
                     <button class="mc-mobile-toggle" type="button"
                             data-bs-toggle="collapse" data-bs-target="#mc-mobile-navigation"
                             aria-controls="mc-mobile-navigation" aria-expanded="false"
@@ -88,13 +103,22 @@
                         <strong>Matric</strong> <span>Connect</span>
                     </a>
 
-                    <a class="mc-mobile-account" asp-area="" asp-controller="Students" asp-action="Profile" aria-label="My Profile">
-                        <img src="~/images/dashboard/mobile-account.svg" alt="" />
-                    </a>
+                    @if (!isStudentFlow)
+                    {
+                        <a class="mc-mobile-account" asp-area="" asp-controller="Students" asp-action="Profile" aria-label="My Profile">
+                            <img src="~/images/dashboard/mobile-account.svg" alt="" />
+                        </a>
+                    }
                 </div>
 
                 <div id="mc-mobile-navigation" class="collapse mc-mobile-navigation">
                     <partial name="_DashboardNavigation" />
+                    @if (isStudentFlow && student != null)
+                    {
+                        <div class="mc-student-mobile-account">
+                            <a class="mc-account-link" asp-area="" asp-controller="Students" asp-action="Profile">My Profile</a>
+                        </div>
+                    }
                 </div>
             </header>
 

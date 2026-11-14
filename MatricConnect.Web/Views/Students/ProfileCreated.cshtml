@@ -1,0 +1,27 @@
+@model MatricConnect.Models.Student
+
+@{
+    ViewData["Title"] = "Profile Saved";
+    ViewData["StudentFlow"] = "Create";
+}
+
+<section class="mc-student-flow mc-student-confirm mc-student-created">
+    <header class="mc-student-intro">
+        <p class="mc-browse-eyebrow">Profile saved</p>
+        <h1 class="mc-browse-title">You’re ready <br class="mc-student-break" />to explore</h1>
+        <p>Your profile has been created. Keep your Student ID for your next visit.</p>
+    </header>
+
+    <section class="mc-student-card mc-student-id-card">
+        <h2 class="mc-browse-eyebrow">Your Student ID</h2>
+        <p class="mc-browse-title">@Model.Id</p>
+        <p class="mc-browse-note">Keep a copy of this ID.</p>
+    </section>
+
+    <div class="mc-student-actions">
+        <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button">Browse universities</a>
+        <a asp-controller="Home" asp-action="Index"
+           class="btn mc-browse-button mc-browse-button-secondary">Back to dashboard</a>
+    </div>
+    <p class="mc-browse-note">Use Existing Student and this ID to access your saved profile.</p>
+</section>

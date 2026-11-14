@@ -1,3 +1,6 @@
+@using Microsoft.Extensions.Hosting
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+
 @model MatricConnect.Models.Student
 
 @{
@@ -27,6 +30,10 @@
         <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button">Browse universities</a>
         <a asp-controller="SavedProgrammes" asp-action="Index"
            class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>
+        @if (Environment.IsDevelopment())
+        {
+            <a asp-controller="Students" asp-action="Edit" class="btn mc-browse-button mc-browse-button-secondary">Edit profile</a>
+        }
         <a asp-controller="Students" asp-action="Existing"
            class="btn mc-browse-button mc-browse-button-secondary">Use a different Student ID</a>
     </div>

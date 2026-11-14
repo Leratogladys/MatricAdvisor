@@ -1151,7 +1151,7 @@
 }
 
 .mc-student-break,
-.mc-create-mobile-tip,
+.mc-editor-mobile-tip,
 .mc-lookup-mobile-tip {
     display: none;
 }
@@ -1192,7 +1192,7 @@
     min-height: 72px;
 }
 
-.mc-student-create .mc-student-guide p:not(:last-child) {
+.mc-student-editor .mc-student-guide p:not(:last-child) {
     min-height: 96px;
 }
 
@@ -1280,7 +1280,7 @@ select.mc-student-input {
     gap: 24px;
 }
 
-.mc-student-create .mc-student-actions {
+.mc-student-editor .mc-student-actions {
     grid-template-columns: minmax(0, 230px) minmax(0, 150px);
     gap: 16px;
 }
@@ -1370,38 +1370,38 @@ select.mc-student-input {
         display: none;
     }
 
-    .mc-create-mobile-tip,
+    .mc-editor-mobile-tip,
     .mc-lookup-mobile-tip {
         display: block;
     }
 
-    .mc-student-create,
-    .mc-student-create .mc-student-intro {
+    .mc-student-editor,
+    .mc-student-editor .mc-student-intro {
         gap: 16px;
     }
 
-    .mc-student-create .mc-student-intro > p:last-child,
+    .mc-student-editor .mc-student-intro > p:last-child,
     .mc-student-lookup .mc-student-intro > p:last-child {
         min-height: 72px;
     }
 
-    .mc-student-create .mc-student-columns > .mc-student-card,
+    .mc-student-editor .mc-student-columns > .mc-student-card,
     .mc-student-lookup .mc-lookup-card {
         min-height: 0;
         padding: 0;
         background: transparent;
     }
 
-    .mc-student-create .mc-student-actions {
+    .mc-student-editor .mc-student-actions {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .mc-create-mobile-tip {
+    .mc-editor-mobile-tip {
         min-height: 72px;
     }
 
-    .mc-student-create .mc-student-actions,
-    .mc-student-create .mc-create-mobile-tip {
+    .mc-student-editor .mc-student-actions,
+    .mc-student-editor .mc-editor-mobile-tip {
         margin-top: 4px;
     }
 
@@ -1419,5 +1419,26 @@ select.mc-student-input {
 
     .mc-lookup-secondary {
         gap: 24px;
+    }
+}
+
+
+.mc-student-profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mc-student-profile-actions .mc-browse-button {
+    padding-inline: 20px;
+}
+
+@media (max-width: 599.98px) {
+    .mc-student-profile-actions {
+        flex-direction: column;
+    }
+
+    .mc-student-profile-actions form .mc-browse-button {
+        width: 100%;
     }
 }

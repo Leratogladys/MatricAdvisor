@@ -6,6 +6,7 @@
 using MatricConnect.Core.Interfaces;
 using MatricConnect.Data;
 using MatricConnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace MatricConnect.Infrastructure.Repositories
@@ -62,5 +63,18 @@ namespace MatricConnect.Infrastructure.Repositories
 
             return _context.Students.FirstOrDefault(s => s.Id == studentId);
         } // end method GetStudentById
+
+        public bool UpdateStudent(int studentId, Student details)
+        {
+            return _context.Students
+                .Where(student => student.Id == studentId)
+                .ExecuteUpdate(update => update
+                    .SetProperty(student => student.FirstName, details.FirstName)
+                    .SetProperty(student => student.LastName, details.LastName)
+                    .SetProperty(student => student.Province, details.Province)
+                    .SetProperty(student => student.APSScore, details.APSScore)
+                    .SetProperty(student => student.MathematicsMark, details.MathematicsMark)
+                    .SetProperty(student => student.PhysicalScienceMark, details.PhysicalScienceMark)) == 1;
+        } // end method UpdateStudent
     } // end class StudentRepository
 } // end namespace MatricConnect.Infrastructure.Repositories

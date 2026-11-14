@@ -56,5 +56,10 @@ namespace MatricConnect.Services
 
             return _studentRepository.GetStudentById(studentId);
         } // end method GetStudentById
+
+        public bool UpdateStudent(int studentId, Student details)
+        {
+            return _studentRepository.UpdateStudent(studentId, details);
+        } // end method UpdateStudent
     } // end class StudentService
 } // end namespace MatricConnect.Services

@@ -1,6 +1,6 @@
 ﻿// Programmer name : Lerato Molefe
 // Project name    : Matric Connect
-// Purpose         : Handles student profile creation through the website.
+// Purpose         : Handles student profile creation, lookup and editing.
 
 using MatricConnect.Models;
 using MatricConnect.Services;
@@ -15,15 +15,18 @@ namespace MatricConnect.Web.Controllers
     {
         private readonly StudentService _studentService;
         private readonly StudentValidator _studentValidator;
+        private readonly IWebHostEnvironment _environment;
 
         public StudentsController(
             StudentService studentService,
-            StudentValidator studentValidator)
+            StudentValidator studentValidator,
+            IWebHostEnvironment environment)
         {
             //
             // Name              : StudentsController(
             //                     StudentService studentService,
-            //                     StudentValidator studentValidator)
+            //                     StudentValidator studentValidator,
+            //                     IWebHostEnvironment environment)
             // Purpose           : Receives profile services and validation
             //                     through dependency injection.
             // Re-use            : None
@@ -31,11 +34,14 @@ namespace MatricConnect.Web.Controllers
             //                     - service used to save student profiles
             //                     StudentValidator studentValidator
             //                     - shared student validation rules
+            //                     IWebHostEnvironment environment
+            //                     - checks if local profile editing is enabled
             // Output Type       : None
             //
 
             _studentService = studentService;
             _studentValidator = studentValidator;
+            _environment = environment;
         } // end constructor
 
         [HttpGet]
@@ -80,22 +86,8 @@ namespace MatricConnect.Web.Controllers
                 return View(model);
             } // end if
 
-            var student = new Student
-            {
-                FirstName = model.FirstName.Trim(),
-                LastName = model.LastName.Trim(),
-                Province = model.Province.Trim(),
-                APSScore = model.APSScore!.Value,
-                MathematicsMark = model.MathematicsMark!.Value,
-                PhysicalScienceMark = model.PhysicalScienceMark
-            };
-
-            var validationErrors = _studentValidator.Validate(student);
-
-            foreach (var error in validationErrors)
-            {
-                ModelState.AddModelError(string.Empty, error);
-            } // end foreach
+            var student = model.ToStudent();
+            ValidateStudent(student);
 
             if (!ModelState.IsValid)
             {
@@ -207,38 +199,109 @@ namespace MatricConnect.Web.Controllers
         } // end method ShowProfileConfirmation
 
         [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Profile()
         {
-            //
-            // Name              : IActionResult Profile()
-            // Purpose           : Displays the student selected in the current session.
-            // Re-use            : StudentService.GetStudentById()
-            // Method Parameters : None
-            // Output Type       : IActionResult
-            //                     - selected student's profile, or redirect
-            //                       to profile lookup when no selection exists
-            //
+            int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
+            if (studentId is int id && _studentService.GetStudentById(id) is Student student)
+            {
+                return View(student);
+            } // end if
+
+            HttpContext.Session.Remove("CurrentStudentId");
+            return SelectProfile(nameof(Profile));
+        } // end method Profile
+
+        [HttpGet]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Edit()
+        {
+            if (!_environment.IsDevelopment())
+            {
+                return NotFound();
+            } // end if
 
             int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
-
-            if(!studentId.HasValue)
+            if (studentId is int id && _studentService.GetStudentById(id) is Student student)
             {
-                return RedirectToAction(nameof(Existing),
-                       new { returnUrl = Url.Action(nameof(Profile), "Students")});
+                var model = new EditStudentViewModel
+                {
+                    OriginalStudentId = id,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    Province = student.Province,
+                    APSScore = student.APSScore,
+                    MathematicsMark = student.MathematicsMark,
+                    PhysicalScienceMark = student.PhysicalScienceMark
+                };
+
+                return View(model);
             } // end if
 
-            var student = _studentService.GetStudentById(studentId.Value);
+            HttpContext.Session.Remove("CurrentStudentId");
+            return SelectProfile(nameof(Edit));
+        } // end method Edit
 
-            if (student == null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Edit(EditStudentViewModel model)
+        {
+            if (!_environment.IsDevelopment())
+            {
+                return NotFound();
+            } // end if
+
+            int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
+            if (studentId is not int id)
+            {
+                TempData["SuccessMessage"] = "Select your profile again before editing. Your changes were not saved.";
+                return SelectProfile(nameof(Edit));
+            } // end if
+
+            // A form opened before switching profiles must not update the newly selected profile.
+            if (model.OriginalStudentId != id)
+            {
+                TempData["ProfileStatus"] = "The selected profile changed. Open Edit profile again to make changes.";
+                return RedirectToAction(nameof(Profile));
+            } // end if
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            } // end if
+
+            var details = model.ToStudent();
+            ValidateStudent(details);
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            } // end if
+
+            if (!_studentService.UpdateStudent(id, details))
             {
                 HttpContext.Session.Remove("CurrentStudentId");
-
-                return RedirectToAction(nameof(Existing),
-                       new { returnUrl = Url.Action(nameof(Profile), "Students")});
+                TempData["SuccessMessage"] = "The selected profile could not be found. Select an existing profile to edit.";
+                return SelectProfile(nameof(Edit));
             } // end if
 
-            return View(student);
-        } // end method Profile
+            TempData["ProfileStatus"] = "Your profile was updated.";
+            return RedirectToAction(nameof(Profile));
+        } // end method Edit
+
+        private IActionResult SelectProfile(string nextAction)
+        {
+            return RedirectToAction(nameof(Existing), new { returnUrl = Url.Action(nextAction, "Students") });
+        } // end method SelectProfile
+
+        private void ValidateStudent(Student student)
+        {
+            foreach (var error in _studentValidator.Validate(student))
+            {
+                ModelState.AddModelError(string.Empty, error);
+            } // end foreach
+        } // end method ValidateStudent
 
         [HttpPost]
         [ValidateAntiForgeryToken]

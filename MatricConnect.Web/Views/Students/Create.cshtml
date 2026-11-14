@@ -11,11 +11,9 @@
     var returnUrl = Url.IsLocalUrl(Model.ReturnUrl) ? Model.ReturnUrl : null;
     ViewData["StudentReturnUrl"] = returnUrl;
     var cancelUrl = Url.Content(returnUrl) ?? Url.Action("Index", "Universities");
-
-    string? Invalid(string name) => ViewData.ModelState[name]?.Errors.Count > 0 ? "true" : null;
 }
 
-<section class="mc-student-flow mc-student-create">
+<section class="mc-student-flow mc-student-editor">
     <header class="mc-student-intro">
         <p class="mc-browse-eyebrow">Student profile</p>
         <h1 class="mc-browse-title">Create your <br class="mc-student-break" />student profile</h1>
@@ -25,84 +23,9 @@
     <div class="mc-student-columns">
         <form asp-controller="Students" asp-action="Create" method="post" class="mc-student-card" novalidate>
             <input type="hidden" name="ReturnUrl" value="@returnUrl" />
-            <h2 class="mc-browse-heading mc-student-card-heading">Your details &amp; results</h2>
-            <p class="mc-browse-note">Fields marked * are required.</p>
+            <partial name="_StudentProfileFields" model="Model" />
 
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="mc-student-error" role="alert">
-                    <p>Check your details and try again.</p>
-                    <div asp-validation-summary="ModelOnly"></div>
-                </div>
-            }
-
-            <div class="mc-student-field-grid">
-                <div class="mc-student-field">
-                    <label asp-for="FirstName">First name <span aria-hidden="true">*</span></label>
-                    <input asp-for="FirstName" class="mc-student-input" autocomplete="given-name"
-                           placeholder="Enter your first name" required
-                           aria-invalid="@Invalid(nameof(Model.FirstName))" aria-describedby="first-name-error first-name-help" />
-                    <span asp-validation-for="FirstName" id="first-name-error" class="mc-student-error"></span>
-                    <span id="first-name-help" class="mc-student-field-help">Required</span>
-                </div>
-
-                <div class="mc-student-field">
-                    <label asp-for="LastName">Last name <span aria-hidden="true">*</span></label>
-                    <input asp-for="LastName" class="mc-student-input" autocomplete="family-name"
-                           placeholder="Enter your last name" required
-                           aria-invalid="@Invalid(nameof(Model.LastName))" aria-describedby="last-name-error last-name-help" />
-                    <span asp-validation-for="LastName" id="last-name-error" class="mc-student-error"></span>
-                    <span id="last-name-help" class="mc-student-field-help">Required</span>
-                </div>
-
-                <div class="mc-student-field">
-                    <label asp-for="Province">Home province <span aria-hidden="true">*</span></label>
-                    <select asp-for="Province" class="form-select mc-student-input" required
-                            aria-invalid="@Invalid(nameof(Model.Province))" aria-describedby="province-error province-help">
-                        <option value="">Select province</option>
-                        <option value="Eastern Cape">Eastern Cape</option>
-                        <option value="Free State">Free State</option>
-                        <option value="Gauteng">Gauteng</option>
-                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-                        <option value="Limpopo">Limpopo</option>
-                        <option value="Mpumalanga">Mpumalanga</option>
-                        <option value="North West">North West</option>
-                        <option value="Northern Cape">Northern Cape</option>
-                        <option value="Western Cape">Western Cape</option>
-                    </select>
-                    <span asp-validation-for="Province" id="province-error" class="mc-student-error"></span>
-                    <span id="province-help" class="mc-student-field-help">Where you live</span>
-                </div>
-
-                <div class="mc-student-field">
-                    <label asp-for="APSScore">APS score <span aria-hidden="true">*</span></label>
-                    <input asp-for="APSScore" class="mc-student-input" type="number" inputmode="numeric"
-                           min="0" max="57" step="1" placeholder="Enter your APS score" required
-                           aria-invalid="@Invalid(nameof(Model.APSScore))" aria-describedby="aps-error aps-help" />
-                    <span asp-validation-for="APSScore" id="aps-error" class="mc-student-error"></span>
-                    <span id="aps-help" class="mc-student-field-help">Whole number from 0 to 57</span>
-                </div>
-
-                <div class="mc-student-field">
-                    <label asp-for="MathematicsMark">Mathematics (%) <span aria-hidden="true">*</span></label>
-                    <input asp-for="MathematicsMark" class="mc-student-input" type="number" inputmode="decimal"
-                           min="0" max="100" step="0.01" placeholder="e.g. 70" required
-                           aria-invalid="@Invalid(nameof(Model.MathematicsMark))" aria-describedby="maths-error maths-help" />
-                    <span asp-validation-for="MathematicsMark" id="maths-error" class="mc-student-error"></span>
-                    <span id="maths-help" class="mc-student-field-help">A mark from 0 to 100</span>
-                </div>
-
-                <div class="mc-student-field">
-                    <label asp-for="PhysicalScienceMark">Physical Science (%)</label>
-                    <input asp-for="PhysicalScienceMark" class="mc-student-input" type="number" inputmode="decimal"
-                           min="0" max="100" step="0.01" placeholder="Optional"
-                           aria-invalid="@Invalid(nameof(Model.PhysicalScienceMark))" aria-describedby="science-error science-help" />
-                    <span asp-validation-for="PhysicalScienceMark" id="science-error" class="mc-student-error"></span>
-                    <span id="science-help" class="mc-student-field-help">Leave blank if not taken</span>
-                </div>
-            </div>
-
-            <p class="mc-browse-note mc-create-mobile-tip">Use your existing APS score. Leave Physical Science blank if not taken.</p>
+            <p class="mc-browse-note mc-editor-mobile-tip">Use your existing APS score. Leave Physical Science blank if not taken.</p>
 
             <div class="mc-student-actions">
                 <button type="submit" class="btn mc-browse-button">Create profile</button>

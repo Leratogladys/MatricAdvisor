@@ -1,0 +1,40 @@
+@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Lets the selected student update their profile.
+*@
+
+@model EditStudentViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    ViewData["StudentFlow"] = "Profile";
+}
+
+<section class="mc-student-flow mc-student-editor">
+    <header class="mc-student-intro">
+        <p class="mc-browse-eyebrow">Student ID @Model.OriginalStudentId</p>
+        <h1 class="mc-browse-title">Edit your student profile</h1>
+        <p>Update your details and the matric results used to check programme requirements.</p>
+    </header>
+
+    <div class="mc-student-columns">
+        <form asp-controller="Students" asp-action="Edit" method="post" class="mc-student-card" novalidate>
+            <input asp-for="OriginalStudentId" type="hidden" />
+            <partial name="_StudentProfileFields" model="Model" />
+
+            <p class="mc-browse-note mc-editor-mobile-tip">Clear your Physical Science mark if you no longer want to include it.</p>
+
+            <div class="mc-student-actions">
+                <button type="submit" class="btn mc-browse-button">Save changes</button>
+                <a asp-action="Profile" class="btn mc-browse-button mc-browse-button-secondary">Cancel</a>
+            </div>
+        </form>
+
+        <aside class="mc-student-card mc-student-guide">
+            <h2 class="mc-browse-heading">What changes</h2>
+            <p>Future eligibility checks use your updated marks.</p>
+            <p>Clear your Physical Science mark if you no longer want to include it.</p>
+            <p class="mc-browse-note">Your Student ID and saved programmes stay the same.</p>
+        </aside>
+    </div>
+</section>

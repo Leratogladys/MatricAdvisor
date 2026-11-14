@@ -33,5 +33,8 @@ namespace MatricConnect.Core.Interfaces
         //
 
         Student? GetStudentById(int studentId);
+
+        // Updates the profile fields of an existing student. Returns false if the student no longer exists.
+        bool UpdateStudent(int studentId, Student details);
     } // end interface IStudentRepository
 } // end namespace MatricConnect.Core.Interfaces

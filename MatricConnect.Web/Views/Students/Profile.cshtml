@@ -3,67 +3,49 @@
    Purpose         : Displays the student profile selected in the session.
 *@
 
+@using Microsoft.Extensions.Hosting
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Environment
+
 @model MatricConnect.Models.Student
 
 @{
     ViewData["Title"] = "My Profile";
+    ViewData["StudentFlow"] = "Profile";
 }
 
-<h1>My Profile</h1>
+<section class="mc-student-flow">
+    <header class="mc-student-intro">
+        <p class="mc-browse-eyebrow">Student profile</p>
+        <h1 class="mc-browse-title">My profile</h1>
+        <p>View the details and matric results saved to your profile.</p>
+    </header>
 
-<dl class="row">
-    <dt class="col-5">Student ID</dt>
-    <dd class="col-7">@Model.Id</dd>
+    @if (TempData["ProfileStatus"] is string message)
+    {
+        <p class="mc-student-message" role="status">@message</p>
+    }
 
-    <dt class="col-5">Name</dt>
-    <dd class="col-7">@Model.FirstName @Model.LastName</dd>
+    <div class="mc-student-card">
+        <h2 class="mc-browse-heading">@Model.FirstName @Model.LastName</h2>
+        <span class="mc-browse-note">Student ID @Model.Id · @Model.Province</span>
+        <dl class="mc-student-marks">
+            <div><dt>APS score:</dt> <dd>@Model.APSScore</dd></div>
+            <div><dt>Mathematics:</dt> <dd>@Model.MathematicsMark.ToString("0.##")%</dd></div>
+            <div><dt>Physical Science:</dt> <dd>@(Model.PhysicalScienceMark is decimal science ? science.ToString("0.##") + "%" : "Not provided")</dd></div>
+        </dl>
+    </div>
 
-    <dt class="col-5">Home province</dt>
-    <dd class="col-7">@Model.Province</dd>
-
-    <dt class="col-5">APS score</dt>
-    <dd class="col-7">@Model.APSScore</dd>
-
-    <dt class="col-5">Mathematics</dt>
-    <dd class="col-7">@Model.MathematicsMark.ToString("0.##")%</dd>
-
-    <dt class="col-5">Physical Science</dt>
-    <dd class="col-7">
-        @if(Model.PhysicalScienceMark.HasValue)
+    <div class="mc-student-profile-actions">
+        @if (Environment.IsDevelopment())
         {
-            <span>@Model.PhysicalScienceMark.Value.ToString("0.##")%</span>
+            <a asp-action="Edit" class="btn mc-browse-button">Edit profile</a>
         }
-        else
-        {
-            <span>Not Provided</span>
-        }
-    </dd>
-</dl>
-
-    <a asp-controller="Universities"
-       asp-action="Index"
-       class="btn btn-primary">
-       Search Universities
-   </a>
-
-    <a asp-controller="Students"
-       asp-action="Existing"
-       asp-route-returnUrl="@Url.Action("Profile", "Students")"
-       class="btn btn-outline-secondary">
-        Select Another Profile
-    </a>
-
-    <a asp-controller="SavedProgrammes"
-       asp-action="Index"
-       class="btn btn-outline-primary">
-        Saved Programmes
-    </a>
-
-    <form asp-controller="Students"
-          asp-action="ClearProfile"
-          method="post"
-          class="mt-3">
-          <button type="submit" class="btn btn-outline-secondary">
-              Clear Selected Profile
-          </button>
-    </form>
+        <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">Search universities</a>
+        <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>
+        <a asp-action="Existing" asp-route-returnUrl="@Url.Action("Profile", "Students")"
+           class="btn mc-browse-button mc-browse-button-secondary">Select another profile</a>
+        <form asp-action="ClearProfile" method="post">
+            <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Clear selected profile</button>
+        </form>
+    </div>
+</section>

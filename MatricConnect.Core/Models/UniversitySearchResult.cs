@@ -3,5 +3,6 @@
 
 namespace MatricConnect.Models
 {
-    public record UniversitySearchResult(int Id, string Name, string Province, int ProgrammeCount);
+    public record UniversitySearchResult(int Id, string Name, string Province, string Website,
+        bool IsUniversityOfTechnology, int ProgrammeCount);
 }

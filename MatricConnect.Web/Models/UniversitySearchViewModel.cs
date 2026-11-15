@@ -1,7 +1,7 @@
 ﻿// Programmer name : Lerato Molefe
 // Project name    : Matric Connect
 // Purpose         : Stores province options, the selected province,
-//                   and university search results for the web page.
+//                   institution type, and directory search results.
 
 using MatricConnect.Models;
 
@@ -10,6 +10,13 @@ namespace MatricConnect.Web.Models
 {
     public class UniversitySearchViewModel
     {
+        public const string UniversitiesType = "universities";
+        public const string TvetCollegesType = "tvet";
+
+        public string InstitutionType { get; set; } = UniversitiesType;
+        public bool ShowTvetColleges => InstitutionType == TvetCollegesType;
+        public List<TvetCollege> Colleges { get; set; } = new();
+
         public List<string> Provinces
         {
             //

@@ -23,12 +23,14 @@ builder.Services.AddDbContext<MatricConnectContext>(options =>
 // Register repository interfaces and thier database implementations.
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+builder.Services.AddScoped<ITvetCollegeRepository, TvetCollegeRepository>();
 builder.Services.AddScoped<ISavedProgrammeRepository, SavedProgrammeRepository>();
 
 
 // Register shared application services and validation.
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<UniversityService>();
+builder.Services.AddScoped<TvetCollegeService>();
 builder.Services.AddScoped<SavedProgrammeService>();
 builder.Services.AddScoped<EligibilityService>();
 builder.Services.AddScoped<StudentValidator>();

@@ -75,11 +75,15 @@ namespace MatricConnect.Data
             get; set;
         } // end property
 
+        public DbSet<TvetCollege> TvetColleges => Set<TvetCollege>();
+
         public DbSet<ProgrammeIntake> ProgrammeIntakes => Set<ProgrammeIntake>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<TvetCollege>().HasIndex(college => college.Name).IsUnique();
 
             modelBuilder.Entity<ProgrammeIntake>().HasKey(intake => new { intake.ProgrammeId, intake.IntakeYear });
             modelBuilder.Entity<Programme>()

@@ -164,10 +164,39 @@ namespace MatricConnect.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.TvetCollege", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Province")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Website")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("TvetColleges");
+                });
+
             modelBuilder.Entity("MatricConnect.Models.University", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsUniversityOfTechnology")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")

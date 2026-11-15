@@ -14,10 +14,12 @@ namespace MatricConnect.Web.Controllers
     public class UniversitiesController : Controller
     {
         private readonly UniversityService _universityService;
+        private readonly TvetCollegeService _tvetCollegeService;
         private readonly EligibilityService _eligibilityService;
         private readonly StudentService _studentService;
 
-        public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService, StudentService studentService)
+        public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService,
+            StudentService studentService, TvetCollegeService tvetCollegeService)
         {
             //
             // Name              : UniversitiesController(
@@ -36,49 +38,49 @@ namespace MatricConnect.Web.Controllers
             // Output Type       : None
             //
             _universityService = universityService;
+            _tvetCollegeService = tvetCollegeService;
             _eligibilityService = eligibilityService;
             _studentService = studentService;
         } // end constructor
 
         [HttpGet]
-        public IActionResult Index(string? selectedProvince)
+        public IActionResult Index(string? selectedProvince, string? institutionType)
         {
-            //
-            // Name              : IActionResult Index(string? selectedProvince)
-            // Purpose           : Displays province options and retrieves
-            //                     universities for a valid province selection.
-            // Re-use            : UniversityService.GetProvince(),
-            //                     UniversityService.GetUniversitySearchResults()
-            // Method Parameters : string? selectedProvince
-            //                     - province selected for searching
-            // Output Type       : IActionResult
-            //                     - university search view and its results
-            //
-
             var model = new UniversitySearchViewModel
             {
                 Provinces = _universityService.GetProvince(),
-                SelectedProvince = selectedProvince
+                SelectedProvince = selectedProvince,
+                InstitutionType = institutionType ?? UniversitySearchViewModel.UniversitiesType
             };
+
+            if (model.InstitutionType is not (UniversitySearchViewModel.UniversitiesType or UniversitySearchViewModel.TvetCollegesType))
+            {
+                ModelState.AddModelError(nameof(UniversitySearchViewModel.InstitutionType),
+                    "Select an institution type from the list.");
+            }
 
             if (Request.Query.ContainsKey(nameof(UniversitySearchViewModel.SelectedProvince)))
             {
-                if (string.IsNullOrWhiteSpace(selectedProvince) ||
-                    !model.Provinces.Contains(selectedProvince))
+                if (selectedProvince is null || !model.Provinces.Contains(selectedProvince))
                 {
-                    ModelState.AddModelError(
-                        nameof(UniversitySearchViewModel.SelectedProvince),
+                    ModelState.AddModelError(nameof(UniversitySearchViewModel.SelectedProvince),
                         "Select a province from the list.");
-                } // end if
-                else
+                }
+                else if (ModelState.IsValid)
                 {
-                    model.Universities = _universityService.GetUniversitySearchResults(selectedProvince);
-                } // end else
-            } // end if
+                    if (model.ShowTvetColleges)
+                    {
+                        model.Colleges = _tvetCollegeService.GetByProvince(selectedProvince);
+                    }
+                    else
+                    {
+                        model.Universities = _universityService.GetUniversitySearchResults(selectedProvince);
+                    }
+                }
+            }
 
             return View(model);
-       
-        } // end method Index
+        }
 
         [HttpGet]
         public IActionResult Programmes(int id)

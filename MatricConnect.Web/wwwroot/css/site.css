@@ -594,7 +594,6 @@
 }
 
 .mc-browse-description,
-.mc-search-empty-description,
 .mc-browse-note {
     font: 400 16px / 24px var(--mc-font-body);
 }
@@ -606,13 +605,6 @@
 .mc-browse-note,
 .mc-province-help {
     color: var(--mc-muted);
-}
-
-.mc-province-form {
-    display: grid;
-    grid-template-columns: minmax(0, 540px) minmax(180px, 260px);
-    align-items: start;
-    gap: 16px;
 }
 
 .mc-province-field {
@@ -659,10 +651,6 @@
     color: var(--mc-surface);
 }
 
-.mc-province-form > .mc-browse-button {
-    margin-top: 28px;
-}
-
 .mc-browse-heading {
     font: 700 22px / 28px var(--mc-font-heading);
     overflow-wrap: anywhere;
@@ -693,24 +681,12 @@
     min-height: 84px;
 }
 
-.mc-university-card .mc-browse-heading {
-    max-width: 205px;
-}
-
 .mc-browse-card .mc-browse-note {
     min-height: 48px;
 }
 
 .mc-browse-card .mc-browse-button {
     margin-top: auto;
-}
-
-.mc-search-empty-description {
-    max-width: 42ch;
-}
-
-.mc-search-reset {
-    width: min(100%, 260px);
 }
 
 @media (min-width: 600px) and (max-width: 1199.98px) {
@@ -733,39 +709,51 @@
         text-wrap: initial;
     }
 
-    .mc-search-empty .mc-browse-title {
-        max-width: 280px;
-    }
-
     .mc-browse-description {
         min-height: 72px;
-    }
-
-    .mc-search-empty-description {
-        min-height: 120px;
-    }
-
-    .mc-search-reset {
-        width: 100%;
-    }
-
-    .mc-province-form {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 24px;
-    }
-
-    .mc-search-with-results .mc-province-form {
-        gap: 16px;
-    }
-
-    .mc-province-form > .mc-browse-button {
-        margin-top: 0;
     }
 }
 
 @media (max-width: 599.98px) {
     .mc-browse-results {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.mc-directory .mc-browse-title,
+.mc-directory .mc-browse-description,
+.mc-directory .mc-province-field,
+.mc-directory .mc-browse-card .mc-browse-note {
+    min-height: 0;
+}
+
+.mc-directory-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(150px, 220px);
+    align-items: start;
+    gap: 16px;
+}
+
+.mc-directory-form > .mc-browse-button {
+    margin-top: 28px;
+}
+
+.mc-directory .mc-browse-card .mc-browse-button {
+    width: 100%;
+}
+
+.mc-directory .mc-browse-note a {
+    color: var(--mc-teal);
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 991.98px) {
+    .mc-directory-form {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mc-directory-form > .mc-browse-button {
+        margin-top: 0;
     }
 }
 

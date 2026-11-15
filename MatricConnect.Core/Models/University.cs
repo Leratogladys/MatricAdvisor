@@ -65,6 +65,8 @@ namespace MatricConnect.Models
 
             get; set; } = string.Empty; // end property
 
+        public bool IsUniversityOfTechnology { get; set; }
+
         public ICollection<Programme> Programmes
         {
             //

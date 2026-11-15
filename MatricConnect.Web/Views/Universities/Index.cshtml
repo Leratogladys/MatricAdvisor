@@ -1,18 +1,22 @@
 ﻿@* Programmer name : Lerato Molefe
    Project name    : Matric Connect
-   Purpose         : Displays province selection and university search results.
+   Purpose         : Displays public universities and TVET colleges by province.
 *@
 
 @model MatricConnect.Web.Models.UniversitySearchViewModel
+@using MatricConnect.Web.Models
 
 @{
-    ViewData["Title"] = "Search Universities";
-    bool searchSubmitted = Context.Request.Query.ContainsKey(nameof(Model.SelectedProvince));
-    bool validSearch = searchSubmitted && ViewData.ModelState.IsValid;
-    var universityCount = Model.Universities.Count;
-    bool hasResults = validSearch && universityCount > 0;
-    bool isEmpty = validSearch && universityCount == 0;
-    var universityLabel = universityCount == 1 ? "university" : "universities";
+    ViewData["Title"] = "Find Institutions";
+    var validSearch = Context.Request.Query.ContainsKey(nameof(Model.SelectedProvince)) && ViewData.ModelState.IsValid;
+    var count = Model.ShowTvetColleges ? Model.Colleges.Count : Model.Universities.Count;
+    var institutionLabel = Model.ShowTvetColleges
+        ? (count == 1 ? "TVET college" : "TVET colleges")
+        : (count == 1 ? "university" : "universities");
+    var directoryUrl = Model.ShowTvetColleges
+        ? "https://www.dhet.gov.za/SitePages/TVETlinks.aspx"
+        : "https://usaf.ac.za/prospective-students/";
+    var directoryLabel = Model.ShowTvetColleges ? "DHET public TVET college directory" : "Universities South Africa directory";
 }
 
 @if (TempData["SuccessMessage"] is string successMessage)
@@ -22,71 +26,95 @@
     </div>
 }
 
-@if (isEmpty)
-{
-    <div class="mc-browse-flow mc-search-empty">
-        <p class="mc-browse-eyebrow">Search results</p>
-        <h1 class="mc-browse-title">No universities listed yet</h1>
-        <p class="mc-search-empty-description">There are no universities in our catalogue for this province. Try another province.</p>
-        <a asp-controller="Universities" asp-action="Index" class="btn mc-browse-button mc-search-reset">
-            Choose another province
-        </a>
-        <p class="mc-browse-note">This reflects our catalogue, not every university in South Africa.</p>
-    </div>
-}
-else
-{
-    <div class="mc-browse-flow @(hasResults ? "mc-search-with-results" : null)">
-        <p class="mc-browse-eyebrow">Explore your options</p>
-        <h1 class="mc-browse-title">@(hasResults ? "Find your university" : "Where would you like to study?")</h1>
+<div class="mc-browse-flow mc-directory">
+    <p class="mc-browse-eyebrow">Explore your options</p>
+    <h1 class="mc-browse-title">Where would you like to study?</h1>
+    <p class="mc-browse-description">Browse South Africa’s public universities and TVET colleges by province.</p>
 
-        @if (hasResults)
-        {
-            <p class="mc-browse-description">Choose a province to browse universities and their programmes.</p>
-        }
+    <form asp-controller="Universities" asp-action="Index" method="get" class="mc-directory-form">
+        <div class="mc-province-field">
+            <label asp-for="SelectedProvince" class="mc-province-label">Province</label>
+            <select asp-for="SelectedProvince" class="form-select mc-province-select" required
+                    aria-describedby="province-error"
+                    aria-invalid="@(ViewData.ModelState[nameof(Model.SelectedProvince)]?.Errors.Count > 0 ? "true" : null)">
+                <option value="">Select province</option>
+                @foreach (var province in Model.Provinces)
+                {
+                    <option value="@province">@province</option>
+                }
+            </select>
+            <span id="province-error" asp-validation-for="SelectedProvince" class="text-danger"></span>
+        </div>
+        <div class="mc-province-field">
+            <label asp-for="InstitutionType" class="mc-province-label">Institution type</label>
+            <select asp-for="InstitutionType" class="form-select mc-province-select" aria-describedby="type-error"
+                    aria-invalid="@(ViewData.ModelState[nameof(Model.InstitutionType)]?.Errors.Count > 0 ? "true" : null)">
+                <option value="@UniversitySearchViewModel.UniversitiesType">Universities</option>
+                <option value="@UniversitySearchViewModel.TvetCollegesType">TVET colleges</option>
+            </select>
+            <span id="type-error" asp-validation-for="InstitutionType" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn mc-browse-button">Find institutions</button>
+    </form>
 
-        <form asp-controller="Universities" asp-action="Index" method="get" class="mc-province-form">
-            <div class="mc-province-field">
-                <label asp-for="SelectedProvince" class="mc-province-label">Province</label>
-                <select asp-for="SelectedProvince" class="form-select mc-province-select"
-                        aria-describedby="province-help province-error"
-                        aria-invalid="@(!ViewData.ModelState.IsValid ? "true" : null)">
-                    <option value="">Select province</option>
-                    @foreach (var province in Model.Provinces)
-                    {
-                        <option value="@province">@province</option>
-                    }
-                </select>
-                <p id="province-help" class="mc-province-help">Choose where you want to study.</p>
-                <span id="province-error" asp-validation-for="SelectedProvince" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn mc-browse-button">Find universities</button>
-        </form>
-
-        @if (hasResults)
-        {
-            <section class="mc-browse-flow" aria-labelledby="university-results-heading">
-                <h2 id="university-results-heading" class="mc-browse-heading">@universityCount @universityLabel in @Model.SelectedProvince</h2>
+    @if (validSearch)
+    {
+        <section class="mc-browse-flow" aria-labelledby="directory-results-heading">
+            <h2 id="directory-results-heading" class="mc-browse-heading">@count @institutionLabel in @Model.SelectedProvince</h2>
+            @if (count == 0)
+            {
+                <p class="mc-browse-note">Try another province or institution type.</p>
+            }
+            else
+            {
                 <ul class="mc-browse-results">
-                    @foreach (var university in Model.Universities)
+                    @if (Model.ShowTvetColleges)
                     {
-                        var programmeLabel = university.ProgrammeCount == 1 ? "programme" : "programmes";
-                        <li class="mc-browse-card mc-university-card">
-                            <h3 class="mc-browse-heading">@university.Name</h3>
-                            <p class="mc-browse-note">@university.Province · @university.ProgrammeCount @programmeLabel</p>
-                            <a asp-controller="Universities" asp-action="Programmes" asp-route-id="@university.Id"
-                               class="btn mc-browse-button" aria-label="View programmes at @university.Name">
-                                View programmes
-                            </a>
-                        </li>
+                        @foreach (var college in Model.Colleges)
+                        {
+                            <li class="mc-browse-card">
+                                <h3 class="mc-browse-heading">@college.Name</h3>
+                                <p class="mc-browse-note">Public TVET college · @college.Province</p>
+                                <p class="mc-browse-note">Programme details not yet listed.</p>
+                                <a href="@college.Website" class="btn mc-browse-button mc-browse-button-secondary"
+                                   aria-label="Visit the @college.Name website">Visit official website</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var university in Model.Universities)
+                        {
+                            var typeLabel = university.IsUniversityOfTechnology ? "University of technology" : "Public university";
+                            var programmeLabel = university.ProgrammeCount == 1 ? "programme" : "programmes";
+                            <li class="mc-browse-card">
+                                <h3 class="mc-browse-heading">@university.Name</h3>
+                                <p class="mc-browse-note">@typeLabel · @university.Province</p>
+                                @if (university.ProgrammeCount > 0)
+                                {
+                                    <p class="mc-browse-note">@university.ProgrammeCount @programmeLabel listed</p>
+                                    <a asp-controller="Universities" asp-action="Programmes" asp-route-id="@university.Id"
+                                       class="btn mc-browse-button" aria-label="View programmes at @university.Name">View programmes</a>
+                                }
+                                else
+                                {
+                                    <p class="mc-browse-note">Programme details not yet listed.</p>
+                                    @if (Uri.TryCreate(university.Website, UriKind.Absolute, out var website) &&
+                                        (website.Scheme == Uri.UriSchemeHttps || website.Scheme == Uri.UriSchemeHttp))
+                                    {
+                                        <a href="@website" class="btn mc-browse-button mc-browse-button-secondary"
+                                           aria-label="Visit the @university.Name website">Visit official website</a>
+                                    }
+                                }
+                            </li>
+                        }
                     }
                 </ul>
-                <p class="mc-browse-note">You can browse a different province without changing your home province.</p>
-            </section>
-        }
-        else
-        {
-            <p class="mc-browse-note">Choose a province to see the universities listed in our catalogue.</p>
-        }
-    </div>
-}
+            }
+            <p class="mc-browse-note">
+                Each institution appears under one province. Check its website for campus locations.
+                Source: <a href="@directoryUrl">@directoryLabel</a>.
+            </p>
+        </section>
+    }
+</div>

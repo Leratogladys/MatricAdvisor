@@ -16,9 +16,12 @@
 <div class="mc-browse-flow">
     <p class="mc-browse-eyebrow">@Model.University.Province / @Model.University.Name</p>
     <h1 class="mc-browse-title">Explore programmes</h1>
-    <p class="mc-browse-description">@(hasEligibilityCheck
-        ? "Choose a programme to view its requirements and check your results."
-        : "Choose a programme to view its last verified intake and published requirements.")</p>
+    @if (programmeCount > 0)
+    {
+        <p class="mc-browse-description">@(hasEligibilityCheck
+            ? "Choose a programme to view its requirements and check your results."
+            : "Choose a programme to view its last verified intake and published requirements.")</p>
+    }
 
     <a asp-controller="Universities" asp-action="Index" asp-route-selectedProvince="@Model.University.Province"
        class="btn mc-browse-button mc-browse-button-secondary mc-programmes-back">
@@ -27,7 +30,13 @@
 
     @if (programmeCount == 0)
     {
-        <p class="mc-browse-note">No programmes are currently listed for this university.</p>
+        <p class="mc-browse-note">Programme details are not yet listed in Matric Connect.</p>
+        @if (Uri.TryCreate(Model.University.Website, UriKind.Absolute, out var website) &&
+            (website.Scheme == Uri.UriSchemeHttps || website.Scheme == Uri.UriSchemeHttp))
+        {
+            <a href="@website" class="btn mc-browse-button mc-programmes-back"
+               aria-label="Visit the @Model.University.Name website">Visit official website</a>
+        }
     }
     else
     {

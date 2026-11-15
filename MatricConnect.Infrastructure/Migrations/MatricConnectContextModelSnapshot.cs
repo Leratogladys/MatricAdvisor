@@ -65,6 +65,9 @@ namespace MatricConnect.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AdmissionScoreBySubject")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("AdmissionScoreLabel")
                         .IsRequired()
                         .HasColumnType("TEXT");

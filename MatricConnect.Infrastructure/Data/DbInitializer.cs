@@ -175,6 +175,7 @@ namespace MatricConnect.Data
             VerifiedIntakeSeed.Add2027Intakes(context, ufs.Id, uj.Id, up.Id);
             NationalDirectorySeed.AddMissingInstitutions(context);
             CutIntakeSeed.AddPublishedIntakes(context);
+            MandelaIntakeSeed.AddPublishedIntakes(context);
         } // end method
 
         // --------------------------------------------------

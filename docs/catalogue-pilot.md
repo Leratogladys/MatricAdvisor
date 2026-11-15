@@ -43,6 +43,22 @@ CUT generally expects 50% in English Home Language or First Additional Language.
 
 Sources for general rules and dates: [CUT Student Calendar](https://www.cut.ac.za/calendar), [CUT APS guide](https://www.cut.ac.za/admission-points-ap), [CUT application dates](https://www.cut.ac.za/application-process), and [CUT NBT guidance](https://www.cut.ac.za/nbt).
 
+## Nelson Mandela University: entry-level computing
+
+Checked on **15 November 2026** against the [2027 undergraduate admissions guide](https://www.mandela.ac.za/getmedia/29267715-7b08-41cc-80ed-e23dde7772ec/NMU-Z-CARD-UNDERGRAD-PROGRAMME_DIGITAL-FA?disposition=attachment), [Faculty of Engineering, the Built Environment and Technology prospectus](https://www.mandela.ac.za/getmedia/8d278dd0-b607-4ac3-a7d1-8450ba54a8e2/Prospectus-Faculty-of-EBET?disposition=attachment), and [Faculty of Science prospectus](https://www.mandela.ac.za/getmedia/0bd96b8d-b5cc-4c60-a6a9-d596fa4396d6/Prospectus-Faculty-of-Science?disposition=attachment). These entries cover South African NSC applicants.
+
+| Qualification | Code | Mathematics route: AS / subject mark | Technical Mathematics route: AS / subject mark | Mathematical Literacy route: AS / subject mark |
+| --- | --- | --- | --- | --- |
+| Bachelor of Information Technology | 72001 | 370 / 50% | 370 / 50% | — |
+| BSc (Computer Science) | 20053 | 410 / 65% | — | — |
+| Diploma in IT (Software Development) | 7224 | 330 / 40% | 330 / 40% | 345 / 60% |
+| Diploma in IT (Support Services) | 7228 | 330 / 40% | 330 / 40% | 345 / 60% |
+| Higher Certificate in IT (User Support Services) | 70003 | 290 / 35% | 290 / 35% | 305 / 55% |
+
+A dash indicates an alternative that the sources do not list for that qualification. Mandela's Applicant Score (AS) uses subject percentages from six subjects and is on a different scale from the student profile's APS. The listing links to the university's AS guide. The university's [2027 application guidelines](https://www.mandela.ac.za/getmedia/a2444ae4-f32e-458e-ad9a-ebfa6c7864e7/01guidelines?disposition=attachment) give **3 August 2026** for early applications and **30 September 2026** as the general final deadline for these programmes, subject to availability. No later intake dates were confirmed.
+
+Communication Networks (7227) is omitted pending confirmation: the faculty prospectus lists Mathematics or Technical Mathematics at 45%, while the 2027 general admissions guide contains conflicting marks and Mathematical Literacy entries for the same diploma. The BIT listing identifies North Campus from the faculty prospectus and directs readers to confirm campus availability because the general guide also references George.
+
 ## Updating the catalogue
 
 - Development startup applies migrations and seeds missing programmes and verified intakes, matching existing programmes by university and name. The programme ID and intake year form a unique key. Existing programmes, data and saved links remain in place.

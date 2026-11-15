@@ -49,8 +49,11 @@
                         <h3 class="mc-browse-heading">@programme.Name</h3>
                         @if (programme.LatestVerifiedIntake is { } intake)
                         {
+                            var scoreSummary = string.IsNullOrWhiteSpace(intake.AdmissionScoreBySubject)
+                                ? $"{intake.AdmissionScoreLabel} {intake.RequiredAps}+"
+                                : $"{intake.AdmissionScoreLabel} varies by subject";
                             <p class="mc-browse-note">
-                                @intake.IntakeYear intake@(intake.HasClosed(now) ? " (closed)" : "") · @intake.AdmissionScoreLabel @(intake.RequiredAps)+
+                                @intake.IntakeYear intake@(intake.HasClosed(now) ? " (closed)" : "") · @scoreSummary
                             </p>
                         }
                         else
@@ -64,7 +67,7 @@
                     </li>
                 }
             </ul>
-            <p class="mc-browse-note">APS is one requirement. Open a programme to review all requirements stored in Matric Connect.</p>
+            <p class="mc-browse-note">The admission score is one requirement. Open a programme to see the full listing.</p>
         </section>
     }
 </div>

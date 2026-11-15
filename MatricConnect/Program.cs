@@ -312,55 +312,66 @@ namespace MatricConnect
             Console.WriteLine("Entry Requirements");
             Console.WriteLine("-----------------------------------------");
 
-            Console.WriteLine($"Minimum APS: {programmeDetails?.RequiredAPS}");
-
-            Console.WriteLine($"Mathematics: {programmeDetails?.RequiredMathematics:0}%");
-
-            if (programmeDetails?.RequiredPhysicalScience == null)
+            if (programmeDetails?.LatestVerifiedIntake is { } intake)
             {
-                Console.WriteLine("Physical Science: Not required");
-            } // end if
+                Console.WriteLine($"Published requirements: {intake.RequirementsSourceUrl}");
+                Console.WriteLine($"Official application dates: {intake.ApplicationDatesSourceUrl}");
+                Console.WriteLine("This programme has published requirements for reference. There is no automatic eligibility result.");
+            }
             else
             {
-                Console.WriteLine($"Physical Science: {programmeDetails.RequiredPhysicalScience:0}%");
-            } // end else
+                Console.WriteLine($"Minimum APS: {programmeDetails?.RequiredAPS}");
 
-            Console.WriteLine();
+                Console.WriteLine($"Mathematics: {programmeDetails?.RequiredMathematics:0}%");
 
-            Console.WriteLine($"Application Deadline: {programmeDetails?.ApplicationDeadline:dd MMMM yyyy}");
-
-            Console.WriteLine();
-
-            Console.WriteLine("Note: Universities may have additional admission requirements.");
-
-            Console.WriteLine();
-
-            Console.WriteLine("------------------");
-            Console.WriteLine("ELIGIBILITY RESULT");
-            Console.WriteLine("------------------");
-
-            var eligibilityIssues = eligibilityService.GetEligibilityIssues(currentStudent, programmeDetails!);
-
-            Console.WriteLine();
-
-            if (eligibilityIssues.Count == 0)
-            {
-                Console.WriteLine("You MEET the requirements currently evaluated by Matric Connect.");
-            } // end if
-            else
-            {
-                Console.WriteLine();
-
-                Console.WriteLine("You DO NOT meet all the requirements currently evaluated by Matric Connect.");
-
-                Console.WriteLine();
-                Console.WriteLine("Requirements not met:");
-
-                foreach (var issue in eligibilityIssues)
+                if (programmeDetails?.RequiredPhysicalScience == null)
                 {
-                    Console.WriteLine($"- {issue}");
-                } // end foreach
-            } // end else
+                    Console.WriteLine("Physical Science: Not required");
+                } // end if
+                else
+                {
+                    Console.WriteLine($"Physical Science: {programmeDetails.RequiredPhysicalScience:0}%");
+                } // end else
+
+                Console.WriteLine();
+
+                Console.WriteLine($"Application Deadline: {programmeDetails?.ApplicationDeadline:dd MMMM yyyy}");
+
+                Console.WriteLine();
+
+                Console.WriteLine("Note: Universities may have additional admission requirements.");
+
+                Console.WriteLine();
+
+                Console.WriteLine("------------------");
+                Console.WriteLine("ELIGIBILITY RESULT");
+                Console.WriteLine("------------------");
+
+                var eligibilityIssues = eligibilityService.GetEligibilityIssues(currentStudent, programmeDetails!);
+
+                Console.WriteLine();
+
+                if (eligibilityIssues.Count == 0)
+                {
+                    Console.WriteLine("You MEET the requirements currently evaluated by Matric Connect.");
+                } // end if
+                else
+                {
+                    Console.WriteLine();
+
+                    Console.WriteLine("You DO NOT meet all the requirements currently evaluated by Matric Connect.");
+
+                    Console.WriteLine();
+                    Console.WriteLine("Requirements not met:");
+
+                    foreach (var issue in eligibilityIssues)
+                    {
+                        Console.WriteLine($"- {issue}");
+                    } // end foreach
+                } // end else
+
+                Console.WriteLine();
+            }
 
             Console.WriteLine();
             Console.WriteLine("What would you like to do?");

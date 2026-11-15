@@ -47,7 +47,14 @@
         <h3 class="mc-browse-heading">Published entry requirements</h3>
         <p>For South African NSC applicants.</p>
         <ul>
-            <li>@Model.AdmissionScoreLabel: @Model.RequiredAps or higher.</li>
+            @if (string.IsNullOrWhiteSpace(Model.AdmissionScoreBySubject))
+            {
+                <li>@Model.AdmissionScoreLabel: @Model.RequiredAps or higher.</li>
+            }
+            else
+            {
+                <li>@Model.AdmissionScoreLabel: @Model.AdmissionScoreBySubject</li>
+            }
             @if (Model.RequiredMathematics is decimal mathematics)
             {
                 <li>Mathematics: @mathematics.ToString("0.##")% or higher.</li>

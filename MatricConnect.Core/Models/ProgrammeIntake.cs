@@ -14,6 +14,7 @@ namespace MatricConnect.Models
         public string? NextApplicationCycleNote { get; set; }
         public string AdmissionScoreLabel { get; set; } = "APS";
         public int RequiredAps { get; set; }
+        public string? AdmissionScoreBySubject { get; set; }
         public decimal? RequiredMathematics { get; set; }
         public decimal? RequiredEnglish { get; set; }
         public decimal? RequiredPhysicalScience { get; set; }

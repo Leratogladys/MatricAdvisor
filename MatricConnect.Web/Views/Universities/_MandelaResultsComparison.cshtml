@@ -1,0 +1,78 @@
+@model ProgrammeDetailsViewModel
+@using MatricConnect.Services
+
+@{
+    var intake = Model.Programme.LatestVerifiedIntake!;
+    var closed = intake.HasClosed(DateTimeOffset.UtcNow);
+    var result = Model.MandelaResult;
+    string? InvalidField(string propertyName) =>
+        ViewData.ModelState.TryGetValue($"MandelaComparison.{propertyName}", out var entry) && entry.Errors.Count > 0
+            ? "true"
+            : null;
+}
+
+<section class="mc-intake-card mc-result-comparison" aria-labelledby="results-comparison">
+    <h2 id="results-comparison" class="mc-browse-heading" tabindex="-1">
+        @(result == null ? "Compare my results" : "Your comparison")
+    </h2>
+    <p class="mc-browse-note">Comparison against @intake.IntakeYear requirements</p>
+    @if (closed)
+    {
+        <p class="mc-intake-status">Applications for the @intake.IntakeYear intake are closed.</p>
+    }
+    <p>Use your Mandela Applicant Score (AS) and your mark for the maths subject you took. Your entries are used only for this comparison.</p>
+
+    @if (result != null)
+    {
+        <div class="mc-comparison-result">
+            <dl class="mc-requirement-list">
+                <div class="mc-requirement @(result.MeetsApplicantScore ? "mc-requirement-met" : "mc-requirement-unmet")">
+                    <dt>Mandela Applicant Score</dt>
+                    <dd>
+                        <span>Your score: @result.ApplicantScore · Minimum: @result.RequiredApplicantScore</span>
+                        <span>@(result.MeetsApplicantScore ? "Meets minimum" : "Below minimum")</span>
+                    </dd>
+                </div>
+                <div class="mc-requirement @(result.MeetsMathsMark ? "mc-requirement-met" : "mc-requirement-unmet")">
+                    <dt>@result.SubjectName</dt>
+                    <dd>
+                        <span>Your mark: @(result.MathsMark.ToString("G29"))% · Minimum: @($"{result.RequiredMathsMark}%")</span>
+                        <span>@(result.MeetsMathsMark ? "Meets minimum" : "Below minimum")</span>
+                    </dd>
+                </div>
+            </dl>
+            <p><strong>Still to check:</strong> Confirm that your NSC is endorsed for Diploma study or higher.</p>
+            <p class="mc-browse-note">The university decides admission. Check its official requirements and application dates before applying for a future intake.</p>
+        </div>
+    }
+
+    <form id="mandela-comparison-form" asp-controller="Universities" asp-action="CompareResults"
+          asp-route-id="@Model.Programme.Id" asp-fragment="results-comparison" method="post">
+        <div class="mc-details-field">
+            <label asp-for="MandelaComparison!.Subject"></label>
+            <select asp-for="MandelaComparison!.Subject" asp-items="Html.GetEnumSelectList<MandelaMathsSubject>()"
+                    class="form-select" required aria-describedby="mandela-subject-error"
+                    aria-invalid="@InvalidField(nameof(MandelaComparisonInputViewModel.Subject))">
+                <option value="">Select a maths subject</option>
+            </select>
+            <span asp-validation-for="MandelaComparison!.Subject" id="mandela-subject-error" class="text-danger"></span>
+        </div>
+        <div class="mc-details-field">
+            <label asp-for="MandelaComparison!.MathsMark"></label>
+            <input asp-for="MandelaComparison!.MathsMark" class="form-control" type="number" inputmode="decimal"
+                   min="0" max="100" step="any" required aria-describedby="mandela-mark-error"
+                   aria-invalid="@InvalidField(nameof(MandelaComparisonInputViewModel.MathsMark))" />
+            <span asp-validation-for="MandelaComparison!.MathsMark" id="mandela-mark-error" class="text-danger"></span>
+        </div>
+        <div class="mc-details-field">
+            <label asp-for="MandelaComparison!.ApplicantScore"></label>
+            <input asp-for="MandelaComparison!.ApplicantScore" class="form-control" type="number" inputmode="numeric"
+                   min="0" max="@MandelaSoftwareDevelopmentComparison.MaximumApplicantScore" step="1" required
+                   aria-describedby="mandela-score-help mandela-score-error"
+                   aria-invalid="@InvalidField(nameof(MandelaComparisonInputViewModel.ApplicantScore))" />
+            <p id="mandela-score-help" class="mc-browse-note">Use the <a href="@intake.ApsGuideUrl">official Mandela AS guide</a> to calculate this score. It uses a different scale from APS.</p>
+            <span asp-validation-for="MandelaComparison!.ApplicantScore" id="mandela-score-error" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn mc-browse-button">@(Model.MandelaResult == null ? "Compare results" : "Compare again")</button>
+    </form>
+</section>

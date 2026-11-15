@@ -30,7 +30,11 @@ else
         <h1 class="mc-browse-title">@programme.Name</h1>
         @if (intake != null)
         {
-            <partial name="_VerifiedProgrammeIntake" model="intake" />
+            <partial name="_VerifiedProgrammeIntake" model="Model" />
+            @if (Model.MandelaComparison != null)
+            {
+                <partial name="_MandelaResultsComparison" model="Model" />
+            }
         }
         else
         {
@@ -159,6 +163,11 @@ else
         const actions = document.getElementById('eligibility-save-actions');
 
         document.getElementById('eligibility-result-heading')?.focus();
+        window.addEventListener('load', () => {
+            const comparisonError = document.querySelector('#mandela-comparison-form .input-validation-error');
+            const comparisonHeading = document.querySelector('.mc-result-comparison:has(.mc-comparison-result) h2');
+            requestAnimationFrame(() => (comparisonError || comparisonHeading)?.focus());
+        });
 
         if (form) {
             form.querySelector('.input-validation-error')?.focus();

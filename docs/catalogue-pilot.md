@@ -59,6 +59,10 @@ A dash indicates an alternative that the sources do not list for that qualificat
 
 Communication Networks (7227) is omitted pending confirmation: the faculty prospectus lists Mathematics or Technical Mathematics at 45%, while the 2027 general admissions guide contains conflicting marks and Mathematical Literacy entries for the same diploma. The BIT listing identifies North Campus from the faculty prospectus and directs readers to confirm campus availability because the general guide also references George.
 
+## Mandela results comparison pilot
+
+The 2027 Mandela Software Development diploma (7224) supports a manual comparison using the requirements above. The learner selects their maths subject and enters their mark and a separately calculated Mandela AS. Results show both numeric minimums independently and leave the NSC Diploma pass requirement for the learner to confirm. The comparison accepts AS values up to 607 to accommodate the seven-point allowance described in Mandela's guide. The form can be used without a profile and does not save entries or change the learner's APS. It is limited to the verified 2027 intake and leaves its closed status visible.
+
 ## Updating the catalogue
 
 - Development startup applies migrations and seeds missing programmes and verified intakes, matching existing programmes by university and name. The programme ID and intake year form a unique key. Existing programmes, data and saved links remain in place.

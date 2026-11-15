@@ -1479,3 +1479,36 @@ select.mc-student-input {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+#results-comparison {
+    scroll-margin-top: 24px;
+}
+
+.mc-result-comparison form,
+.mc-comparison-result {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+}
+
+.mc-result-comparison form {
+    max-width: 34rem;
+}
+
+.mc-result-comparison .form-select {
+    min-height: 48px;
+    border-color: var(--mc-border);
+    border-radius: 8px;
+}
+
+.mc-comparison-result .mc-requirement {
+    min-height: 0;
+}
+
+.mc-result-comparison a:not(.btn) {
+    color: var(--mc-teal);
+}
+
+.mc-comparison-result dd {
+    overflow-wrap: anywhere;
+}

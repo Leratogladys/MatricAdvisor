@@ -156,7 +156,10 @@ namespace MatricConnect.Web.Controllers
             var model = new ProgrammeDetailsViewModel
             {
                 Programme = programme,
-                University = university
+                University = university,
+                MandelaComparison = MandelaSoftwareDevelopmentComparison.Supports(university, programme.LatestVerifiedIntake)
+                    ? new MandelaComparisonInputViewModel()
+                    : null
             };
 
             int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
@@ -189,6 +192,35 @@ namespace MatricConnect.Web.Controllers
 
             return View(model);
         } // end method ProgrammeDetails
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public IActionResult CompareResults([FromRoute] int id,
+            [Bind(Prefix = nameof(ProgrammeDetailsViewModel.MandelaComparison))] MandelaComparisonInputViewModel input)
+        {
+            if (id <= 0 || _universityService.GetProgrammeById(id) is not { } programme ||
+                _universityService.GetUniversityById(programme.UniversityId) is not { } university ||
+                !MandelaSoftwareDevelopmentComparison.Supports(university, programme.LatestVerifiedIntake))
+            {
+                return NotFound();
+            }
+
+            var model = new ProgrammeDetailsViewModel
+            {
+                Programme = programme,
+                University = university,
+                MandelaComparison = input
+            };
+
+            if (ModelState.IsValid)
+            {
+                model.MandelaResult = MandelaSoftwareDevelopmentComparison.Compare(
+                    input.Subject!.Value, input.ApplicantScore!.Value, input.MathsMark!.Value);
+            }
+
+            return View("ProgrammeDetails", model);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

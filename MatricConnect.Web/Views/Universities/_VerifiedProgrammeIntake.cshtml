@@ -3,12 +3,13 @@
    Purpose         : Shows sourced admissions information and the programme save action.
 *@
 
-@model MatricConnect.Models.ProgrammeIntake
+@model ProgrammeDetailsViewModel
 
 @{
-    var deadline = Model.ApplicationDeadline;
-    var closingTime = Model.ApplicationClosingTime;
-    bool closed = Model.HasClosed(DateTimeOffset.UtcNow);
+    var intake = Model.Programme.LatestVerifiedIntake!;
+    var deadline = intake.ApplicationDeadline;
+    var closingTime = intake.ApplicationClosingTime;
+    bool closed = intake.HasClosed(DateTimeOffset.UtcNow);
     var timeLabel = closingTime is TimeOnly time ? $" at {time:HH:mm} SAST" : "";
     var deadlineLabel = deadline is DateOnly date ? $"{date:d MMMM yyyy}{timeLabel}" : "";
     var dateTimeValue = deadline is DateOnly day
@@ -16,19 +17,19 @@
         : null;
 }
 
-<p class="mc-details-intro">Programme code @Model.OfficialProgrammeCode</p>
+<p class="mc-details-intro">Programme code @intake.OfficialProgrammeCode</p>
 
 <div class="mc-intake-grid">
     <section class="mc-intake-card" aria-labelledby="intake-heading">
         <h2 id="intake-heading" class="mc-browse-heading">
-            @(closed ? $"Last verified intake: {Model.IntakeYear}" : $"{Model.IntakeYear} intake")
+            @(closed ? $"Last verified intake: {intake.IntakeYear}" : $"{intake.IntakeYear} intake")
         </h2>
         @if (closed)
         {
             <p class="mc-intake-status">Applications closed <time datetime="@dateTimeValue">@deadlineLabel</time>.</p>
-            @if (!string.IsNullOrWhiteSpace(Model.NextApplicationCycleNote))
+            @if (!string.IsNullOrWhiteSpace(intake.NextApplicationCycleNote))
             {
-                <p><strong>Next application cycle:</strong> @Model.NextApplicationCycleNote</p>
+                <p><strong>Next application cycle:</strong> @intake.NextApplicationCycleNote</p>
             }
             else
             {
@@ -47,47 +48,58 @@
         <h3 class="mc-browse-heading">Published entry requirements</h3>
         <p>For South African NSC applicants.</p>
         <ul>
-            @if (string.IsNullOrWhiteSpace(Model.AdmissionScoreBySubject))
+            @if (string.IsNullOrWhiteSpace(intake.AdmissionScoreBySubject))
             {
-                <li>@Model.AdmissionScoreLabel: @Model.RequiredAps or higher.</li>
+                <li>@intake.AdmissionScoreLabel: @intake.RequiredAps or higher.</li>
             }
             else
             {
-                <li>@Model.AdmissionScoreLabel: @Model.AdmissionScoreBySubject</li>
+                <li>@intake.AdmissionScoreLabel: @intake.AdmissionScoreBySubject</li>
             }
-            @if (Model.RequiredMathematics is decimal mathematics)
+            @if (intake.RequiredMathematics is decimal mathematics)
             {
                 <li>Mathematics: @mathematics.ToString("0.##")% or higher.</li>
             }
-            @if (Model.RequiredEnglish is decimal english)
+            @if (intake.RequiredEnglish is decimal english)
             {
                 <li>English: @english.ToString("0.##")% or higher.</li>
             }
-            @if (Model.RequiredPhysicalScience is decimal science)
+            @if (intake.RequiredPhysicalScience is decimal science)
             {
                 <li>Physical Sciences: @science.ToString("0.##")% or higher.</li>
             }
-            @foreach (var requirement in Model.AdditionalRequirements.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            @foreach (var requirement in intake.AdditionalRequirements.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
                 <li>@requirement</li>
             }
         </ul>
-        <p class="mc-browse-note">Last checked <time datetime="@Model.VerifiedOn.ToString("yyyy-MM-dd")">@Model.VerifiedOn.ToString("d MMMM yyyy")</time>.</p>
+        <p class="mc-browse-note">Last checked <time datetime="@intake.VerifiedOn.ToString("yyyy-MM-dd")">@intake.VerifiedOn.ToString("d MMMM yyyy")</time>.</p>
         <ul class="mc-intake-sources">
-            <li><a href="@Model.RequirementsSourceUrl">Official programme requirements</a></li>
-            <li><a href="@Model.ApplicationDatesSourceUrl">Official application dates</a></li>
+            <li><a href="@intake.RequirementsSourceUrl">Official programme requirements</a></li>
+            <li><a href="@intake.ApplicationDatesSourceUrl">Official application dates</a></li>
         </ul>
     </section>
 
     <div class="mc-intake-side">
         <section aria-labelledby="intake-check-heading">
             <h2 id="intake-check-heading" class="mc-browse-heading">Checking your results</h2>
-            <p>Use the university’s scoring rules and check each subject requirement against your results. Matric Connect shows the published requirements without an automatic eligibility result.</p>
-            <a href="@Model.ApsGuideUrl">How the university calculates its admission score</a>
+            @if (Model.MandelaComparison != null)
+            {
+                <p>Compare your Mandela Applicant Score and maths mark with the published minimums for this intake.</p>
+            }
+            else
+            {
+                <p>Use the university’s scoring rules and check each subject requirement against your results. Matric Connect shows the published requirements without an automatic eligibility result.</p>
+            }
+            <a href="@intake.ApsGuideUrl">How the university calculates its admission score</a>
         </section>
 
         <div class="mc-intake-actions">
-            <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@Model.ProgrammeId" method="post">
+            @if (Model.MandelaComparison != null)
+            {
+                <a href="#results-comparison" class="btn mc-browse-button">Compare my results</a>
+            }
+            <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@intake.ProgrammeId" method="post">
                 <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>
             </form>
             <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>

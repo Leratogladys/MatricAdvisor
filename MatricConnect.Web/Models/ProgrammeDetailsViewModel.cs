@@ -4,6 +4,7 @@
 //                   for the programme details page.
 
 using MatricConnect.Models;
+using MatricConnect.Services;
 
 namespace MatricConnect.Web.Models
 {
@@ -58,6 +59,10 @@ namespace MatricConnect.Web.Models
 
         public bool MeetsEvaluatedRequirements => EligibilityChecked &&
             EligibilityRequirements.All(requirement => requirement.Issue == null);
+
+        public MandelaComparisonInputViewModel? MandelaComparison { get; set; }
+
+        public MandelaComparisonResult? MandelaResult { get; set; }
 
         public ProgrammeSaveOutcome? SaveOutcome { get; set; }
     } // end class ProgrammeDetailsViewModel

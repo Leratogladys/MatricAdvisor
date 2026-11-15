@@ -34,6 +34,7 @@ namespace MatricConnect.Data
                     IntakeYear = intakeYear,
                     OfficialProgrammeCode = isComputerScience ? "SBA13" : "SBA21",
                     ApplicationDeadline = new DateOnly(2026, 9, 30),
+                    AdmissionScoreLabel = "Wits APS",
                     RequiredAps = 44,
                     RequiredMathematics = 70,
                     AdditionalRequirements = """

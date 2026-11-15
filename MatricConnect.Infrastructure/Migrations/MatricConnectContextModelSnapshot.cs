@@ -65,6 +65,13 @@ namespace MatricConnect.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AdmissionScoreLabel")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<TimeOnly?>("ApplicationClosingTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ApplicationDatesSourceUrl")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -83,7 +90,13 @@ namespace MatricConnect.Migrations
                     b.Property<int>("RequiredAps")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal?>("RequiredEnglish")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal>("RequiredMathematics")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("RequiredPhysicalScience")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RequirementsSourceUrl")

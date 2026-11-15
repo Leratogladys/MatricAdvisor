@@ -8,13 +8,17 @@
 @{
     ViewData["Title"] = "Browse Programmes";
     var programmeCount = Model.Programmes.Count;
+    var now = DateTimeOffset.UtcNow;
+    var hasEligibilityCheck = Model.Programmes.Any(programme => programme.LatestVerifiedIntake == null);
     var programmeLabel = programmeCount == 1 ? "programme" : "programmes";
 }
 
 <div class="mc-browse-flow">
     <p class="mc-browse-eyebrow">@Model.University.Province / @Model.University.Name</p>
     <h1 class="mc-browse-title">Explore programmes</h1>
-    <p class="mc-browse-description">Choose a programme to view its requirements and check your results.</p>
+    <p class="mc-browse-description">@(hasEligibilityCheck
+        ? "Choose a programme to view its requirements and check your results."
+        : "Choose a programme to view its last verified intake and published requirements.")</p>
 
     <a asp-controller="Universities" asp-action="Index" asp-route-selectedProvince="@Model.University.Province"
        class="btn mc-browse-button mc-browse-button-secondary mc-programmes-back">
@@ -36,7 +40,9 @@
                         <h3 class="mc-browse-heading">@programme.Name</h3>
                         @if (programme.LatestVerifiedIntake is { } intake)
                         {
-                            <p class="mc-browse-note">@intake.IntakeYear intake · Wits APS @(intake.RequiredAps)+</p>
+                            <p class="mc-browse-note">
+                                @intake.IntakeYear intake@(intake.HasClosed(now) ? " (closed)" : "") · @intake.AdmissionScoreLabel @(intake.RequiredAps)+
+                            </p>
                         }
                         else
                         {

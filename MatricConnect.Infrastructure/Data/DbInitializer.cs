@@ -172,6 +172,7 @@ namespace MatricConnect.Data
 
             UpdateUfsProgrammeData(context, ufs.Id);
             WitsIntakeSeed.AddVerifiedIntakes(context, wits.Id);
+            VerifiedIntakeSeed.Add2027Intakes(context, ufs.Id, uj.Id, up.Id);
         } // end method
 
         // --------------------------------------------------

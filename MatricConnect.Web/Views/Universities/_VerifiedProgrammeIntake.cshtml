@@ -6,9 +6,14 @@
 @model MatricConnect.Models.ProgrammeIntake
 
 @{
-    var today = DateOnly.FromDateTime(DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(2)).Date);
     var deadline = Model.ApplicationDeadline;
-    bool closed = deadline.HasValue && deadline.Value < today;
+    var closingTime = Model.ApplicationClosingTime;
+    bool closed = Model.HasClosed(DateTimeOffset.UtcNow);
+    var timeLabel = closingTime is TimeOnly time ? $" at {time:HH:mm} SAST" : "";
+    var deadlineLabel = deadline is DateOnly date ? $"{date:d MMMM yyyy}{timeLabel}" : "";
+    var dateTimeValue = deadline is DateOnly day
+        ? closingTime is TimeOnly clock ? $"{day:yyyy-MM-dd}T{clock:HH:mm}+02:00" : $"{day:yyyy-MM-dd}"
+        : null;
 }
 
 <p class="mc-details-intro">Programme code @Model.OfficialProgrammeCode</p>
@@ -20,12 +25,12 @@
         </h2>
         @if (closed)
         {
-            <p class="mc-intake-status">Applications closed <time datetime="@deadline!.Value.ToString("yyyy-MM-dd")">@deadline.Value.ToString("d MMMM yyyy")</time>.</p>
+            <p class="mc-intake-status">Applications closed <time datetime="@dateTimeValue">@deadlineLabel</time>.</p>
             <p><strong>Next intake:</strong> Not yet confirmed.</p>
         }
-        else if (deadline is DateOnly date)
+        else if (deadline.HasValue)
         {
-            <p><strong>Application closing date:</strong> <time datetime="@date.ToString("yyyy-MM-dd")">@date.ToString("d MMMM yyyy")</time>.</p>
+            <p><strong>Application closing date:</strong> <time datetime="@dateTimeValue">@deadlineLabel</time>.</p>
         }
         else
         {
@@ -35,8 +40,16 @@
         <h3 class="mc-browse-heading">Entry requirements for @Model.IntakeYear</h3>
         <p>For South African NSC applicants.</p>
         <ul>
-            <li>Wits APS: @Model.RequiredAps or higher.</li>
-            <li>Mathematics: Level 6 (@Model.RequiredMathematics.ToString("0.##")% or higher).</li>
+            <li>@Model.AdmissionScoreLabel: @Model.RequiredAps or higher.</li>
+            <li>Mathematics: @Model.RequiredMathematics.ToString("0.##")% or higher.</li>
+            @if (Model.RequiredEnglish is decimal english)
+            {
+                <li>English: @english.ToString("0.##")% or higher.</li>
+            }
+            @if (Model.RequiredPhysicalScience is decimal science)
+            {
+                <li>Physical Sciences: @science.ToString("0.##")% or higher.</li>
+            }
             @foreach (var requirement in Model.AdditionalRequirements.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
             {
                 <li>@requirement</li>
@@ -45,15 +58,15 @@
         <p class="mc-browse-note">Last checked <time datetime="@Model.VerifiedOn.ToString("yyyy-MM-dd")">@Model.VerifiedOn.ToString("d MMMM yyyy")</time>.</p>
         <ul class="mc-intake-sources">
             <li><a href="@Model.RequirementsSourceUrl">Official programme requirements</a></li>
-            <li><a href="@Model.ApplicationDatesSourceUrl">Wits application dates</a></li>
+            <li><a href="@Model.ApplicationDatesSourceUrl">Official application dates</a></li>
         </ul>
     </section>
 
     <div class="mc-intake-side">
         <section aria-labelledby="intake-check-heading">
             <h2 id="intake-check-heading" class="mc-browse-heading">Checking your results</h2>
-            <p>Wits uses its own APS calculation. Matric Connect shows the published requirements for this intake without an automatic eligibility result.</p>
-            <a href="@Model.ApsGuideUrl">How Wits calculates APS</a>
+            <p>Use the university’s scoring rules and check each subject requirement against your results. For this intake, Matric Connect shows the published requirements without an automatic eligibility result.</p>
+            <a href="@Model.ApsGuideUrl">How the university calculates its admission score</a>
         </section>
 
         <div class="mc-intake-actions">

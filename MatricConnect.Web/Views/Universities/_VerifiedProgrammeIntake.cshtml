@@ -1,0 +1,66 @@
+@* Programmer name : Lerato Molefe
+   Project name    : Matric Connect
+   Purpose         : Shows sourced admissions information and the programme save action.
+*@
+
+@model MatricConnect.Models.ProgrammeIntake
+
+@{
+    var today = DateOnly.FromDateTime(DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(2)).Date);
+    var deadline = Model.ApplicationDeadline;
+    bool closed = deadline.HasValue && deadline.Value < today;
+}
+
+<p class="mc-details-intro">Programme code @Model.OfficialProgrammeCode</p>
+
+<div class="mc-intake-grid">
+    <section class="mc-intake-card" aria-labelledby="intake-heading">
+        <h2 id="intake-heading" class="mc-browse-heading">
+            @(closed ? $"Last verified intake: {Model.IntakeYear}" : $"{Model.IntakeYear} intake")
+        </h2>
+        @if (closed)
+        {
+            <p class="mc-intake-status">Applications closed <time datetime="@deadline!.Value.ToString("yyyy-MM-dd")">@deadline.Value.ToString("d MMMM yyyy")</time>.</p>
+            <p><strong>Next intake:</strong> Not yet confirmed.</p>
+        }
+        else if (deadline is DateOnly date)
+        {
+            <p><strong>Application closing date:</strong> <time datetime="@date.ToString("yyyy-MM-dd")">@date.ToString("d MMMM yyyy")</time>.</p>
+        }
+        else
+        {
+            <p><strong>Application closing date:</strong> Not yet confirmed.</p>
+        }
+
+        <h3 class="mc-browse-heading">Entry requirements for @Model.IntakeYear</h3>
+        <p>For South African NSC applicants.</p>
+        <ul>
+            <li>Wits APS: @Model.RequiredAps or higher.</li>
+            <li>Mathematics: Level 6 (@Model.RequiredMathematics.ToString("0.##")% or higher).</li>
+            @foreach (var requirement in Model.AdditionalRequirements.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                <li>@requirement</li>
+            }
+        </ul>
+        <p class="mc-browse-note">Last checked <time datetime="@Model.VerifiedOn.ToString("yyyy-MM-dd")">@Model.VerifiedOn.ToString("d MMMM yyyy")</time>.</p>
+        <ul class="mc-intake-sources">
+            <li><a href="@Model.RequirementsSourceUrl">Official programme requirements</a></li>
+            <li><a href="@Model.ApplicationDatesSourceUrl">Wits application dates</a></li>
+        </ul>
+    </section>
+
+    <div class="mc-intake-side">
+        <section aria-labelledby="intake-check-heading">
+            <h2 id="intake-check-heading" class="mc-browse-heading">Checking your results</h2>
+            <p>Wits uses its own APS calculation. Matric Connect shows the published requirements for this intake without an automatic eligibility result.</p>
+            <a href="@Model.ApsGuideUrl">How Wits calculates APS</a>
+        </section>
+
+        <div class="mc-intake-actions">
+            <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@Model.ProgrammeId" method="post">
+                <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>
+            </form>
+            <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>
+        </div>
+    </div>
+</div>

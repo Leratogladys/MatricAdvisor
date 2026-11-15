@@ -53,6 +53,51 @@ namespace MatricConnect.Migrations
                     b.ToTable("Programmes");
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.ProgrammeIntake", b =>
+                {
+                    b.Property<int>("ProgrammeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IntakeYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AdditionalRequirements")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApplicationDatesSourceUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("ApplicationDeadline")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApsGuideUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OfficialProgrammeCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RequiredAps")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("RequiredMathematics")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RequirementsSourceUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("VerifiedOn")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProgrammeId", "IntakeYear");
+
+                    b.ToTable("ProgrammeIntakes");
+                });
+
             modelBuilder.Entity("MatricConnect.Models.SavedProgramme", b =>
                 {
                     b.Property<int>("Id")
@@ -140,6 +185,15 @@ namespace MatricConnect.Migrations
                     b.Navigation("University");
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.ProgrammeIntake", b =>
+                {
+                    b.HasOne("MatricConnect.Models.Programme", null)
+                        .WithMany("Intakes")
+                        .HasForeignKey("ProgrammeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MatricConnect.Models.SavedProgramme", b =>
                 {
                     b.HasOne("MatricConnect.Models.Programme", "Programme")
@@ -161,6 +215,8 @@ namespace MatricConnect.Migrations
 
             modelBuilder.Entity("MatricConnect.Models.Programme", b =>
                 {
+                    b.Navigation("Intakes");
+
                     b.Navigation("SavedProgrammes");
                 });
 

@@ -222,6 +222,13 @@ namespace MatricConnect.Web.Controllers
                 return NotFound();
             } // end if
 
+            // Verified intakes are shown with their official criteria. The stored profile APS
+            // does not identify its scoring system, so do not use it for this comparison.
+            if (programme.LatestVerifiedIntake != null)
+            {
+                return RedirectToAction(nameof(ProgrammeDetails), new { id });
+            } // end if
+
             var university = _universityService
                 .GetUniversityById(programme.UniversityId);
 

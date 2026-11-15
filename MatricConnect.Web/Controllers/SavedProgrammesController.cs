@@ -131,8 +131,9 @@ namespace MatricConnect.Web.Controllers
             int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
             if(!studentId.HasValue)
             {
-                TempData["SuccessMessage"] = "Select a student profile. You will return to this " +
-                                              "programme to review your results and save it.";
+                TempData["SuccessMessage"] = programme.LatestVerifiedIntake != null
+                    ? "Select a student profile. You will return to this programme to save it."
+                    : "Select a student profile. You will return to this programme to review your results and save it.";
 
                 return RedirectToAction("Existing", "Students", new { returnUrl });
             } // end if 

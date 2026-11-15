@@ -34,7 +34,14 @@
                 {
                     <li class="mc-browse-card">
                         <h3 class="mc-browse-heading">@programme.Name</h3>
-                        <p class="mc-browse-note">@programme.FieldOfStudy · APS @programme.RequiredAPS</p>
+                        @if (programme.LatestVerifiedIntake is { } intake)
+                        {
+                            <p class="mc-browse-note">@intake.IntakeYear intake · Wits APS @(intake.RequiredAps)+</p>
+                        }
+                        else
+                        {
+                            <p class="mc-browse-note">@programme.FieldOfStudy · APS @programme.RequiredAPS</p>
+                        }
                         <a asp-controller="Universities" asp-action="ProgrammeDetails" asp-route-id="@programme.Id"
                            class="btn mc-browse-button" aria-label="View requirements for @programme.Name">
                             View requirements

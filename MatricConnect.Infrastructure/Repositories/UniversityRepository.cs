@@ -6,6 +6,7 @@
 using MatricConnect.Data;
 using MatricConnect.Models;
 using MatricConnect.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatricConnect.Infrastructure.Repositories
 {
@@ -103,6 +104,7 @@ namespace MatricConnect.Infrastructure.Repositories
             //
 
             return _context.Programmes
+                .Include(p => p.Intakes)
                 .Where(p => p.UniversityId == universityId)
                 .OrderBy(p => p.Name)
                 .ToList();
@@ -122,7 +124,7 @@ namespace MatricConnect.Infrastructure.Repositories
             //                     - null when no matching programme exists
             //
 
-            return _context.Programmes.FirstOrDefault(p => p.Id == programmeId);
+            return _context.Programmes.Include(p => p.Intakes).FirstOrDefault(p => p.Id == programmeId);
         } // end method
 
         public University? GetUniversityById(int universityId)

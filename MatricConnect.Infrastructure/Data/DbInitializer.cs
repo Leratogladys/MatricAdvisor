@@ -171,6 +171,7 @@ namespace MatricConnect.Data
             } // end if
 
             UpdateUfsProgrammeData(context, ufs.Id);
+            WitsIntakeSeed.AddVerifiedIntakes(context, wits.Id);
         } // end method
 
         // --------------------------------------------------

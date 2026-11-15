@@ -1442,3 +1442,52 @@ select.mc-student-input {
         width: 100%;
     }
 }
+
+.mc-intake-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.mc-intake-card,
+.mc-intake-side,
+.mc-intake-side section,
+.mc-intake-actions {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+}
+
+.mc-intake-card {
+    padding: 24px;
+    border-radius: var(--mc-radius-card);
+    background: var(--mc-surface);
+}
+
+.mc-intake-card ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.mc-intake-status {
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--mc-terracotta-tint);
+}
+
+.mc-intake-actions .btn {
+    width: 100%;
+}
+
+.mc-intake-grid a:not(.btn) {
+    color: var(--mc-teal);
+}
+
+@media (max-width: 991.98px) {
+    .mc-intake-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

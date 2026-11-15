@@ -75,6 +75,19 @@ namespace MatricConnect.Data
             get; set;
         } // end property
 
+        public DbSet<ProgrammeIntake> ProgrammeIntakes => Set<ProgrammeIntake>();
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ProgrammeIntake>().HasKey(intake => new { intake.ProgrammeId, intake.IntakeYear });
+            modelBuilder.Entity<Programme>()
+                .HasMany(programme => programme.Intakes)
+                .WithOne()
+                .HasForeignKey(intake => intake.ProgrammeId);
+        } // end method OnModelCreating
+
         public DbSet<SavedProgramme> SavedProgrammes
         {
             //

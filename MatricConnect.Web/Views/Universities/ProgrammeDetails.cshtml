@@ -10,6 +10,7 @@
     ViewData["Title"] = "Programme Details";
     var student = SelectedStudent.GetStudent(Context);
     var programme = Model.Programme;
+    var intake = programme.LatestVerifiedIntake;
     var science = programme.RequiredPhysicalScience;
     var website = Uri.TryCreate(Model.University.Website, UriKind.Absolute, out var site) &&
                   (site.Scheme == Uri.UriSchemeHttps || site.Scheme == Uri.UriSchemeHttp) ? site.AbsoluteUri : null;
@@ -27,120 +28,127 @@ else
            class="btn mc-browse-button mc-browse-button-secondary mc-details-back">Back to programmes</a>
         <p class="mc-browse-eyebrow">@Model.University.Name<span class="d-none d-lg-inline"> / @Model.University.Province</span></p>
         <h1 class="mc-browse-title">@programme.Name</h1>
-        <p class="mc-details-intro">@programme.FieldOfStudy · Requirements from the Matric Connect catalogue</p>
+        @if (intake != null)
+        {
+            <partial name="_VerifiedProgrammeIntake" model="intake" />
+        }
+        else
+        {
+            <p class="mc-details-intro">@programme.FieldOfStudy · Requirements from the Matric Connect catalogue</p>
 
-        <div class="mc-details-grid">
-            <div class="mc-details-profile">
-                <h2 class="mc-browse-heading">@(student == null ? "Your results" : "Your profile")</h2>
-                @if (student != null)
-                {
-                    <p>@student.FirstName @student.LastName · ID @student.Id<br />
-                       APS @student.APSScore · Mathematics @(student.MathematicsMark.ToString("0.##"))%<br />
-                       Physical Science: @(student.PhysicalScienceMark.HasValue ? $"{student.PhysicalScienceMark:0.##}%" : "Not provided")</p>
-                }
-            </div>
+            <div class="mc-details-grid">
+                <div class="mc-details-profile">
+                    <h2 class="mc-browse-heading">@(student == null ? "Your results" : "Your profile")</h2>
+                    @if (student != null)
+                    {
+                        <p>@student.FirstName @student.LastName · ID @student.Id<br />
+                           APS @student.APSScore · Mathematics @(student.MathematicsMark.ToString("0.##"))%<br />
+                           Physical Science: @(student.PhysicalScienceMark.HasValue ? $"{student.PhysicalScienceMark:0.##}%" : "Not provided")</p>
+                    }
+                </div>
 
-            <section id="eligibility-result" class="mc-details-requirements" aria-labelledby="entry-requirements-heading">
-                @if (Model.EligibilityChecked)
-                {
-                    <div class="mc-eligibility-banner @(Model.MeetsEvaluatedRequirements ? "mc-requirement-met" : "mc-requirement-unmet")">
-                        <h2 id="eligibility-result-heading" class="mc-browse-heading" tabindex="-1">
-                            @(Model.MeetsEvaluatedRequirements ? "Evaluated requirements met" : "Some requirements not met")
-                        </h2>
-                        <p>@(Model.MeetsEvaluatedRequirements
-                            ? "You meet the requirements currently evaluated by Matric Connect."
-                            : "You do not meet all the requirements currently evaluated by Matric Connect. See each result below.")</p>
-                    </div>
-                }
-                <h2 id="entry-requirements-heading" class="mc-browse-heading">Entry requirements</h2>
-                <dl class="mc-requirement-list">
+                <section id="eligibility-result" class="mc-details-requirements" aria-labelledby="entry-requirements-heading">
                     @if (Model.EligibilityChecked)
                     {
-                        foreach (var requirement in Model.EligibilityRequirements)
-                        {
-                            var suffix = requirement.IsPercentage ? "%" : "";
-                            var actual = requirement.Actual.HasValue ? $"{requirement.Actual:0.##}{suffix}" : "Not provided";
-                            var tone = !requirement.Required.HasValue ? null : requirement.Issue == null ? "mc-requirement-met" : "mc-requirement-unmet";
-                            <div class="mc-requirement mc-requirement-comparison @tone">
-                                <dt>@requirement.Label</dt>
-                                <dd>
-                                    @if (requirement.Required.HasValue)
-                                    {
-                                        <span>Required: @($"{requirement.Required:0.##}{suffix}") · Yours: @actual</span>
-                                        <span>@(requirement.Issue == null ? "Meets requirement" : requirement.Actual.HasValue ? "Does not meet requirement" : requirement.Issue)</span>
-                                    }
-                                    else
-                                    {
-                                        <span>Not required for this programme</span>
-                                    }
-                                </dd>
-                            </div>
-                        }
-                    }
-                    <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>APS score</dt><dd>Minimum APS: @programme.RequiredAPS</dd></div>
-                    <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>Mathematics</dt><dd>Minimum mark: @(programme.RequiredMathematics.ToString("0.##"))%</dd></div>
-                    <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>Physical Science</dt><dd>@(science.HasValue ? $"Minimum mark: {science:0.##}%" : "Not required for this programme")</dd></div>
-                </dl>
-                <p class="mc-browse-note mc-details-dates">Catalogue deadline: @programme.ApplicationDeadline.ToString("dd MMMM yyyy"). Confirm application dates with the university.</p>
-            </section>
-
-            <section class="mc-details-check" aria-label="Check eligibility">
-                <form id="eligibility-form" asp-controller="Universities" asp-action="CheckEligibility"
-                      asp-route-id="@programme.Id" method="post">
-                    <details class="mc-details-inputs" open="@(showFields ? "open" : null)">
-                        <summary>@(student == null ? "Enter your academic results" : "Review or edit marks for this check")</summary>
-                        <div class="mc-details-fields">
-                            <div class="mc-details-field">
-                                <label asp-for="EligibilityInput.APSScore"></label>
-                                <input asp-for="EligibilityInput.APSScore" class="form-control" type="number" min="0" max="57" step="1"
-                                       aria-describedby="aps-error" />
-                                <span asp-validation-for="EligibilityInput.APSScore" id="aps-error" class="text-danger"></span>
-                            </div>
-                            <div class="mc-details-field">
-                                <label asp-for="EligibilityInput.MathematicsMark"></label>
-                                <input asp-for="EligibilityInput.MathematicsMark" asp-format="{0:0.##}" class="form-control"
-                                       type="number" min="0" max="100" step="0.01" aria-describedby="maths-error" />
-                                <span asp-validation-for="EligibilityInput.MathematicsMark" id="maths-error" class="text-danger"></span>
-                            </div>
-                            <div class="mc-details-field">
-                                <label asp-for="EligibilityInput.PhysicalScienceMark"></label>
-                                <input asp-for="EligibilityInput.PhysicalScienceMark" asp-format="{0:0.##}" class="form-control"
-                                       type="number" min="0" max="100" step="0.01" aria-describedby="science-help science-error" />
-                                <p id="science-help" class="mc-browse-note">Leave blank if you do not take Physical Science.</p>
-                                <span asp-validation-for="EligibilityInput.PhysicalScienceMark" id="science-error" class="text-danger"></span>
-                            </div>
+                        <div class="mc-eligibility-banner @(Model.MeetsEvaluatedRequirements ? "mc-requirement-met" : "mc-requirement-unmet")">
+                            <h2 id="eligibility-result-heading" class="mc-browse-heading" tabindex="-1">
+                                @(Model.MeetsEvaluatedRequirements ? "Evaluated requirements met" : "Some requirements not met")
+                            </h2>
+                            <p>@(Model.MeetsEvaluatedRequirements
+                                ? "You meet the requirements currently evaluated by Matric Connect."
+                                : "You do not meet all the requirements currently evaluated by Matric Connect. See each result below.")</p>
                         </div>
-                    </details>
-                    <button type="submit" class="btn mc-browse-button">@(Model.EligibilityChecked ? "Check again" : "Check my eligibility")</button>
-                </form>
-                @if (student != null && !Model.EligibilityChecked)
-                {
-                    <p class="mc-browse-note">Checking uses the results stored in your student profile unless you edit them for this check.</p>
-                }
-            </section>
+                    }
+                    <h2 id="entry-requirements-heading" class="mc-browse-heading">Entry requirements</h2>
+                    <dl class="mc-requirement-list">
+                        @if (Model.EligibilityChecked)
+                        {
+                            foreach (var requirement in Model.EligibilityRequirements)
+                            {
+                                var suffix = requirement.IsPercentage ? "%" : "";
+                                var actual = requirement.Actual.HasValue ? $"{requirement.Actual:0.##}{suffix}" : "Not provided";
+                                var tone = !requirement.Required.HasValue ? null : requirement.Issue == null ? "mc-requirement-met" : "mc-requirement-unmet";
+                                <div class="mc-requirement mc-requirement-comparison @tone">
+                                    <dt>@requirement.Label</dt>
+                                    <dd>
+                                        @if (requirement.Required.HasValue)
+                                        {
+                                            <span>Required: @($"{requirement.Required:0.##}{suffix}") · Yours: @actual</span>
+                                            <span>@(requirement.Issue == null ? "Meets requirement" : requirement.Actual.HasValue ? "Does not meet requirement" : requirement.Issue)</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Not required for this programme</span>
+                                        }
+                                    </dd>
+                                </div>
+                            }
+                        }
+                        <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>APS score</dt><dd>Minimum APS: @programme.RequiredAPS</dd></div>
+                        <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>Mathematics</dt><dd>Minimum mark: @(programme.RequiredMathematics.ToString("0.##"))%</dd></div>
+                        <div class="mc-requirement mc-requirement-minimum" hidden="@Model.EligibilityChecked"><dt>Physical Science</dt><dd>@(science.HasValue ? $"Minimum mark: {science:0.##}%" : "Not required for this programme")</dd></div>
+                    </dl>
+                    <p class="mc-browse-note mc-details-dates">Catalogue deadline: @programme.ApplicationDeadline.ToString("dd MMMM yyyy"). Confirm application dates with the university.</p>
+                </section>
 
-            <p class="mc-browse-note mc-details-disclaimer">
-                Universities may have additional requirements and selection criteria. Meeting these checks does not guarantee admission.
-            </p>
-            <div class="mc-details-actions">
-                @if (Model.EligibilityChecked)
-                {
-                    <div id="eligibility-save-actions">
-                        <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@programme.Id" method="post">
-                            <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>
-                        </form>
-                        <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">
-                            View saved programmes
-                        </a>
-                    </div>
-                }
-                @if (website != null)
-                {
-                    <a href="@website" class="btn mc-browse-button mc-browse-button-secondary">University website</a>
-                }
+                <section class="mc-details-check" aria-label="Check eligibility">
+                    <form id="eligibility-form" asp-controller="Universities" asp-action="CheckEligibility"
+                          asp-route-id="@programme.Id" method="post">
+                        <details class="mc-details-inputs" open="@(showFields ? "open" : null)">
+                            <summary>@(student == null ? "Enter your academic results" : "Review or edit marks for this check")</summary>
+                            <div class="mc-details-fields">
+                                <div class="mc-details-field">
+                                    <label asp-for="EligibilityInput.APSScore"></label>
+                                    <input asp-for="EligibilityInput.APSScore" class="form-control" type="number" min="0" max="57" step="1"
+                                           aria-describedby="aps-error" />
+                                    <span asp-validation-for="EligibilityInput.APSScore" id="aps-error" class="text-danger"></span>
+                                </div>
+                                <div class="mc-details-field">
+                                    <label asp-for="EligibilityInput.MathematicsMark"></label>
+                                    <input asp-for="EligibilityInput.MathematicsMark" asp-format="{0:0.##}" class="form-control"
+                                           type="number" min="0" max="100" step="0.01" aria-describedby="maths-error" />
+                                    <span asp-validation-for="EligibilityInput.MathematicsMark" id="maths-error" class="text-danger"></span>
+                                </div>
+                                <div class="mc-details-field">
+                                    <label asp-for="EligibilityInput.PhysicalScienceMark"></label>
+                                    <input asp-for="EligibilityInput.PhysicalScienceMark" asp-format="{0:0.##}" class="form-control"
+                                           type="number" min="0" max="100" step="0.01" aria-describedby="science-help science-error" />
+                                    <p id="science-help" class="mc-browse-note">Leave blank if you do not take Physical Science.</p>
+                                    <span asp-validation-for="EligibilityInput.PhysicalScienceMark" id="science-error" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </details>
+                        <button type="submit" class="btn mc-browse-button">@(Model.EligibilityChecked ? "Check again" : "Check my eligibility")</button>
+                    </form>
+                    @if (student != null && !Model.EligibilityChecked)
+                    {
+                        <p class="mc-browse-note">Checking uses the results stored in your student profile unless you edit them for this check.</p>
+                    }
+                </section>
+
+                <p class="mc-browse-note mc-details-disclaimer">
+                    Universities may have additional requirements and selection criteria. Meeting these checks does not guarantee admission.
+                </p>
+                <div class="mc-details-actions">
+                    @if (Model.EligibilityChecked)
+                    {
+                        <div id="eligibility-save-actions">
+                            <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@programme.Id" method="post">
+                                <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>
+                            </form>
+                            <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">
+                                View saved programmes
+                            </a>
+                        </div>
+                    }
+                    @if (website != null)
+                    {
+                        <a href="@website" class="btn mc-browse-button mc-browse-button-secondary">University website</a>
+                    }
+                </div>
+
             </div>
-
-        </div>
+        }
     </div>
 }
 

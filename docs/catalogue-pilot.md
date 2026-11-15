@@ -29,8 +29,22 @@ Verified on **15 November 2026** against the 2027 admissions publications. No la
 - **UJ:** The [2027 prospectus](https://www.uj.ac.za/wp-content/uploads/2026/06/uj_undergrad_prospectus2027.pdf) lists the three Auckland Park Kingsway programmes and the APS method. UJ's [undergraduate admissions page](https://www.uj.ac.za/admission-aid/undergraduate/) confirms **31 October 2026 at 12:00 SAST**.
 - **UP:** The [2027 requirements table](https://drupalwebprod-files.up.ac.za/Public/2026-03/UP_DESA_Application%20requirements%20tables_2027_web.pdf?VersionId=vw30gCBk2BMAXzOhFSBflmkFOHOMFOoa) lists the requirements in the School of Information Technology section. The [2027 prospectus](https://drupalwebprod-files.up.ac.za/Public/2026-01/UP_UG%20Prospectus%202027_NSC-IEB_DevV5_web_0.pdf?VersionId=mFTqP2HthIDn48ISjWf4b4g6CtdE6beU) explains the APS method. UP's [application dates](https://www.up.ac.za/online-application/important-dates) give **30 June 2026** for both programmes.
 
+## CUT: entry-level computing
+
+Checked on **15 November 2026**. The qualification pages provide published guidance for South African NSC applicants. They are not dated 2028 requirements. The general undergraduate application deadline for the 2027 intake was **30 September 2026**. CUT lists its 2028 undergraduate application window as **April 2027 to 30 September 2027**; students should reconfirm programme availability and requirements before applying.
+
+| Qualification | Code | Campuses | Normal threshold and subject routes |
+| --- | --- | --- | --- |
+| [Higher Certificate in Information Technology](https://www.cut.ac.za/programmes/hcert-information-technology) | HC_ITC | Bloemfontein and Welkom | CUT APS 27; NSC Higher Certificate pass or above and English proficiency at NQF level 4. At 22–26 points the applicant must complete a selection process. |
+| [Diploma in Computer Networking](https://www.cut.ac.za/programmes/dip-computer-networking) | DP_CMN | Bloemfontein | CUT APS 27; NSC Diploma pass or above and one of Mathematics 40%, Computer Science 40%, or Mathematical Literacy 60%. |
+| [Diploma in Information Technology](https://www.cut.ac.za/programmes/dp-information-technology) | DP_ITC | Bloemfontein and Welkom | CUT APS 27; NSC Diploma pass or above and the same subject alternatives as Computer Networking. |
+
+CUT generally expects 50% in English Home Language or First Additional Language. Both diplomas have a selection process, and CUT publishes an extended study route for some first-time applicants with 22–26 points. These are reference listings, so the app does not give an automatic eligibility decision or reduce the subject alternatives to a compulsory Mathematics mark.
+
+Sources for general rules and dates: [CUT Student Calendar](https://www.cut.ac.za/calendar), [CUT APS guide](https://www.cut.ac.za/admission-points-ap), [CUT application dates](https://www.cut.ac.za/application-process), and [CUT NBT guidance](https://www.cut.ac.za/nbt).
+
 ## Updating the catalogue
 
-- Development startup applies migrations and adds verified intakes to existing programmes matched by university and name. The programme ID and intake year form a unique key. Existing programmes, data and saved links remain in place.
+- Development startup applies migrations and seeds missing programmes and verified intakes, matching existing programmes by university and name. The programme ID and intake year form a unique key. Existing programmes, data and saved links remain in place.
 - Add each later cycle as a separate record once verified. Preserve old intake information and leave unconfirmed dates blank. The browse and detail pages show the most recent recorded intake. Use a cutoff time only if the institution publishes one.
 - The MVC site shows verified intake requirements as reference information and lets learners save a programme directly. It does not apply a stored APS of unknown scoring method or infer marks that the profile does not collect. The original comparison remains available for records without a verified intake.

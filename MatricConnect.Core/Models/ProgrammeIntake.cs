@@ -11,9 +11,10 @@ namespace MatricConnect.Models
         public string OfficialProgrammeCode { get; set; } = string.Empty;
         public DateOnly? ApplicationDeadline { get; set; }
         public TimeOnly? ApplicationClosingTime { get; set; }
+        public string? NextApplicationCycleNote { get; set; }
         public string AdmissionScoreLabel { get; set; } = "APS";
         public int RequiredAps { get; set; }
-        public decimal RequiredMathematics { get; set; }
+        public decimal? RequiredMathematics { get; set; }
         public decimal? RequiredEnglish { get; set; }
         public decimal? RequiredPhysicalScience { get; set; }
         public string AdditionalRequirements { get; set; } = string.Empty;

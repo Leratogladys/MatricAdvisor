@@ -26,7 +26,14 @@
         @if (closed)
         {
             <p class="mc-intake-status">Applications closed <time datetime="@dateTimeValue">@deadlineLabel</time>.</p>
-            <p><strong>Next intake:</strong> Not yet confirmed.</p>
+            @if (!string.IsNullOrWhiteSpace(Model.NextApplicationCycleNote))
+            {
+                <p><strong>Next application cycle:</strong> @Model.NextApplicationCycleNote</p>
+            }
+            else
+            {
+                <p><strong>Next intake:</strong> Not yet confirmed.</p>
+            }
         }
         else if (deadline.HasValue)
         {
@@ -37,11 +44,14 @@
             <p><strong>Application closing date:</strong> Not yet confirmed.</p>
         }
 
-        <h3 class="mc-browse-heading">Entry requirements for @Model.IntakeYear</h3>
+        <h3 class="mc-browse-heading">Published entry requirements</h3>
         <p>For South African NSC applicants.</p>
         <ul>
             <li>@Model.AdmissionScoreLabel: @Model.RequiredAps or higher.</li>
-            <li>Mathematics: @Model.RequiredMathematics.ToString("0.##")% or higher.</li>
+            @if (Model.RequiredMathematics is decimal mathematics)
+            {
+                <li>Mathematics: @mathematics.ToString("0.##")% or higher.</li>
+            }
             @if (Model.RequiredEnglish is decimal english)
             {
                 <li>English: @english.ToString("0.##")% or higher.</li>
@@ -65,7 +75,7 @@
     <div class="mc-intake-side">
         <section aria-labelledby="intake-check-heading">
             <h2 id="intake-check-heading" class="mc-browse-heading">Checking your results</h2>
-            <p>Use the university’s scoring rules and check each subject requirement against your results. For this intake, Matric Connect shows the published requirements without an automatic eligibility result.</p>
+            <p>Use the university’s scoring rules and check each subject requirement against your results. Matric Connect shows the published requirements without an automatic eligibility result.</p>
             <a href="@Model.ApsGuideUrl">How the university calculates its admission score</a>
         </section>
 

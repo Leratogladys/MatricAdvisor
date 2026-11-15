@@ -83,6 +83,9 @@ namespace MatricConnect.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("NextApplicationCycleNote")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("OfficialProgrammeCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -93,7 +96,7 @@ namespace MatricConnect.Migrations
                     b.Property<decimal?>("RequiredEnglish")
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("RequiredMathematics")
+                    b.Property<decimal?>("RequiredMathematics")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("RequiredPhysicalScience")

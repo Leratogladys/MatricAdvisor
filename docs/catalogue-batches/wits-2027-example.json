@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "scope": "university-undergraduate-nsc",
+  "university": "University of the Witwatersrand",
+  "intakeYear": 2027,
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect Wits catalogue pilot",
+  "verifiedOn": "2026-11-15",
+  "entries": [
+    {
+      "code": "SBA13",
+      "name": "BSc Computer Science",
+      "fieldOfStudy": "Computer Science",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/computer-science/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 44,
+      "minimumMathematics": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "NSC with a bachelor’s pass.",
+        "English Home Language or First Additional Language: Level 5 (60% or higher).",
+        "National Benchmark Tests (NBT): the Academic and Quantitative Literacy and Mathematics tests had to be taken in one session by 31 October 2026.",
+        "Applicants with a Wits APS of 41–43 could be waitlisted if places were available."
+      ]
+    },
+    {
+      "code": "SBA21",
+      "name": "BSc Computational and Applied Mathematics",
+      "fieldOfStudy": "Computational Mathematics",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/computational-and-applied-mathematics/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 44,
+      "minimumMathematics": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "NSC with a bachelor’s pass.",
+        "English Home Language or First Additional Language: Level 5 (60% or higher).",
+        "National Benchmark Tests (NBT): the Academic and Quantitative Literacy and Mathematics tests had to be taken in one session by 31 October 2026.",
+        "Applicants with a Wits APS of 41–43 could be waitlisted if places were available."
+      ]
+    }
+  ]
+}

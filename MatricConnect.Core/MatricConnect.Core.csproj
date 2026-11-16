@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Data/programme-comparisons.json" LogicalName="MatricConnect.ProgrammeComparisons.json" />
+  </ItemGroup>
+
 </Project>

@@ -3,13 +3,13 @@
 // Purpose         : Adds verified 2027 computing qualifications for Nelson Mandela University.
 
 using MatricConnect.Models;
-using static MatricConnect.Services.MandelaSoftwareDevelopmentComparison;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatricConnect.Data
 {
     internal static class MandelaIntakeSeed
     {
+        private const string UniversityName = "Nelson Mandela University";
         private const string EbetProspectus =
             "https://www.mandela.ac.za/getmedia/8d278dd0-b607-4ac3-a7d1-8450ba54a8e2/Prospectus-Faculty-of-EBET?disposition=attachment";
         private const string ScienceProspectus =
@@ -18,11 +18,11 @@ namespace MatricConnect.Data
             "https://www.mandela.ac.za/getmedia/a2444ae4-f32e-458e-ad9a-ebfa6c7864e7/01guidelines?disposition=attachment";
         private const string ScoreGuideUrl =
             "https://www.mandela.ac.za/getmedia/29267715-7b08-41cc-80ed-e23dde7772ec/NMU-Z-CARD-UNDERGRAD-PROGRAMME_DIGITAL-FA?disposition=attachment";
-        private static readonly string DiplomaRequirements =
+        private const string DiplomaRequirements =
             "North Campus, Gqeberha.\nNSC with a Diploma pass or higher.\n" +
-            $"Mathematics or Technical Mathematics: at least {MathematicsMark}%. Mathematical Literacy: at least {LiteracyMark}%.";
-        private static readonly string DiplomaScore =
-            $"{MathematicsScore} or higher with Mathematics or Technical Mathematics; {LiteracyScore} or higher with Mathematical Literacy.";
+            "Mathematics or Technical Mathematics: at least 40%. Mathematical Literacy: at least 60%.";
+        private const string DiplomaScore =
+            "330 or higher with Mathematics or Technical Mathematics; 345 or higher with Mathematical Literacy.";
 
         private sealed record ProgrammeFacts(string Name, string Field, string Code, int Score, string Requirements,
             string Source = EbetProspectus, string? ScoreBySubject = null, decimal? Mathematics = null);
@@ -35,9 +35,9 @@ namespace MatricConnect.Data
             new("BSc (Computer Science)", "Computer Science", "20053", 410,
                 "South Campus, Gqeberha.\nNSC with a bachelor's pass.",
                 Source: ScienceProspectus, Mathematics: 65),
-            new("Diploma in Information Technology (Software Development)", "Software Development", ProgrammeCode, MathematicsScore,
+            new("Diploma in Information Technology (Software Development)", "Software Development", "7224", 330,
                 DiplomaRequirements, ScoreBySubject: DiplomaScore),
-            new("Diploma in Information Technology (Support Services)", "Information Technology", "7228", MathematicsScore,
+            new("Diploma in Information Technology (Support Services)", "Information Technology", "7228", 330,
                 DiplomaRequirements, ScoreBySubject: DiplomaScore),
             new("Higher Certificate in Information Technology (User Support Services)", "Information Technology", "70003", 290,
                 "North Campus, Gqeberha, and George Campus.\nNSC with a Higher Certificate pass or higher.\n" +
@@ -47,6 +47,7 @@ namespace MatricConnect.Data
 
         public static void AddPublishedIntakes(MatricConnectContext context)
         {
+            const int intakeYear = 2027;
             var deadline = new DateOnly(2026, 9, 30);
             var universityId = context.Universities.Single(university => university.Name == UniversityName).Id;
             var names = Programmes.Select(facts => facts.Name).ToArray();
@@ -69,14 +70,14 @@ namespace MatricConnect.Data
                     context.Programmes.Add(programme);
                 }
 
-                if (programme.Intakes.Any(intake => intake.IntakeYear == IntakeYear))
+                if (programme.Intakes.Any(intake => intake.IntakeYear == intakeYear))
                 {
                     continue;
                 }
 
                 programme.Intakes.Add(new ProgrammeIntake
                 {
-                    IntakeYear = IntakeYear,
+                    IntakeYear = intakeYear,
                     OfficialProgrammeCode = facts.Code,
                     ApplicationDeadline = deadline,
                     AdmissionScoreLabel = "Mandela AS",

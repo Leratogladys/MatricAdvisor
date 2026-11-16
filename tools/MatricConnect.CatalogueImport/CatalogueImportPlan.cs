@@ -59,7 +59,7 @@ internal sealed class CatalogueImportPlan
                 continue;
             }
 
-            if (ProgrammeComparisonRules.For(university, incomingIntake) != null)
+            if (ProgrammeComparisonRules.IsConfigured(university, incomingIntake))
             {
                 plan.Errors.Add($"{row.Code}: a comparison already exists for this code and intake. Add this programme through a dedicated review.");
                 continue;

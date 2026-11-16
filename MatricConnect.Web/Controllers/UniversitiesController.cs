@@ -222,9 +222,25 @@ namespace MatricConnect.Web.Controllers
                     $"Enter a {rules.ScoreLabel} between 0 and {rules.MaximumScore}.");
             }
 
+            foreach (var requirement in rules.RequiredMarks)
+            {
+                var field = $"{nameof(model.Comparison)}.{nameof(input.RequiredMarks)}[{(int)requirement.Subject}]";
+                if (ModelState.TryGetValue(field, out var state) && state.Errors.Count > 0)
+                {
+                    continue;
+                }
+
+                var requiredMark = input.RequiredMarks.GetValueOrDefault(requirement.Subject);
+                if (!requiredMark.HasValue || requiredMark is < 0 or > 100)
+                {
+                    ModelState.AddModelError(field, $"Enter your {requirement.Label} mark between 0 and 100.");
+                }
+            }
+
             if (ModelState.IsValid && subjectRule != null)
             {
-                model.ComparisonResult = subjectRule.Compare(input.Score!.Value, input.Mark!.Value);
+                model.ComparisonResult = rules.Compare(subjectRule, input.Score!.Value,
+                    input.Mark!.Value, input.RequiredMarks);
             }
 
             return View("ProgrammeDetails", model);

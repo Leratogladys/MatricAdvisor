@@ -2,13 +2,26 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using MatricConnect.CatalogueImport;
 using MatricConnect.Data;
+using MatricConnect.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-const string usage = "Usage: --database <MatricConnect.db> --batch <reviewed.json> [--apply]";
+const string usage = "Usage: --database <MatricConnect.db> --batch <reviewed.json> [--apply] or --check-rules";
 if (args is ["--help"] or ["-h"])
 {
     Console.WriteLine(usage);
+    return 0;
+}
+
+if (args is ["--check-rules"])
+{
+    if (ProgrammeComparisonRules.ConfigurationError is { } error)
+    {
+        Console.Error.WriteLine($"Invalid comparison rules: {error}");
+        return 1;
+    }
+
+    Console.WriteLine("Comparison rules are valid.");
     return 0;
 }
 
@@ -21,6 +34,9 @@ if (args is not ["--database", _, "--batch", _] &&
 
 try
 {
+    if (ProgrammeComparisonRules.ConfigurationError is { } configurationError)
+        throw new InvalidDataException($"Comparison rules are invalid: {configurationError}");
+
     var database = Path.GetFullPath(args[1]);
     var batchPath = Path.GetFullPath(args[3]);
     var apply = args.Length == 5;

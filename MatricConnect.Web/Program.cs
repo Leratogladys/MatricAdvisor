@@ -46,7 +46,12 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-var app = builder.Build();  
+var app = builder.Build();
+
+if (ProgrammeComparisonRules.ConfigurationError is { } configurationError)
+{
+    app.Logger.LogError("Programme comparisons are unavailable: {ConfigurationError}", configurationError);
+}
 
 // Apply existing migrations ans initialise data during local development.
 if(app.Environment.IsDevelopment())

@@ -16,5 +16,7 @@ namespace MatricConnect.Web.Models
 
         [Required(ErrorMessage = "Enter your admission score.")]
         public int? Score { get; set; }
+
+        public Dictionary<ComparisonSubject, decimal?> RequiredMarks { get; set; } = [];
     }
 }

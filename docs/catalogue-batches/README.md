@@ -30,8 +30,11 @@ A batch is for one university and intake. Its reviewer attests that the source l
 
 The tool only adds new programmes. It rejects a batch if an entry would alter an existing listing, reuse a programme code or name for different data, or introduce a programme that would immediately match an existing comparison. Apply batches deliberately to the intended database; keep their reviewed manifests in version control so deployments can repeat the import. There is no automatic import on app startup. To undo a new batch in a test environment, restore the pre-import snapshot; in an environment with users, account for saved references before removing any records.
 
+## Comparison rules
+
+The [versioned comparison catalogue](comparison-rules.md) defines the existing CUT and Mandela checks as data. Bulk imports still add requirements-only listings. Enabling another comparison requires a separately reviewed rule entry and explicit checks.
+
 ## Next releases
 
-1. **Use reviewed rules as data.** Add a versioned rule format for institution-specific scores and subject options. Cover both mandatory sets and alternatives. Start by expressing the current CUT and Mandela checks in that format and run their existing examples before turning it on for another programme. Anything not captured by the calculation stays visible for the learner to check.
-2. **Run one real Wits batch.** Start with 10–20 programmes in one faculty. Verify names, codes, intake dates and rules from official sources. Use the importer preview and examine the resulting pages on a test copy. Enable comparisons only when the relevant Wits scoring method and requirements have been verified and are supported.
-3. **Add search and pagination before increasing volume.** Today the university page loads its full programme list. Add a safe way to review later intakes without replacing historical data or changing saved programme IDs. Then examine TVET-specific formats separately.
+1. **Run one real Wits batch.** Start with 10–20 programmes in one faculty. Verify names, codes, intake dates and rules from official sources. Use the importer preview and examine the resulting pages on a test copy. Enable comparisons only when the relevant Wits scoring method and requirements have been verified and are supported.
+2. **Add search and pagination before increasing volume.** Today the university page loads its full programme list. Add a safe way to review later intakes without replacing historical data or changing saved programme IDs. Then examine TVET-specific formats separately.

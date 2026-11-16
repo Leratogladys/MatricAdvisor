@@ -3,14 +3,13 @@
 // Purpose         : Adds CUT's published entry-level IT programmes and admissions information.
 
 using MatricConnect.Models;
-using MatricConnect.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace MatricConnect.Data
 {
     internal static class CutIntakeSeed
     {
-        private const string UniversityName = CutInformationTechnologyComparison.UniversityName;
+        private const string UniversityName = "Central University of Technology";
         private const string ApplicationDatesUrl = "https://www.cut.ac.za/application-process";
         private const string ScoreGuideUrl = "https://www.cut.ac.za/admission-points-ap";
         private const string NextCycle =
@@ -18,10 +17,8 @@ namespace MatricConnect.Data
             "Confirm programme availability and requirements for 2028 with CUT.";
         private const string Nbt =
             "First-year applicants must write the Academic and Quantitative Literacy and Mathematics NBTs before registration.";
-        private static readonly string DiplomaSubjects =
-            $"Meet one of these subject marks: {CutInformationTechnologyComparison.MathematicsOrComputerScienceMark}% in Mathematics, " +
-            $"{CutInformationTechnologyComparison.MathematicsOrComputerScienceMark}% in Computer Science, " +
-            $"or {CutInformationTechnologyComparison.MathematicalLiteracyMark}% in Mathematical Literacy.";
+        private const string DiplomaSubjects =
+            "Meet one of these subject marks: 40% in Mathematics, 40% in Computer Science, or 60% in Mathematical Literacy.";
         private const string DiplomaEnglish =
             "CUT generally expects at least 50% in English Home Language or English First Additional Language.";
         private const string DiplomaSelection =
@@ -41,7 +38,7 @@ namespace MatricConnect.Data
                 "dip-computer-networking",
                 "Offered at Bloemfontein.\nNSC with a Diploma pass or higher.\n" +
                 DiplomaSubjects + "\n" + DiplomaEnglish + "\n" + DiplomaSelection + "\n" + Nbt),
-            new("Diploma in Information Technology", "Information Technology", CutInformationTechnologyComparison.ProgrammeCode,
+            new("Diploma in Information Technology", "Information Technology", "DP_ITC",
                 "dp-information-technology",
                 "Offered at Bloemfontein and Welkom.\nNSC with a Diploma pass or higher.\n" +
                 DiplomaSubjects + "\n" + DiplomaEnglish + "\n" + DiplomaSelection + "\n" + Nbt)
@@ -49,8 +46,8 @@ namespace MatricConnect.Data
 
         public static void AddPublishedIntakes(MatricConnectContext context)
         {
-            const int intakeYear = CutInformationTechnologyComparison.IntakeYear;
-            const int requiredAps = CutInformationTechnologyComparison.MinimumScore;
+            const int intakeYear = 2027;
+            const int requiredAps = 27;
             var applicationDeadline = new DateOnly(2026, 9, 30);
             var universityId = context.Universities.Single(university => university.Name == UniversityName).Id;
             var names = Programmes.Select(facts => facts.Name).ToArray();

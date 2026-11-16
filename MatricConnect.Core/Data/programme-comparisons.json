@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "scoreSchemes": [
+    {
+      "id": "cut-aps",
+      "university": "Central University of Technology",
+      "label": "CUT APS",
+      "maximum": 49,
+      "guideUrl": "https://www.cut.ac.za/admission-points-ap"
+    },
+    {
+      "id": "mandela-as",
+      "university": "Nelson Mandela University",
+      "label": "Mandela Applicant Score (AS)",
+      "maximum": 607,
+      "guideUrl": "https://www.mandela.ac.za/getmedia/29267715-7b08-41cc-80ed-e23dde7772ec/NMU-Z-CARD-UNDERGRAD-PROGRAMME_DIGITAL-FA?disposition=attachment"
+    }
+  ],
+  "programmes": [
+    {
+      "university": "Central University of Technology",
+      "programmeCode": "DP_ITC",
+      "intakeYear": 2027,
+      "applicantRoute": "south-african-nsc",
+      "scoreScheme": "cut-aps",
+      "requirementsUrl": "https://www.cut.ac.za/programmes/dp-information-technology",
+      "verifiedOn": "2026-11-15",
+      "minimumScore": 27,
+      "subjectOptions": [
+        { "subject": "mathematics", "minimumMark": 40 },
+        { "subject": "computerScience", "minimumMark": 40 },
+        { "subject": "mathematicalLiteracy", "minimumMark": 60 }
+      ],
+      "remainingRequirements": "Confirm your NSC Diploma pass or higher. Review CUT’s English guidance, National Benchmark Test requirements and selection process.",
+      "extendedCurriculum": { "from": 22, "to": 26 }
+    },
+    {
+      "university": "Nelson Mandela University",
+      "programmeCode": "7224",
+      "intakeYear": 2027,
+      "applicantRoute": "south-african-nsc",
+      "scoreScheme": "mandela-as",
+      "requirementsUrl": "https://www.mandela.ac.za/getmedia/8d278dd0-b607-4ac3-a7d1-8450ba54a8e2/Prospectus-Faculty-of-EBET?disposition=attachment",
+      "verifiedOn": "2026-11-15",
+      "subjectOptions": [
+        { "subject": "mathematics", "minimumMark": 40, "minimumScore": 330 },
+        { "subject": "technicalMathematics", "minimumMark": 40, "minimumScore": 330 },
+        { "subject": "mathematicalLiteracy", "minimumMark": 60, "minimumScore": 345 }
+      ],
+      "remainingRequirements": "Confirm that your NSC is endorsed for Diploma study or higher."
+    }
+  ]
+}

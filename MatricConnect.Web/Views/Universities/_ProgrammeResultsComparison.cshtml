@@ -22,7 +22,14 @@
     {
         <p class="mc-intake-status">Applications for the @intake.IntakeYear intake are closed.</p>
     }
-    <p>Enter your @rules.ScoreLabel and the mark for the subject you want to compare. Your entries are used only for this comparison.</p>
+    @if (rules.RequiredMarks.Count == 0)
+    {
+        <p>Enter your @rules.ScoreLabel and the mark for the subject you want to compare. Your entries are used only for this comparison.</p>
+    }
+    else
+    {
+        <p>Enter your @rules.ScoreLabel, the mark for your chosen subject, and each additional required mark below. Your entries are used only for this comparison.</p>
+    }
 
     @if (result != null)
     {
@@ -42,6 +49,16 @@
                         <span>@(result.MeetsMark ? "Meets minimum" : "Below minimum")</span>
                     </dd>
                 </div>
+                @foreach (var check in result.RequiredMarks)
+                {
+                    <div class="mc-requirement @(check.MeetsMinimum ? "mc-requirement-met" : "mc-requirement-unmet")">
+                        <dt>@check.Requirement.Label</dt>
+                        <dd>
+                            <span>Your mark: @(check.Mark.ToString("G29"))% · Minimum: @($"{check.Requirement.MinimumMark}%")</span>
+                            <span>@(check.MeetsMinimum ? "Meets minimum" : "Below minimum")</span>
+                        </dd>
+                    </div>
+                }
             </dl>
             @if (rules.ExtendedCurriculumScoreRange is { } range && result.Score >= range.From && result.Score <= range.To)
             {
@@ -80,6 +97,23 @@
             <p id="comparison-score-help" class="mc-browse-note">Use the <a href="@intake.ApsGuideUrl">university’s scoring guide</a> to work out this score. Your profile APS may use a different scale.</p>
             <span asp-validation-for="Comparison.Score" id="comparison-score-error" class="text-danger"></span>
         </div>
+        @foreach (var requirement in rules.RequiredMarks)
+        {
+            var key = (int)requirement.Subject;
+            var field = $"Comparison.RequiredMarks[{key}]";
+            var inputId = $"comparison-required-mark-{key}";
+            var errorId = $"{inputId}-error";
+            <div class="mc-details-field">
+                <label for="@inputId">@requirement.Label mark (%)</label>
+                @Html.TextBox(field, Model.Comparison.RequiredMarks.GetValueOrDefault(requirement.Subject), new
+                {
+                    id = inputId, @class = "form-control", type = "number", inputmode = "decimal",
+                    min = 0, max = 100, step = "any", required = "required",
+                    aria_describedby = errorId, aria_invalid = InvalidField($"RequiredMarks[{key}]")
+                })
+                @Html.ValidationMessage(field, null, new { id = errorId, @class = "text-danger" })
+            </div>
+        }
         <button type="submit" class="btn mc-browse-button">@(result == null ? "Compare results" : "Compare again")</button>
     </form>
 </section>

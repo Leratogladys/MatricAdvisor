@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "scope": "university-undergraduate-nsc",
+  "university": "University of the Witwatersrand",
+  "intakeYear": 2027,
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect catalogue review",
+  "verifiedOn": "2026-11-16",
+  "entries": [
+    {
+      "code": "SBA00",
+      "name": "BSc General",
+      "fieldOfStudy": "General Science",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/bsc/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 42,
+      "minimumMathematics": 60,
+      "minimumEnglish": 60,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–41 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA03",
+      "name": "BSc Actuarial Science",
+      "fieldOfStudy": "Actuarial Science",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/actuarial-science/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 44,
+      "minimumMathematics": 80,
+      "minimumEnglish": 80,
+      "minimumPhysicalScience": 80,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "With APS 44 or higher and at least 80% in Mathematics and Physical Sciences, an English mark at NSC Level 6 could be considered for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA08",
+      "name": "BSc Mathematical Sciences",
+      "fieldOfStudy": "Mathematical Sciences",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/mathematical-sciences/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 44,
+      "minimumMathematics": 80,
+      "minimumEnglish": 80,
+      "minimumPhysicalScience": 80,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "With APS 44 or higher and at least 80% in Mathematics and Physical Sciences, an English mark at NSC Level 6 could be considered for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA09",
+      "name": "BSc Geological Sciences",
+      "fieldOfStudy": "Geological Sciences",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/geological-sciences/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 42,
+      "minimumMathematics": 70,
+      "minimumEnglish": 60,
+      "minimumPhysicalScience": 60,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–41 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA10",
+      "name": "BSc Geographical and Archaeological Sciences",
+      "fieldOfStudy": "Geography and Archaeology",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/geographical-and-archaeological-sciences/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 42,
+      "minimumMathematics": 60,
+      "minimumEnglish": 60,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–41 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA15",
+      "name": "BSc Astronomy and Astrophysics",
+      "fieldOfStudy": "Astronomy and Astrophysics",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/astronomy-and-astrophysics/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 43,
+      "minimumMathematics": 70,
+      "minimumEnglish": 60,
+      "minimumPhysicalScience": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026."
+      ]
+    },
+    {
+      "code": "SBA20",
+      "name": "BSc Geospatial Sciences",
+      "fieldOfStudy": "Geospatial Sciences",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/geospatial-sciences/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 42,
+      "minimumMathematics": 60,
+      "minimumEnglish": 60,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–41 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA22",
+      "name": "BSc Environmental Studies",
+      "fieldOfStudy": "Environmental Studies",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/environmental-studies/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 42,
+      "minimumMathematics": 60,
+      "minimumEnglish": 60,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–41 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA23",
+      "name": "BSc Physics and Philosophy",
+      "fieldOfStudy": "Physics and Philosophy",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/physics-and-philosophy/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 43,
+      "minimumMathematics": 70,
+      "minimumEnglish": 70,
+      "minimumPhysicalScience": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–42 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA24",
+      "name": "BSc Physics and Finance",
+      "fieldOfStudy": "Physics and Finance",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/physics-and-finance/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 43,
+      "minimumMathematics": 70,
+      "minimumEnglish": 70,
+      "minimumPhysicalScience": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–42 APS for the waiting list if places were available."
+      ]
+    },
+    {
+      "code": "SBA25",
+      "name": "BSc Physics, Ecology and Sustainability",
+      "fieldOfStudy": "Physics, Ecology and Sustainability",
+      "requirementsSourceUrl": "https://www.wits.ac.za/course-finder/undergraduate/science/physics-ecology-and-sustainability/",
+      "scoreLabel": "Wits APS",
+      "minimumScore": 43,
+      "minimumMathematics": 70,
+      "minimumEnglish": 70,
+      "minimumPhysicalScience": 70,
+      "applicationDeadline": "2026-09-30",
+      "applicationDatesSourceUrl": "https://www.wits.ac.za/undergraduate/apply-to-wits/timelines/",
+      "scoreGuideUrl": "https://www.wits.ac.za/undergraduate/entry-requirements/",
+      "requirements": [
+        "A bachelor’s pass on the National Senior Certificate (NSC) is required.",
+        "Use your English Home Language or First Additional Language mark.",
+        "Wits required both National Benchmark Tests (Academic and Quantitative Literacy, and Mathematics) by 31 October 2026.",
+        "Wits could consider applicants on 40–42 APS for the waiting list if places were available."
+      ]
+    }
+  ]
+}

@@ -34,7 +34,11 @@ The tool only adds new programmes. It rejects a batch if an entry would alter an
 
 The [versioned comparison catalogue](comparison-rules.md) defines the existing CUT and Mandela checks as data. Bulk imports still add requirements-only listings. Enabling another comparison requires a separately reviewed rule entry and explicit checks.
 
+## Reviewed batches
+
+- [Wits Faculty of Science, 2027](wits-2027-science.md): 11 new application codes, with a source and minimum requirements for each. Follow the read-only preview before applying the batch to an intended database.
+
 ## Next releases
 
-1. **Run one real Wits batch.** Start with 10–20 programmes in one faculty. Verify names, codes, intake dates and rules from official sources. Use the importer preview and examine the resulting pages on a test copy. Enable comparisons only when the relevant Wits scoring method and requirements have been verified and are supported.
-2. **Add search and pagination before increasing volume.** Today the university page loads its full programme list. Add a safe way to review later intakes without replacing historical data or changing saved programme IDs. Then examine TVET-specific formats separately.
+1. Review Wits comparisons separately from the import. Cross-check the Wits scoring method and validate the programme and intake rules before enabling Compare my results.
+2. Add search and pagination before increasing volume. Today the university page loads its full programme list. Add a safe way to review later intakes without replacing historical data or changing saved programme IDs. Then examine TVET-specific formats separately.

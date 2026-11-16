@@ -7,6 +7,7 @@
 
 @{
     var intake = Model.Programme.LatestVerifiedIntake!;
+    var comparison = Model.ComparisonRules;
     var deadline = intake.ApplicationDeadline;
     var closingTime = intake.ApplicationClosingTime;
     bool closed = intake.HasClosed(DateTimeOffset.UtcNow);
@@ -83,9 +84,9 @@
     <div class="mc-intake-side">
         <section aria-labelledby="intake-check-heading">
             <h2 id="intake-check-heading" class="mc-browse-heading">Checking your results</h2>
-            @if (Model.MandelaComparison != null)
+            @if (comparison != null)
             {
-                <p>Compare your Mandela Applicant Score and maths mark with the published minimums for this intake.</p>
+                <p>Compare your @comparison.ScoreLabel and subject mark with the published minimums for this intake.</p>
             }
             else
             {
@@ -95,7 +96,7 @@
         </section>
 
         <div class="mc-intake-actions">
-            @if (Model.MandelaComparison != null)
+            @if (comparison != null)
             {
                 <a href="#results-comparison" class="btn mc-browse-button">Compare my results</a>
             }

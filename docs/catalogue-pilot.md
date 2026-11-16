@@ -39,7 +39,7 @@ Checked on **15 November 2026**. The qualification pages provide published guida
 | [Diploma in Computer Networking](https://www.cut.ac.za/programmes/dip-computer-networking) | DP_CMN | Bloemfontein | CUT APS 27; NSC Diploma pass or above and one of Mathematics 40%, Computer Science 40%, or Mathematical Literacy 60%. |
 | [Diploma in Information Technology](https://www.cut.ac.za/programmes/dp-information-technology) | DP_ITC | Bloemfontein and Welkom | CUT APS 27; NSC Diploma pass or above and the same subject alternatives as Computer Networking. |
 
-CUT generally expects 50% in English Home Language or First Additional Language. Both diplomas have a selection process, and CUT publishes an extended study route for some first-time applicants with 22–26 points. These are reference listings, so the app does not give an automatic eligibility decision or reduce the subject alternatives to a compulsory Mathematics mark.
+CUT generally expects 50% in English Home Language or First Additional Language. Both diplomas have a selection process, and CUT publishes an extended study route for some first-time applicants with 22–26 points. The published requirements remain visible, including all subject alternatives. The app does not make an eligibility decision.
 
 Sources for general rules and dates: [CUT Student Calendar](https://www.cut.ac.za/calendar), [CUT APS guide](https://www.cut.ac.za/admission-points-ap), [CUT application dates](https://www.cut.ac.za/application-process), and [CUT NBT guidance](https://www.cut.ac.za/nbt).
 
@@ -59,9 +59,11 @@ A dash indicates an alternative that the sources do not list for that qualificat
 
 Communication Networks (7227) is omitted pending confirmation: the faculty prospectus lists Mathematics or Technical Mathematics at 45%, while the 2027 general admissions guide contains conflicting marks and Mathematical Literacy entries for the same diploma. The BIT listing identifies North Campus from the faculty prospectus and directs readers to confirm campus availability because the general guide also references George.
 
-## Mandela results comparison pilot
+## Manual results comparisons
 
 The 2027 Mandela Software Development diploma (7224) supports a manual comparison using the requirements above. The learner selects their maths subject and enters their mark and a separately calculated Mandela AS. Results show both numeric minimums independently and leave the NSC Diploma pass requirement for the learner to confirm. The comparison accepts AS values up to 607 to accommodate the seven-point allowance described in Mandela's guide. The form can be used without a profile and does not save entries or change the learner's APS. It is limited to the verified 2027 intake and leaves its closed status visible.
+
+The 2027 CUT Diploma in Information Technology (DP_ITC) also supports a manual comparison. Learners enter their own CUT APS (0–49 on the NSC scale) and a mark for Mathematics, Computer Science or Mathematical Literacy. The result compares that mark and APS against the two mainstream minimums. Scores from 22 to 26 show a link to the separate Extended Curriculum Programme rules for first-time applicants. The comparison leaves the diploma endorsement, English guidance, NBTs and selection for the learner to check with CUT. It uses no profile data and leaves the closed 2027 intake visible. CUT’s Computer Networking diploma and Higher Certificate remain reference listings.
 
 ## Updating the catalogue
 

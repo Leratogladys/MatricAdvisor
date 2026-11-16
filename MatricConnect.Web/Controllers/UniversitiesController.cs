@@ -156,10 +156,7 @@ namespace MatricConnect.Web.Controllers
             var model = new ProgrammeDetailsViewModel
             {
                 Programme = programme,
-                University = university,
-                MandelaComparison = MandelaSoftwareDevelopmentComparison.Supports(university, programme.LatestVerifiedIntake)
-                    ? new MandelaComparisonInputViewModel()
-                    : null
+                University = university
             };
 
             int? studentId = HttpContext.Session.GetInt32("CurrentStudentId");
@@ -197,11 +194,11 @@ namespace MatricConnect.Web.Controllers
         [ValidateAntiForgeryToken]
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult CompareResults([FromRoute] int id,
-            [Bind(Prefix = nameof(ProgrammeDetailsViewModel.MandelaComparison))] MandelaComparisonInputViewModel input)
+            [Bind(Prefix = nameof(ProgrammeDetailsViewModel.Comparison))] ProgrammeComparisonInputViewModel input)
         {
             if (id <= 0 || _universityService.GetProgrammeById(id) is not { } programme ||
                 _universityService.GetUniversityById(programme.UniversityId) is not { } university ||
-                !MandelaSoftwareDevelopmentComparison.Supports(university, programme.LatestVerifiedIntake))
+                ProgrammeComparisonRules.For(university, programme.LatestVerifiedIntake) is not { } rules)
             {
                 return NotFound();
             }
@@ -210,13 +207,24 @@ namespace MatricConnect.Web.Controllers
             {
                 Programme = programme,
                 University = university,
-                MandelaComparison = input
+                Comparison = input
             };
 
-            if (ModelState.IsValid)
+            var subjectRule = rules.Subjects.FirstOrDefault(option => option.Subject == input.Subject);
+            if (input.Subject.HasValue && subjectRule == null)
             {
-                model.MandelaResult = MandelaSoftwareDevelopmentComparison.Compare(
-                    input.Subject!.Value, input.ApplicantScore!.Value, input.MathsMark!.Value);
+                ModelState.AddModelError($"{nameof(model.Comparison)}.{nameof(input.Subject)}", "Choose a subject from the list.");
+            }
+
+            if (input.Score is int score && (score < 0 || score > rules.MaximumScore))
+            {
+                ModelState.AddModelError($"{nameof(model.Comparison)}.{nameof(input.Score)}",
+                    $"Enter a {rules.ScoreLabel} between 0 and {rules.MaximumScore}.");
+            }
+
+            if (ModelState.IsValid && subjectRule != null)
+            {
+                model.ComparisonResult = subjectRule.Compare(input.Score!.Value, input.Mark!.Value);
             }
 
             return View("ProgrammeDetails", model);

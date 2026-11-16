@@ -31,9 +31,9 @@ else
         @if (intake != null)
         {
             <partial name="_VerifiedProgrammeIntake" model="Model" />
-            @if (Model.MandelaComparison != null)
+            @if (Model.ComparisonRules != null)
             {
-                <partial name="_MandelaResultsComparison" model="Model" />
+                <partial name="_ProgrammeResultsComparison" model="Model" />
             }
         }
         else
@@ -164,7 +164,7 @@ else
 
         document.getElementById('eligibility-result-heading')?.focus();
         window.addEventListener('load', () => {
-            const comparisonError = document.querySelector('#mandela-comparison-form .input-validation-error');
+            const comparisonError = document.querySelector('#programme-comparison-form .input-validation-error');
             const comparisonHeading = document.querySelector('.mc-result-comparison:has(.mc-comparison-result) h2');
             requestAnimationFrame(() => (comparisonError || comparisonHeading)?.focus());
         });

@@ -1,0 +1,85 @@
+@model ProgrammeDetailsViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    var intake = Model.Programme.LatestVerifiedIntake!;
+    var rules = Model.ComparisonRules!;
+    var closed = intake.HasClosed(DateTimeOffset.UtcNow);
+    var result = Model.ComparisonResult;
+    var subjects = rules.Subjects.Select(option => new SelectListItem(option.Label, ((int)option.Subject).ToString()));
+    string? InvalidField(string propertyName) =>
+        ViewData.ModelState.TryGetValue($"Comparison.{propertyName}", out var entry) && entry.Errors.Count > 0
+            ? "true"
+            : null;
+}
+
+<section class="mc-intake-card mc-result-comparison" aria-labelledby="results-comparison">
+    <h2 id="results-comparison" class="mc-browse-heading" tabindex="-1">
+        @(result == null ? "Compare my results" : "Your comparison")
+    </h2>
+    <p class="mc-browse-note">Comparison against @intake.IntakeYear requirements</p>
+    @if (closed)
+    {
+        <p class="mc-intake-status">Applications for the @intake.IntakeYear intake are closed.</p>
+    }
+    <p>Enter your @rules.ScoreLabel and the mark for the subject you want to compare. Your entries are used only for this comparison.</p>
+
+    @if (result != null)
+    {
+        <div class="mc-comparison-result">
+            <dl class="mc-requirement-list">
+                <div class="mc-requirement @(result.MeetsScore ? "mc-requirement-met" : "mc-requirement-unmet")">
+                    <dt>@rules.ScoreLabel</dt>
+                    <dd>
+                        <span>Your score: @result.Score · Minimum: @result.Requirement.MinimumScore</span>
+                        <span>@(result.MeetsScore ? "Meets minimum" : "Below minimum")</span>
+                    </dd>
+                </div>
+                <div class="mc-requirement @(result.MeetsMark ? "mc-requirement-met" : "mc-requirement-unmet")">
+                    <dt>@result.Requirement.Label</dt>
+                    <dd>
+                        <span>Your mark: @(result.Mark.ToString("G29"))% · Minimum: @($"{result.Requirement.MinimumMark}%")</span>
+                        <span>@(result.MeetsMark ? "Meets minimum" : "Below minimum")</span>
+                    </dd>
+                </div>
+            </dl>
+            @if (rules.ExtendedCurriculumScoreRange is { } range && result.Score >= range.From && result.Score <= range.To)
+            {
+                <p><strong>Extended Curriculum Programme:</strong> First-time applicants with a score of @($"{range.From}–{range.To}") may be considered for this route.
+                    Check <a href="@intake.RequirementsSourceUrl">the university’s requirements for this route</a>; this comparison uses the mainstream minimums.</p>
+            }
+            <p><strong>Still to check:</strong> @rules.RemainingRequirements</p>
+            <p class="mc-browse-note">The university decides admission. Check its official requirements and application dates before applying for a future intake.</p>
+        </div>
+    }
+
+    <form id="programme-comparison-form" asp-controller="Universities" asp-action="CompareResults"
+          asp-route-id="@Model.Programme.Id" asp-fragment="results-comparison" method="post">
+        <div class="mc-details-field">
+            <label asp-for="Comparison.Subject"></label>
+            <select asp-for="Comparison.Subject" asp-items="subjects"
+                    class="form-select" required aria-describedby="comparison-subject-error"
+                    aria-invalid="@InvalidField(nameof(ProgrammeComparisonInputViewModel.Subject))">
+                <option value="">Select a subject</option>
+            </select>
+            <span asp-validation-for="Comparison.Subject" id="comparison-subject-error" class="text-danger"></span>
+        </div>
+        <div class="mc-details-field">
+            <label asp-for="Comparison.Mark"></label>
+            <input asp-for="Comparison.Mark" class="form-control" type="number" inputmode="decimal"
+                   min="0" max="100" step="any" required aria-describedby="comparison-mark-error"
+                   aria-invalid="@InvalidField(nameof(ProgrammeComparisonInputViewModel.Mark))" />
+            <span asp-validation-for="Comparison.Mark" id="comparison-mark-error" class="text-danger"></span>
+        </div>
+        <div class="mc-details-field">
+            <label asp-for="Comparison.Score">@rules.ScoreLabel</label>
+            <input asp-for="Comparison.Score" class="form-control" type="number" inputmode="numeric"
+                   min="0" max="@rules.MaximumScore" step="1" required
+                   aria-describedby="comparison-score-help comparison-score-error"
+                   aria-invalid="@InvalidField(nameof(ProgrammeComparisonInputViewModel.Score))" />
+            <p id="comparison-score-help" class="mc-browse-note">Use the <a href="@intake.ApsGuideUrl">university’s scoring guide</a> to work out this score. Your profile APS may use a different scale.</p>
+            <span asp-validation-for="Comparison.Score" id="comparison-score-error" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn mc-browse-button">@(result == null ? "Compare results" : "Compare again")</button>
+    </form>
+</section>

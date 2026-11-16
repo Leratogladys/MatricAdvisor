@@ -2,27 +2,10 @@
 // Project name    : Matric Connect
 // Purpose         : Compares the two numeric requirements for Mandela's 2027 Software Development diploma.
 
-using System.ComponentModel.DataAnnotations;
 using MatricConnect.Models;
 
 namespace MatricConnect.Services
 {
-    public enum MandelaMathsSubject
-    {
-        Mathematics = 1,
-        [Display(Name = "Technical Mathematics")]
-        TechnicalMathematics = 2,
-        [Display(Name = "Mathematical Literacy")]
-        MathematicalLiteracy = 3
-    }
-
-    public sealed record MandelaComparisonResult(string SubjectName, int ApplicantScore, decimal MathsMark,
-        int RequiredApplicantScore, int RequiredMathsMark)
-    {
-        public bool MeetsApplicantScore => ApplicantScore >= RequiredApplicantScore;
-        public bool MeetsMathsMark => MathsMark >= RequiredMathsMark;
-    }
-
     public static class MandelaSoftwareDevelopmentComparison
     {
         public const string UniversityName = "Nelson Mandela University";
@@ -38,17 +21,13 @@ namespace MatricConnect.Services
             university.Name == UniversityName &&
             intake is { OfficialProgrammeCode: ProgrammeCode, IntakeYear: IntakeYear };
 
-        public static MandelaComparisonResult Compare(MandelaMathsSubject subject, int applicantScore, decimal mathsMark)
-        {
-            var (name, requiredScore, requiredMark) = subject switch
-            {
-                MandelaMathsSubject.Mathematics => ("Mathematics", MathematicsScore, MathematicsMark),
-                MandelaMathsSubject.TechnicalMathematics => ("Technical Mathematics", MathematicsScore, MathematicsMark),
-                MandelaMathsSubject.MathematicalLiteracy => ("Mathematical Literacy", LiteracyScore, LiteracyMark),
-                _ => throw new ArgumentOutOfRangeException(nameof(subject))
-            };
-
-            return new MandelaComparisonResult(name, applicantScore, mathsMark, requiredScore, requiredMark);
-        }
+        public static ProgrammeComparisonRules Rules { get; } = new(
+            "Mandela Applicant Score (AS)", MaximumApplicantScore,
+            [
+                new(ComparisonSubject.Mathematics, "Mathematics", MathematicsScore, MathematicsMark),
+                new(ComparisonSubject.TechnicalMathematics, "Technical Mathematics", MathematicsScore, MathematicsMark),
+                new(ComparisonSubject.MathematicalLiteracy, "Mathematical Literacy", LiteracyScore, LiteracyMark)
+            ],
+            "Confirm that your NSC is endorsed for Diploma study or higher.");
     }
 }

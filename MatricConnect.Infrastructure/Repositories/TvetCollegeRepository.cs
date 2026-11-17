@@ -11,6 +11,8 @@ namespace MatricConnect.Infrastructure.Repositories
 {
     public class TvetCollegeRepository(MatricConnectContext context) : ITvetCollegeRepository
     {
+        public TvetCollege? GetById(int id) => context.TvetColleges.AsNoTracking().SingleOrDefault(college => college.Id == id);
+
         public List<TvetCollege> GetByProvince(string province)
         {
             return context.TvetColleges.AsNoTracking()

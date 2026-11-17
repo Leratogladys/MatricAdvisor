@@ -9,5 +9,6 @@ namespace MatricConnect.Core.Interfaces
     public interface ITvetCollegeRepository
     {
         List<TvetCollege> GetByProvince(string province);
+        TvetCollege? GetById(int id);
     }
 }

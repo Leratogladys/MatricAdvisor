@@ -2,6 +2,7 @@
 // Project name    : Matric Connect
 // Purpose         : Handles web requests for university browsing.
 
+using MatricConnect.Infrastructure.Repositories;
 using MatricConnect.Services;
 using MatricConnect.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +15,13 @@ namespace MatricConnect.Web.Controllers
     public class UniversitiesController : Controller
     {
         private readonly UniversityService _universityService;
+        private readonly ProgrammeReferenceRepository _programmeReferences;
         private readonly TvetCollegeService _tvetCollegeService;
         private readonly EligibilityService _eligibilityService;
         private readonly StudentService _studentService;
 
         public UniversitiesController(UniversityService universityService, EligibilityService eligibilityService,
-            StudentService studentService, TvetCollegeService tvetCollegeService)
+            StudentService studentService, TvetCollegeService tvetCollegeService, ProgrammeReferenceRepository programmeReferences)
         {
             //
             // Name              : UniversitiesController(
@@ -39,6 +41,7 @@ namespace MatricConnect.Web.Controllers
             //
             _universityService = universityService;
             _tvetCollegeService = tvetCollegeService;
+            _programmeReferences = programmeReferences;
             _eligibilityService = eligibilityService;
             _studentService = studentService;
         } // end constructor
@@ -71,6 +74,7 @@ namespace MatricConnect.Web.Controllers
                     if (model.ShowTvetColleges)
                     {
                         model.Colleges = _tvetCollegeService.GetByProvince(selectedProvince);
+                        model.CollegeProgrammeCounts = _programmeReferences.CountByCollege(selectedProvince);
                     }
                     else
                     {
@@ -113,11 +117,64 @@ namespace MatricConnect.Web.Controllers
             var model = new UniversityProgrammesViewModel
             {
                 University = universty,
-                Programmes = _universityService.GetProgrammesByUniversity(id)
+                Programmes = _universityService.GetProgrammesByUniversity(id),
+                References = _programmeReferences.ForUniversity(id)
             };
 
             return View(model);
         } // end method Programmes
+
+        [HttpGet]
+        public IActionResult CollegeProgrammes(int id)
+        {
+            if (!ModelState.IsValid || id <= 0 || _tvetCollegeService.GetById(id) is not { } college)
+                return NotFound();
+
+            return View(new CollegeProgrammesViewModel(college, _programmeReferences.ForCollege(id)));
+        }
+
+        [HttpGet]
+        public IActionResult ReferenceDetails(int id)
+        {
+            if (!ModelState.IsValid || id <= 0 || _programmeReferences.Find(id) is not { } reference ||
+                (reference.University == null && reference.TvetCollege == null))
+                return NotFound();
+
+            ProgrammeSaveOutcome? saveOutcome = null;
+            if (HttpContext.Session.GetInt32("CurrentStudentId") is int studentId &&
+                TempData[ProgrammeSaveFeedback.ReferenceKey(studentId, id)] is string feedback &&
+                Enum.TryParse<ProgrammeSaveOutcome>(feedback, out var parsed))
+            {
+                saveOutcome = parsed;
+            }
+
+            return View(new ProgrammeReferenceDetailsViewModel(reference, saveOutcome,
+                ReferenceComparisonRules.Read(reference.ComparisonRulesJson)));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public IActionResult CompareReference([FromRoute] int id, [FromForm] int? route, [FromForm] decimal?[] values)
+        {
+            if (id <= 0 || _programmeReferences.Find(id) is not { } reference ||
+                (reference.University == null && reference.TvetCollege == null) ||
+                ReferenceComparisonRules.Read(reference.ComparisonRulesJson) is not { } rules ||
+                route is not int routeIndex || routeIndex < 0 || routeIndex >= rules.Routes.Length)
+                return NotFound();
+
+            var minimums = rules.Routes[routeIndex].Minimums;
+            if (values.Length != minimums.Length)
+                ModelState.AddModelError(nameof(values), "Complete every field in this entry route.");
+            for (var i = 0; i < Math.Min(values.Length, minimums.Length); i++)
+            {
+                if (values[i] is not decimal value || !minimums[i].IsValidValue(value))
+                    ModelState.AddModelError(nameof(values), $"Enter a valid value for {minimums[i].Label}.");
+            }
+
+            var submission = new ReferenceComparisonSubmission(routeIndex, values, ModelState.IsValid);
+            return View("ReferenceDetails", new ProgrammeReferenceDetailsViewModel(reference, null, rules, submission));
+        }
 
         [HttpGet]
         public IActionResult ProgrammeDetails(int id)

@@ -75,9 +75,18 @@
                             <li class="mc-browse-card">
                                 <h3 class="mc-browse-heading">@college.Name</h3>
                                 <p class="mc-browse-note">Public TVET college · @college.Province</p>
-                                <p class="mc-browse-note">Programme details not yet listed.</p>
-                                <a href="@college.Website" class="btn mc-browse-button mc-browse-button-secondary"
-                                   aria-label="Visit the @college.Name website">Visit official website</a>
+                                @if (Model.CollegeProgrammeCounts.GetValueOrDefault(college.Id) is > 0)
+                                {
+                                    <p class="mc-browse-note">@Model.CollegeProgrammeCounts[college.Id] programmes listed</p>
+                                    <a asp-action="CollegeProgrammes" asp-route-id="@college.Id" class="btn mc-browse-button"
+                                       aria-label="View programmes at @college.Name">View programmes</a>
+                                }
+                                else
+                                {
+                                    <p class="mc-browse-note">Programme details not yet listed.</p>
+                                    <a href="@college.Website" class="btn mc-browse-button mc-browse-button-secondary"
+                                       aria-label="Visit the @college.Name website">Visit official website</a>
+                                }
                             </li>
                         }
                     }

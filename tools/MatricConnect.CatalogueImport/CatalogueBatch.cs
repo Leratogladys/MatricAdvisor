@@ -46,12 +46,14 @@ internal sealed record CatalogueEntry(
     string? Code, string? Name, string? FieldOfStudy, string? ScoreLabel, int? MinimumScore,
     string? ScoreBySubject, decimal? MinimumMathematics, decimal? MinimumEnglish, decimal? MinimumPhysicalScience,
     DateOnly? ApplicationDeadline, TimeOnly? ApplicationClosingTime, string? NextApplicationCycleNote,
-    string? RequirementsSourceUrl, string? ApplicationDatesSourceUrl, string? ScoreGuideUrl, string?[]? Requirements)
+    string? RequirementsSourceUrl, string? ApplicationDatesSourceUrl, string? ScoreGuideUrl, string?[]? Requirements, string? Faculty)
 {
     public IEnumerable<string> Validate(int intakeYear)
     {
         if (!IsLine(Code) || !IsLine(Name) || !IsLine(FieldOfStudy) || !IsLine(ScoreLabel))
             yield return "Code, name, field of study and score label are required single lines.";
+        if (Faculty != null && !IsLine(Faculty))
+            yield return "Provide a nonblank faculty name or omit it.";
         // The current data model needs a numeric score or a published description of subject-specific scores.
         if ((MinimumScore.HasValue == (ScoreBySubject != null)) || MinimumScore is <= 0 ||
             (ScoreBySubject != null && !IsLine(ScoreBySubject)))

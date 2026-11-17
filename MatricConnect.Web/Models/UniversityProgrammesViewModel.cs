@@ -25,7 +25,9 @@ namespace MatricConnect.Web.Models
             get; set;
         } = new University(); // end property
 
-      public List<Programme> Programmes
+        public IReadOnlyList<ProgrammeReference> References { get; set; } = [];
+
+        public List<Programme> Programmes
         {
             //
             // Name            : property List<Programme> Programmes

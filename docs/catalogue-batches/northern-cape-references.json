@@ -1,0 +1,526 @@
+{
+  "version": 1,
+  "province": "Northern Cape",
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect catalogue review",
+  "verifiedOn": "2026-11-16",
+  "institutions": [
+    {
+      "kind": "university",
+      "name": "Sol Plaatje University",
+      "entries": [
+        {
+          "name": "Higher Certificate in Entrepreneurship",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a Higher Certificate entry route; check the listed commerce subject, language and marks."
+        },
+        {
+          "name": "Diploma in Retail Business Management",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists an NSC with diploma admission and additional subject conditions."
+        },
+        {
+          "name": "Bachelor of Commerce in Accounting",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a bachelor’s entry route and options involving Mathematics and Accounting."
+        },
+        {
+          "name": "Bachelor of Commerce in Economics",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a bachelor’s entry route with Mathematics and a route involving Economics or Business Studies."
+        },
+        {
+          "name": "Bachelor of Commerce in Tourism Management",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university."
+        },
+        {
+          "name": "Bachelor of Public Administration",
+          "group": "Faculty of Economic and Management Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-economic-and-management-sciences/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university."
+        },
+        {
+          "name": "Bachelor of Education (Foundation Phase Teaching)",
+          "group": "Faculty of Education",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-edu-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check language and Mathematics or Mathematical Literacy requirements; SPU lists a separate route with an accredited Early Childhood Development qualification."
+        },
+        {
+          "name": "Bachelor of Education (Intermediate Phase Teaching)",
+          "group": "Faculty of Education",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-edu-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a bachelor’s entry route. Check the subject requirements for your intended teaching stream."
+        },
+        {
+          "name": "Bachelor of Education (Senior Phase and Further Education and Training Phase Teaching)",
+          "group": "Faculty of Education",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-edu-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a bachelor’s entry route. Subject requirements depend on the teaching stream."
+        },
+        {
+          "name": "Higher Certificate in Court Interpreting",
+          "group": "Faculty of Humanities",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-hum-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check the language combination and the published Higher Certificate entry routes."
+        },
+        {
+          "name": "Higher Certificate in Heritage Studies",
+          "group": "Faculty of Humanities",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-hum-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check the Higher Certificate entry requirements and Mathematics or Mathematical Literacy options."
+        },
+        {
+          "name": "Bachelor of Arts",
+          "group": "Faculty of Humanities",
+          "sourceUrl": "https://www.spu.ac.za/index.php/faculty-of-hum-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists a bachelor’s entry route; specialisation and major subjects can have additional requirements."
+        },
+        {
+          "name": "Diploma in Information and Communication Technology in Applications Development",
+          "group": "Faculty of Natural and Applied Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-nas-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check the published language, Mathematics or Mathematical Literacy routes and minimum marks."
+        },
+        {
+          "name": "Diploma in Agriculture",
+          "group": "Faculty of Natural and Applied Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-nas-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check diploma admission and the listed language, Mathematics and science requirements."
+        },
+        {
+          "name": "Bachelor of Science",
+          "group": "Faculty of Natural and Applied Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-nas-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "Check the required subjects for your intended specialisation, including Physical Sciences (Geology) where applicable."
+        },
+        {
+          "name": "Bachelor of Environmental Science",
+          "group": "Faculty of Natural and Applied Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-nas-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists an NSC bachelor’s entry route with science subject requirements."
+        },
+        {
+          "name": "Bachelor of Science in Data Science",
+          "group": "Faculty of Natural and Applied Sciences",
+          "sourceUrl": "https://www.spu.ac.za/index.php/spu-nas-programmes/",
+          "availability": "Listed by SPU. Confirm the next intake and its entry requirements with the university.",
+          "entryRequirements": "SPU lists an NSC bachelor’s entry route and Mathematics and language conditions."
+        }
+      ]
+    },
+    {
+      "kind": "tvet",
+      "name": "Northern Cape Rural TVET College",
+      "entries": [
+        {
+          "name": "Electrical Infrastructure Construction",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kathu, Upington",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Prevocational Learning Programme",
+          "group": "Foundation pathway",
+          "campuses": "Kathu, Namaqualand",
+          "entryRequirements": "College entry summary: A completed Grade 9 is not listed as a prerequisite. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Engineering and Related Design",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kathu, Namaqualand, Upington",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Hospitality",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kathu",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Office Administration",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kuruman, Kathu, Namaqualand, Upington, De Aar",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Safety in Society",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kuruman, Upington",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Transport and Logistics",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Kuruman",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Renewable Energy Technologies",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Upington",
+          "entryRequirements": "College entry summary: Grade 9. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Fitter and Turner",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Namaqualand",
+          "entryRequirements": "College entry summary: Matric with at least 40% in Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Electrician",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kathu, Namaqualand",
+          "entryRequirements": "College entry summary: Matric with at least 40% in Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Solar Photovoltaic Standalone Installer",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kathu",
+          "entryRequirements": "College entry summary: Grade 9 with Mathematics. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Chef",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Upington",
+          "entryRequirements": "College entry summary: Matric or NC(V) Level 4. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Plumbing",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Upington",
+          "entryRequirements": "College entry summary: Grade 10 or NQF Level 3. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Early Childhood Development",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Upington",
+          "entryRequirements": "College entry summary: Grade 11. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Office Administration",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kuruman, Namaqualand, Upington, De Aar",
+          "entryRequirements": "College entry summary: Matric or NC(V) Level 4. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Public Service Administrator",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kuruman",
+          "entryRequirements": "College entry summary: Matric or NC(V) Level 4. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Management Assistant",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kuruman, Namaqualand, De Aar",
+          "entryRequirements": "College entry summary: Matric or NC(V) Level 4. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Small Retail Business Owner",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kuruman",
+          "entryRequirements": "College entry summary: Grade 11. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Road Transport Manager",
+          "group": "QCTO occupational qualifications",
+          "campuses": "Kuruman",
+          "entryRequirements": "College entry summary: Matric (NQF 4) with Mathematics, or an Occupational Certificate in Transport Clerk. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Diesel Mechanic",
+          "group": "Artisan trades and apprenticeships",
+          "campuses": "Upington, Kathu",
+          "entryRequirements": "College entry summary: Matric with at least 40% in Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Boilermaker",
+          "group": "Artisan trades and apprenticeships",
+          "campuses": "Kathu, Namaqualand",
+          "entryRequirements": "College entry summary: Matric with at least 40% in Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Welder",
+          "group": "Artisan trades and apprenticeships",
+          "campuses": "Kathu, Namaqualand",
+          "entryRequirements": "College entry summary: Matric with at least 40% in Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists the 2027 intake as closed. Confirm the next intake with the college.",
+          "intakeYear": 2027,
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Business Management (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Kuruman, Kathu, Namaqualand",
+          "entryRequirements": "College entry summary: Matric (Grade 12). Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Engineering Studies (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Kathu",
+          "entryRequirements": "College entry summary: Matric with Mathematics and Physical Sciences. Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Financial Management (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Kathu, Upington",
+          "entryRequirements": "College entry summary: Matric (Grade 12). Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Management Assistant (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Kuruman, Kathu, Namaqualand, Upington, De Aar",
+          "entryRequirements": "College entry summary: Matric (Grade 12). Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Public Management (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Kuruman, Namaqualand, De Aar",
+          "entryRequirements": "College entry summary: Matric (Grade 12). Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        },
+        {
+          "name": "Tourism (N4–N6)",
+          "group": "Report 191 (NATED): continuing students",
+          "campuses": "Upington",
+          "entryRequirements": "College entry summary: Matric (Grade 12). Confirm specific conditions with admissions.",
+          "availability": "The college lists this route for continuing students only.",
+          "sourceUrl": "https://www.ncrtvet.com/"
+        }
+      ]
+    },
+    {
+      "kind": "tvet",
+      "name": "Northern Cape Urban TVET College",
+      "entries": [
+        {
+          "name": "Finance, Economics and Accounting",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/city-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "City and Phatsimang",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements. Ask admissions to confirm the additional Accounting condition."
+        },
+        {
+          "name": "Information Technology",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/city-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "City",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements."
+        },
+        {
+          "name": "Tourism",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/city-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "City",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements."
+        },
+        {
+          "name": "Safety in Society",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/moremogolo-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Moremogolo",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements."
+        },
+        {
+          "name": "Transport and Logistics",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/moremogolo-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Moremogolo",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements."
+        },
+        {
+          "name": "Programming and Robotics",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered.",
+          "entryRequirements": "The college’s published NC(V) guidance lists Grade 9 as the general minimum. Confirm current requirements."
+        },
+        {
+          "name": "Financial Management (N4–N6)",
+          "group": "Report 191 (NATED)",
+          "sourceUrl": "https://www.ncutvet.edu.za/city-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "City and Phatsimang",
+          "entryRequirements": "Confirm whether new entrants are accepted and which school qualifications are needed."
+        },
+        {
+          "name": "Marketing Management (N4–N6)",
+          "group": "Report 191 (NATED)",
+          "sourceUrl": "https://www.ncutvet.edu.za/phatsimang/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Phatsimang",
+          "entryRequirements": "Confirm whether new entrants are accepted and which school qualifications are needed."
+        },
+        {
+          "name": "Tourism (N4–N6)",
+          "group": "Report 191 (NATED)",
+          "sourceUrl": "https://www.ncutvet.edu.za/phatsimang/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Phatsimang",
+          "entryRequirements": "Confirm whether new entrants are accepted and which school qualifications are needed."
+        },
+        {
+          "name": "Business Management (N4–N6)",
+          "group": "Report 191 (NATED)",
+          "sourceUrl": "https://www.ncutvet.edu.za/phatsimang/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Phatsimang",
+          "entryRequirements": "Confirm whether new entrants are accepted and which school qualifications are needed."
+        },
+        {
+          "name": "Civil Engineering (N1–N3)",
+          "group": "Report 191 (NATED): historical engineering listings",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered."
+        },
+        {
+          "name": "Electrical Engineering (N1–N3)",
+          "group": "Report 191 (NATED): historical engineering listings",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered."
+        },
+        {
+          "name": "Mechanical Engineering (N1–N3)",
+          "group": "Report 191 (NATED): historical engineering listings",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered."
+        },
+        {
+          "name": "Bricklaying",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/moremogolo-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Moremogolo"
+        },
+        {
+          "name": "Carpentry and Joinery",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/moremogolo-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Moremogolo"
+        },
+        {
+          "name": "Plumbing",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/moremogolo-campus/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability.",
+          "campuses": "Moremogolo"
+        },
+        {
+          "name": "Hairdressing",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/courses/",
+          "availability": "Listed by the college. Confirm the next intake, entry rules and campus availability."
+        },
+        {
+          "name": "Nail and Beauty",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered."
+        },
+        {
+          "name": "Spray Painting",
+          "group": "Occupational programmes and trades",
+          "sourceUrl": "https://www.ncutvet.edu.za/wp-content/uploads/2026/05/Annual-Report-2024-final_compressed.pdf",
+          "availability": "Recorded in the 2024 college report. Confirm whether this route is still offered."
+        }
+      ]
+    }
+  ]
+}

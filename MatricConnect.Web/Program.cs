@@ -31,6 +31,7 @@ builder.Services.AddScoped<ISavedProgrammeRepository, SavedProgrammeRepository>(
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<UniversityService>();
 builder.Services.AddScoped<TvetCollegeService>();
+builder.Services.AddScoped<ProgrammeReferenceRepository>();
 builder.Services.AddScoped<SavedProgrammeService>();
 builder.Services.AddScoped<EligibilityService>();
 builder.Services.AddScoped<StudentValidator>();

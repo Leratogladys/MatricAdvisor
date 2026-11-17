@@ -1,0 +1,107 @@
+@model ProgrammeReferenceDetailsViewModel
+
+@{
+    ViewData["Title"] = "Programme Details";
+    var reference = Model.Reference;
+    var requirements = reference.EntryRequirements?.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? [];
+    var institutionName = reference.University?.Name ?? reference.TvetCollege!.Name;
+    var province = reference.University?.Province ?? reference.TvetCollege!.Province;
+    var institutionId = reference.UniversityId ?? reference.TvetCollegeId;
+    var backAction = reference.UniversityId.HasValue ? "Programmes" : "CollegeProgrammes";
+    var saveMessage = Model.SaveOutcome switch
+    {
+        ProgrammeSaveOutcome.Saved => "Programme saved to your shortlist.",
+        ProgrammeSaveOutcome.AlreadySaved => "This programme is already in your shortlist.",
+        ProgrammeSaveOutcome.Failed => "The programme couldn’t be saved. Try again.",
+        _ => null
+    };
+}
+
+<div class="mc-browse-flow mc-details-flow">
+    <a asp-controller="Universities" asp-action="@backAction" asp-route-id="@institutionId"
+       class="btn mc-browse-button mc-browse-button-secondary mc-details-back">Back to programmes</a>
+    <p class="mc-browse-eyebrow">@institutionName<span class="d-none d-lg-inline"> / @province</span></p>
+    <h1 class="mc-browse-title">@reference.Name</h1>
+    <p class="mc-details-intro">@reference.Group</p>
+
+    @if (saveMessage != null)
+    {
+        <p class="mc-save-feedback-message @(Model.SaveOutcome == ProgrammeSaveOutcome.Failed ? "mc-requirement-unmet" : "mc-requirement-met")"
+           role="status">@saveMessage</p>
+    }
+
+    <div class="mc-intake-grid">
+        <section class="mc-intake-card" aria-labelledby="reference-intake-heading">
+            <h2 id="reference-intake-heading" class="mc-browse-heading">Last verified intake: @(reference.IntakeYear?.ToString() ?? "Not yet confirmed")</h2>
+            <p>@reference.Availability</p>
+            @if (!string.IsNullOrWhiteSpace(reference.Campuses))
+            {
+                <p><strong>Campus:</strong> @reference.Campuses</p>
+            }
+
+            <h3 class="mc-browse-heading">Published entry requirements</h3>
+            @if (requirements.Length == 1)
+            {
+                <p>@requirements[0]</p>
+            }
+            else if (requirements.Length > 1)
+            {
+                <ul>
+                    @foreach (var requirement in requirements)
+                    {
+                        <li>@requirement</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Matric Connect hasn’t verified the entry requirements for this listing yet. Check the official source for current requirements.</p>
+            }
+
+            <p class="mc-browse-note">Listing source checked <time datetime="@reference.VerifiedOn.ToString("yyyy-MM-dd")">@reference.VerifiedOn.ToString("d MMMM yyyy")</time>.</p>
+            <ul class="mc-intake-sources">
+                <li><a href="@reference.SourceUrl" referrerpolicy="no-referrer">Official source</a></li>
+            </ul>
+        </section>
+
+        <div class="mc-intake-side">
+            <section aria-labelledby="reference-check-heading">
+                <h2 id="reference-check-heading" class="mc-browse-heading">Checking your results</h2>
+                @if (Model.Rules != null)
+                {
+                    <p id="reference-comparison-help">Compare your results against the published minimums for your entry route. The institution makes the admission decision.</p>
+                    @if (Model.Rules.ScoreGuideUrl != null)
+                    {
+                        <a href="@Model.Rules.ScoreGuideUrl" referrerpolicy="no-referrer">How the institution assesses applicants</a>
+                    }
+                }
+                else
+                {
+                    <p id="reference-comparison-help">Automatic comparison is unavailable for this listing. @(requirements.Length > 0
+                        ? "Use the published requirements and confirm the applicable intake with the institution."
+                        : "Use the official source to check your results against the institution’s entry requirements.")</p>
+                }
+            </section>
+
+            <div class="mc-intake-actions">
+                @if (Model.Rules != null)
+                {
+                    <a href="#reference-comparison" class="btn mc-browse-button" aria-describedby="reference-comparison-help">Compare my results</a>
+                }
+                else
+                {
+                    <button type="button" class="btn mc-browse-button" disabled aria-describedby="reference-comparison-help">Compare my results</button>
+                }
+                <form asp-controller="SavedProgrammes" asp-action="SaveReference" asp-route-id="@reference.Id" method="post">
+                    <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>
+                </form>
+                <a asp-controller="SavedProgrammes" asp-action="Index" class="btn mc-browse-button mc-browse-button-secondary">View saved programmes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Rules != null)
+{
+    <partial name="_ReferenceComparison" model="Model" />
+}

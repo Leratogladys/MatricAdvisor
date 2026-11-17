@@ -150,6 +150,8 @@ namespace MatricConnect.Models
 
             get; set; } = null!; // end property
 
+        public string? Faculty { get; set; }
+
         public ICollection<ProgrammeIntake> Intakes { get; set; } = new List<ProgrammeIntake>();
 
         public ProgrammeIntake? LatestVerifiedIntake => Intakes.MaxBy(intake => intake.IntakeYear);

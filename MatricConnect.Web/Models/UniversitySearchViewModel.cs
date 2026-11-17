@@ -15,6 +15,7 @@ namespace MatricConnect.Web.Models
 
         public string InstitutionType { get; set; } = UniversitiesType;
         public bool ShowTvetColleges => InstitutionType == TvetCollegesType;
+        public Dictionary<int, int> CollegeProgrammeCounts { get; set; } = [];
         public List<TvetCollege> Colleges { get; set; } = new();
 
         public List<string> Provinces

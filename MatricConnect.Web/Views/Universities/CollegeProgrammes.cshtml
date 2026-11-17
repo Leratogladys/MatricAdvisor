@@ -1,0 +1,42 @@
+@model MatricConnect.Web.Models.CollegeProgrammesViewModel
+
+@{
+    ViewData["Title"] = "TVET programmes";
+    var groups = Model.Programmes.GroupBy(item => item.Group).OrderBy(group => group.Key).ToArray();
+}
+
+<div class="mc-browse-flow">
+    <p class="mc-browse-eyebrow">@Model.College.Province / Public TVET college</p>
+    <h1 class="mc-browse-title">@Model.College.Name</h1>
+    <p class="mc-browse-description">Explore qualification routes and confirm requirements and intake availability with the college.</p>
+    <a asp-action="Index" asp-route-selectedProvince="@Model.College.Province" asp-route-institutionType="tvet"
+       class="btn mc-browse-button mc-browse-button-secondary mc-programmes-back">Back to TVET colleges</a>
+    @if (groups.Length == 0)
+    {
+        <p class="mc-browse-note">Programme details are not yet listed in Matric Connect.</p>
+        <a href="@Model.College.Website" class="btn mc-browse-button mc-programmes-back">Visit official website</a>
+    }
+    else
+    {
+        <nav aria-label="Qualification routes">
+            <ul>
+                @for (int i = 0; i < groups.Length; i++)
+                {
+                    <li><a href="#route-@i">@groups[i].Key (@groups[i].Count())</a></li>
+                }
+            </ul>
+        </nav>
+        @for (int i = 0; i < groups.Length; i++)
+        {
+            <section class="mc-browse-flow" aria-labelledby="route-@i">
+                <h2 id="route-@i" class="mc-browse-heading">@groups[i].Key</h2>
+                <ul class="mc-browse-results">
+                    @foreach (var programme in groups[i])
+                    {
+                        <partial name="_ProgrammeReference" model="programme" />
+                    }
+                </ul>
+            </section>
+        }
+    }
+</div>

@@ -1,8 +1,8 @@
 # Growing the Matric Connect catalogue
 
-Start with **public university undergraduate programmes for school leavers with a South African NSC**, with the public institution directory as the entry point. Bring in a small batch for one university and intake at a time. Track the number of reviewed listings and supported comparisons separately. Count distinct qualifications, not modules, web pages, or repeated campus entries.
+Use the public institution directory for **school-leaver pathways at public universities and TVET colleges**. Gather sources by province, structure them in a reviewed batch and import the whole batch together. Track the number of reviewed listings and supported comparisons separately. Count distinct qualifications, not modules, web pages, or repeated campus entries.
 
-TVET still belongs in the directory. Its programme import needs separate qualification types, campus links, intake periods and prerequisite rules. A college applicant may be applying based on a school grade or a prior qualification. Leave those requirements as references until that model is in place. Postgraduate comparison is outside the school-leaver workflow; keep using official institution links for discovery.
+TVET listings carry their own qualification types, campuses, intake notes and prerequisite information where published. A college applicant may be applying based on a school grade or a prior qualification. Published grade, qualification and placement requirements can be recorded as checks where the institution establishes how they apply. Postgraduate listings use separate qualification routes and do not reuse school-leaver APS.
 
 | Stage | What the team does | What learners see |
 | --- | --- | --- |
@@ -32,7 +32,7 @@ The tool only adds new programmes. It rejects a batch if an entry would alter an
 
 ## Comparison rules
 
-The [versioned comparison catalogue](comparison-rules.md) defines the existing CUT and Mandela checks as data. Bulk imports still add requirements-only listings. Enabling another comparison requires a separately reviewed rule entry and explicit checks.
+The [versioned comparison catalogue](comparison-rules.md) defines the existing CUT and Mandela checks as data. Existing programme intakes still use these rules. A province reference entry can also include an optional `comparison` with named routes and a list of minimums for each. Each minimum has a label, scale and threshold: `level`, `grade`, `nqf`, `aps`, `percent`, or `yesNo`. Use named routes for published alternatives and keep selection, contextual restrictions and unclear criteria in the published notes. Document the scoring method and do not substitute a generic APS.
 
 ## Reviewed batches
 
@@ -42,3 +42,15 @@ The [versioned comparison catalogue](comparison-rules.md) defines the existing C
 
 1. Review Wits comparisons separately from the import. Cross-check the Wits scoring method and validate the programme and intake rules before enabling Compare my results.
 2. Add search and pagination before increasing volume. Today the university page loads its full programme list. Add a safe way to review later intakes without replacing historical data or changing saved programme IDs. Then examine TVET-specific formats separately.
+
+## Province batches and faculties
+
+Use a reviewed university `--batch` when an intake, application code, score or published score alternatives, and required evidence are verified. Its optional `faculty` field controls grouping. The existing faculty assignments for Wits and the other seeded programmes were matched against their published sources and applied in place. No programme IDs or comparison rules changed.
+
+Use `--references` to load reviewed published offerings in a province, including ones without a confirmed intake. This format gives each institution a directory name, kind (`university` or `tvet`), and one or more records with a name, faculty or qualification group, official source, and availability. Keep campus, intake, and entry conditions blank when unconfirmed. Link historical data as historical rather than reusing it for new applicants.
+
+Reference listings open their own details page and can be saved to the student shortlist. The page shows the published conditions we have, keeps unknown intake dates explicit and links to the official source. Entries with reviewed route rules support a comparison of the published minimums. Missing or conflicting entry requirements leave comparison unavailable. Use `--refresh` to preview updates to exact existing titles and groups from a reviewed batch. Adding `--apply` writes the additions and updates together and preserves existing IDs and shortlists. Refresh never removes listings and will reject an older verification date.
+
+The [Northern Cape review](northern-cape-references.md) [Mpumalanga review](mpumalanga-references.md), and [North West review](north-west-references.md) show the batch format and official sources. The Northern Cape review also lists the national rollout order. Both import modes retain the read-only preview and atomic `--apply`.
+
+Existing faculty assignments were checked against the [Wits Science catalogue](https://www.wits.ac.za/undergraduate/academic-programmes/faculty-of-science/), [CUT IT department](https://www.cut.ac.za/department/information-technology), the [Mandela University EBET](https://www.mandela.ac.za/getmedia/8d278dd0-b607-4ac3-a7d1-8450ba54a8e2/Prospectus-Faculty-of-EBET?disposition=attachment) and [Science](https://www.mandela.ac.za/getmedia/0bd96b8d-b5cc-4c60-a6a9-d596fa4396d6/Prospectus-Faculty-of-Science?disposition=attachment) prospectuses, the [UJ School of Computer Science](https://www.uj.ac.za/faculties/science/departments-2/academy-of-computer-science-and-software-engineering/courses-and-programmes/undergraduate-courses/), the [UP faculty catalogue](https://www.up.ac.za/faculty-of-engineering-built-environment-it/undergraduate-programmes), and the [UFS 2027 prospectus](https://www.ufs.ac.za/docs/librariesprovider44/undergraduate/ufs---ug-prospectus-2027---jan.pdf).

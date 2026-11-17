@@ -31,7 +31,7 @@
     {
         <section class="mc-saved-empty" aria-labelledby="saved-empty-title">
             <h2 id="saved-empty-title" class="mc-browse-heading">No saved programmes yet</h2>
-            <p class="mc-browse-note">Browse universities, check a programme’s requirements, and save it here to revisit later.</p>
+            <p class="mc-browse-note">Browse institutions, check a programme’s requirements, and save it here to revisit later.</p>
         </section>
     }
     else
@@ -42,14 +42,14 @@
                 @foreach (var saved in Model.SavedProgrammes)
                 {
                     <li class="mc-browse-card mc-saved-card">
-                        <h3 class="mc-browse-heading">@saved.Programme.Name</h3>
-                        <p class="mc-browse-note">@saved.Programme.University.Name · @saved.Programme.University.Province</p>
+                        <h3 class="mc-browse-heading">@saved.Name</h3>
+                        <p class="mc-browse-note">@saved.InstitutionName · @saved.Province</p>
                         <div class="mc-saved-card-actions">
-                            <a asp-controller="Universities" asp-action="ProgrammeDetails" asp-route-id="@saved.ProgrammeId"
-                               class="btn mc-browse-button" aria-label="View requirements for @saved.Programme.Name">View requirements</a>
-                            <form asp-controller="SavedProgrammes" asp-action="Remove" asp-route-id="@saved.ProgrammeId" method="post">
+                            <a asp-controller="Universities" asp-action="@saved.DetailsAction" asp-route-id="@saved.Id"
+                               class="btn mc-browse-button" aria-label="View requirements for @saved.Name">View requirements</a>
+                            <form asp-controller="SavedProgrammes" asp-action="@saved.RemoveAction" asp-route-id="@saved.Id" method="post">
                                 <button type="submit" class="btn mc-browse-button mc-browse-button-secondary mc-saved-remove"
-                                        aria-label="Remove @saved.Programme.Name from saved programmes">Remove</button>
+                                        aria-label="Remove @saved.Name from saved programmes">Remove</button>
                             </form>
                         </div>
                     </li>

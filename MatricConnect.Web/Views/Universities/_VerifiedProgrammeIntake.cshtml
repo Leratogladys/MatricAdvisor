@@ -90,7 +90,7 @@
             }
             else
             {
-                <p>Use the university’s scoring rules and check each subject requirement against your results. Matric Connect shows the published requirements without an automatic eligibility result.</p>
+                <p id="intake-comparison-help">Use the university’s scoring rules and check each subject requirement against your results. Automatic comparison is unavailable for this intake.</p>
             }
             <a href="@intake.ApsGuideUrl">How the university calculates its admission score</a>
         </section>
@@ -99,6 +99,10 @@
             @if (comparison != null)
             {
                 <a href="#results-comparison" class="btn mc-browse-button">Compare my results</a>
+            }
+            else
+            {
+                <button type="button" class="btn mc-browse-button" disabled aria-describedby="intake-comparison-help">Compare my results</button>
             }
             <form asp-controller="SavedProgrammes" asp-action="Save" asp-route-id="@intake.ProgrammeId" method="post">
                 <button type="submit" class="btn mc-browse-button mc-browse-button-secondary">Save programme</button>

@@ -77,6 +77,10 @@ namespace MatricConnect.Data
 
         public DbSet<TvetCollege> TvetColleges => Set<TvetCollege>();
 
+        public DbSet<ProgrammeReference> ProgrammeReferences => Set<ProgrammeReference>();
+
+        public DbSet<SavedProgrammeReference> SavedProgrammeReferences => Set<SavedProgrammeReference>();
+
         public DbSet<ProgrammeIntake> ProgrammeIntakes => Set<ProgrammeIntake>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -84,6 +88,24 @@ namespace MatricConnect.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<TvetCollege>().HasIndex(college => college.Name).IsUnique();
+
+            modelBuilder.Entity<ProgrammeReference>(reference =>
+            {
+                reference.ToTable(table => table.HasCheckConstraint("CK_ProgrammeReference_OneInstitution",
+                    "(UniversityId IS NULL) <> (TvetCollegeId IS NULL)"));
+                reference.HasOne(item => item.University).WithMany().HasForeignKey(item => item.UniversityId);
+                reference.HasOne(item => item.TvetCollege).WithMany(college => college.ProgrammeReferences)
+                    .HasForeignKey(item => item.TvetCollegeId);
+                reference.HasIndex(item => new { item.UniversityId, item.Group, item.Name }).IsUnique();
+                reference.HasIndex(item => new { item.TvetCollegeId, item.Group, item.Name }).IsUnique();
+            });
+
+            modelBuilder.Entity<SavedProgrammeReference>(saved =>
+            {
+                saved.HasKey(item => new { item.StudentId, item.ProgrammeReferenceId });
+                saved.HasOne<Student>().WithMany().HasForeignKey(item => item.StudentId);
+                saved.HasOne(item => item.Reference).WithMany().HasForeignKey(item => item.ProgrammeReferenceId);
+            });
 
             modelBuilder.Entity<ProgrammeIntake>().HasKey(intake => new { intake.ProgrammeId, intake.IntakeYear });
             modelBuilder.Entity<Programme>()

@@ -4,6 +4,7 @@
 //                   university and programme seed data.
 
 using MatricConnect.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MatricConnect.Data
 {
@@ -176,6 +177,7 @@ namespace MatricConnect.Data
             NationalDirectorySeed.AddMissingInstitutions(context);
             CutIntakeSeed.AddPublishedIntakes(context);
             MandelaIntakeSeed.AddPublishedIntakes(context);
+            context.Database.ExecuteSqlRaw(ReviewedFacultyAssignments.Sql);
         } // end method
 
         // --------------------------------------------------

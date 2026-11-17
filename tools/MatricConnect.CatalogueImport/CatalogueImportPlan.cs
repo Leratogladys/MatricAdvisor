@@ -33,6 +33,9 @@ internal sealed class CatalogueImportPlan
                 .Select(intake => (intake.OfficialProgrammeCode, Programme: programme)))
             .ToLookup(pair => pair.OfficialProgrammeCode, pair => pair.Programme, StringComparer.OrdinalIgnoreCase);
 
+        var referenceNames = context.ProgrammeReferences.Where(item => item.UniversityId == university.Id)
+            .Select(item => item.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
         foreach (var entry in batch.Entries!)
         {
             var row = entry!;
@@ -46,6 +49,7 @@ internal sealed class CatalogueImportPlan
             var incomingIntake = row.CreateIntake(batch);
             var matches = byName[row.Name!].Concat(byCode[row.Code!]).DistinctBy(programme => programme.Id).ToArray();
             if (matches.Length == 1 && matches[0].Name == row.Name && matches[0].FieldOfStudy == row.FieldOfStudy &&
+                (row.Faculty == null || matches[0].Faculty == row.Faculty) &&
                 matches[0].Intakes.SingleOrDefault(intake => intake.IntakeYear == batch.IntakeYear) is { } existing &&
                 SameIntake(existing, incomingIntake))
             {
@@ -59,6 +63,12 @@ internal sealed class CatalogueImportPlan
                 continue;
             }
 
+            if (referenceNames.Contains(row.Name!))
+            {
+                plan.Errors.Add($"{row.Code}: already listed as a reference. Review the promotion separately.");
+                continue;
+            }
+
             if (ProgrammeComparisonRules.IsConfigured(university, incomingIntake))
             {
                 plan.Errors.Add($"{row.Code}: a comparison already exists for this code and intake. Add this programme through a dedicated review.");
@@ -69,6 +79,7 @@ internal sealed class CatalogueImportPlan
             {
                 Name = row.Name!,
                 FieldOfStudy = row.FieldOfStudy!,
+                Faculty = row.Faculty,
                 UniversityId = university.Id,
                 Intakes = [incomingIntake]
             });

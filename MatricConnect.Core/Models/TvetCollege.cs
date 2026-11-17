@@ -9,6 +9,7 @@ namespace MatricConnect.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Province { get; set; } = string.Empty;
+        public ICollection<ProgrammeReference> ProgrammeReferences { get; set; } = [];
         public string Website { get; set; } = string.Empty;
     }
 }

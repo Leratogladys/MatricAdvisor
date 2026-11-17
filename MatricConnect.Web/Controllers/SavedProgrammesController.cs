@@ -3,6 +3,7 @@
 // Purpose         : Handles saving programmes for the student
 //                   selected in the current session.
 
+using MatricConnect.Infrastructure.Repositories;
 using MatricConnect.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,13 @@ namespace MatricConnect.Web.Controllers
         private readonly SavedProgrammeService _savedProgrammeService;
         private readonly StudentService _studentService;
         private readonly UniversityService _universityService;
+        private readonly ProgrammeReferenceRepository _programmeReferences;
 
         private readonly ILogger<SavedProgrammesController> _logger;
 
         public SavedProgrammesController(SavedProgrammeService savedProgrammeService, StudentService studentService,
-            UniversityService universityService, ILogger<SavedProgrammesController> logger)
+            UniversityService universityService, ProgrammeReferenceRepository programmeReferences,
+            ILogger<SavedProgrammesController> logger)
         {
             //
             // Name              : SavedProgrammesController
@@ -42,6 +45,7 @@ namespace MatricConnect.Web.Controllers
             _savedProgrammeService = savedProgrammeService;
             _studentService = studentService;
             _universityService = universityService;
+            _programmeReferences = programmeReferences;
             _logger = logger;
         } // end constructor
 
@@ -82,11 +86,20 @@ namespace MatricConnect.Web.Controllers
                        new { returnUrl = Url.Action("Index", "SavedProgrammes")});
             } // end if
 
+            var savedProgrammes = _savedProgrammeService.GetSavedProgrammesByStudent(student.Id)
+                .Select(item => new SavedProgrammeCard(item.ProgrammeId, item.Programme.Name,
+                    item.Programme.University.Name, item.Programme.University.Province, IsReference: false));
+
+            var savedReferences = _programmeReferences.ForStudent(student.Id)
+                .Select(item => new SavedProgrammeCard(item.ProgrammeReferenceId, item.Reference.Name,
+                    item.Reference.University?.Name ?? item.Reference.TvetCollege!.Name,
+                    item.Reference.University?.Province ?? item.Reference.TvetCollege!.Province, IsReference: true));
+
             var model = new SavedProgrammesViewModel
             {
                 Student = student,
-                SavedProgrammes = _savedProgrammeService.
-                GetSavedProgrammesByStudent(student.Id)
+                SavedProgrammes = savedProgrammes.Concat(savedReferences)
+                    .OrderBy(item => item.Name).ThenBy(item => item.InstitutionName).ToList()
             };
 
             return View(model);
@@ -172,6 +185,70 @@ namespace MatricConnect.Web.Controllers
 
             return RedirectToAction("ProgrammeDetails", "Universities", new { id = programme.Id });
         } // end method Save
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveReference(int id)
+        {
+            if (!ModelState.IsValid || id <= 0 || _programmeReferences.Find(id) == null)
+                return NotFound();
+
+            var returnUrl = Url.Action("ReferenceDetails", "Universities", new { id });
+            if (GetSelectedStudentId() is not int studentId)
+            {
+                TempData["SuccessMessage"] = "Select a student profile. You will return to this programme to save it.";
+                return RedirectToAction("Existing", "Students", new { returnUrl });
+            }
+
+            ProgrammeSaveOutcome outcome;
+            try
+            {
+                outcome = _programmeReferences.Save(studentId, id)
+                    ? ProgrammeSaveOutcome.Saved : ProgrammeSaveOutcome.AlreadySaved;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqliteException { SqliteExtendedErrorCode: 1555 })
+            {
+                outcome = ProgrammeSaveOutcome.AlreadySaved;
+            }
+            catch (Exception ex) when (ex is DbUpdateException or SqliteException)
+            {
+                _logger.LogError(ex, "Unable to save programme reference {ReferenceId}.", id);
+                outcome = ProgrammeSaveOutcome.Failed;
+            }
+
+            TempData[ProgrammeSaveFeedback.ReferenceKey(studentId, id)] = outcome.ToString();
+            return RedirectToAction("ReferenceDetails", "Universities", new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveReference(int id)
+        {
+            if (!ModelState.IsValid || id <= 0)
+                return NotFound();
+
+            if (GetSelectedStudentId() is not int studentId)
+            {
+                TempData["SuccessMessage"] = "Select a student profile to manage saved programmes.";
+                return RedirectToAction("Existing", "Students", new { returnUrl = Url.Action(nameof(Index), "SavedProgrammes") });
+            }
+
+            TempData["SavedProgrammesMessage"] = _programmeReferences.Remove(studentId, id)
+                ? "Programme removed successfully." : "This programme was not found in your saved list.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        private int? GetSelectedStudentId()
+        {
+            if (HttpContext.Session.GetInt32("CurrentStudentId") is not int id)
+                return null;
+
+            if (_studentService.GetStudentById(id) != null)
+                return id;
+
+            HttpContext.Session.Remove("CurrentStudentId");
+            return null;
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

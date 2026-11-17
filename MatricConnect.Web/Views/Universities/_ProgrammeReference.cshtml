@@ -1,0 +1,19 @@
+@model MatricConnect.Models.ProgrammeReference
+
+<li class="mc-browse-card">
+    @if (Model.UniversityId.HasValue)
+    {
+        <h4 class="mc-browse-heading">@Model.Name</h4>
+    }
+    else
+    {
+        <h3 class="mc-browse-heading">@Model.Name</h3>
+    }
+    @if (Model.Campuses != null)
+    {
+        <p class="mc-browse-note">Campus: @Model.Campuses</p>
+    }
+    <p class="mc-browse-note">@(Model.IntakeYear is int year ? $"Verified intake: {year}" : "Intake not yet verified")</p>
+    <a asp-controller="Universities" asp-action="ReferenceDetails" asp-route-id="@Model.Id"
+       class="btn mc-browse-button" aria-label="View requirements for @Model.Name">View requirements</a>
+</li>

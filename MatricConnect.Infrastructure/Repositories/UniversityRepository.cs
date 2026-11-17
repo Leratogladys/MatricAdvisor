@@ -83,7 +83,8 @@ namespace MatricConnect.Infrastructure.Repositories
                 .OrderBy(university => university.Name)
                 .Select(university => new UniversitySearchResult(
                     university.Id, university.Name, university.Province, university.Website,
-                    university.IsUniversityOfTechnology, university.Programmes.Count))
+                    university.IsUniversityOfTechnology, university.Programmes.Count +
+                    _context.ProgrammeReferences.Count(item => item.UniversityId == university.Id)))
                 .ToList();
         } // end method GetUniversitySearchResults
 

@@ -26,6 +26,9 @@ namespace MatricConnect.Migrations
                     b.Property<DateTime>("ApplicationDeadline")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Faculty")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("FieldOfStudy")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -117,6 +120,63 @@ namespace MatricConnect.Migrations
                     b.ToTable("ProgrammeIntakes");
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.ProgrammeReference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Campuses")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ComparisonRulesJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EntryRequirements")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Group")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("IntakeYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TvetCollegeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UniversityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("VerifiedOn")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TvetCollegeId", "Group", "Name")
+                        .IsUnique();
+
+                    b.HasIndex("UniversityId", "Group", "Name")
+                        .IsUnique();
+
+                    b.ToTable("ProgrammeReferences", t =>
+                        {
+                            t.HasCheckConstraint("CK_ProgrammeReference_OneInstitution", "(UniversityId IS NULL) <> (TvetCollegeId IS NULL)");
+                        });
+                });
+
             modelBuilder.Entity("MatricConnect.Models.SavedProgramme", b =>
                 {
                     b.Property<int>("Id")
@@ -136,6 +196,21 @@ namespace MatricConnect.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("SavedProgrammes");
+                });
+
+            modelBuilder.Entity("MatricConnect.Models.SavedProgrammeReference", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProgrammeReferenceId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("StudentId", "ProgrammeReferenceId");
+
+                    b.HasIndex("ProgrammeReferenceId");
+
+                    b.ToTable("SavedProgrammeReferences");
                 });
 
             modelBuilder.Entity("MatricConnect.Models.Student", b =>
@@ -242,6 +317,21 @@ namespace MatricConnect.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.ProgrammeReference", b =>
+                {
+                    b.HasOne("MatricConnect.Models.TvetCollege", "TvetCollege")
+                        .WithMany("ProgrammeReferences")
+                        .HasForeignKey("TvetCollegeId");
+
+                    b.HasOne("MatricConnect.Models.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId");
+
+                    b.Navigation("TvetCollege");
+
+                    b.Navigation("University");
+                });
+
             modelBuilder.Entity("MatricConnect.Models.SavedProgramme", b =>
                 {
                     b.HasOne("MatricConnect.Models.Programme", "Programme")
@@ -261,6 +351,23 @@ namespace MatricConnect.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("MatricConnect.Models.SavedProgrammeReference", b =>
+                {
+                    b.HasOne("MatricConnect.Models.ProgrammeReference", "Reference")
+                        .WithMany()
+                        .HasForeignKey("ProgrammeReferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MatricConnect.Models.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reference");
+                });
+
             modelBuilder.Entity("MatricConnect.Models.Programme", b =>
                 {
                     b.Navigation("Intakes");
@@ -271,6 +378,11 @@ namespace MatricConnect.Migrations
             modelBuilder.Entity("MatricConnect.Models.Student", b =>
                 {
                     b.Navigation("SavedProgrammes");
+                });
+
+            modelBuilder.Entity("MatricConnect.Models.TvetCollege", b =>
+                {
+                    b.Navigation("ProgrammeReferences");
                 });
 
             modelBuilder.Entity("MatricConnect.Models.University", b =>

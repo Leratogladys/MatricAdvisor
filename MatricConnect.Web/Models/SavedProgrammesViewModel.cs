@@ -4,7 +4,6 @@
 //                   programmes to the saved programmes page.
 
 using MatricConnect.Models;
-using MatricConnect.Web.Models;
 
 namespace MatricConnect.Web.Models
 {
@@ -12,7 +11,12 @@ namespace MatricConnect.Web.Models
     {
         public Student Student { get; set; } = new Student();
 
-        public List<SavedProgramme> SavedProgrammes { get; set; }
-        = new List<SavedProgramme>();
+        public List<SavedProgrammeCard> SavedProgrammes { get; set; } = [];
     } // end class SavedProgrammesViewModel
+
+    public sealed record SavedProgrammeCard(int Id, string Name, string InstitutionName, string Province, bool IsReference)
+    {
+        public string DetailsAction => IsReference ? "ReferenceDetails" : "ProgrammeDetails";
+        public string RemoveAction => IsReference ? "RemoveReference" : "Remove";
+    }
 } // end namespace MatricConnect.Web.Models

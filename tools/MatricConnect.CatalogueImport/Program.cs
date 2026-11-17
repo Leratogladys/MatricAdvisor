@@ -6,7 +6,7 @@ using MatricConnect.Services;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-const string usage = "Usage: --database <MatricConnect.db> --batch <reviewed.json> [--apply] or --check-rules";
+const string usage = "Usage: --database <MatricConnect.db> (--batch|--references) <reviewed.json> [--apply] [--refresh (references only)] or --check-rules";
 if (args is ["--help"] or ["-h"])
 {
     Console.WriteLine(usage);
@@ -25,8 +25,9 @@ if (args is ["--check-rules"])
     return 0;
 }
 
-if (args is not ["--database", _, "--batch", _] &&
-    args is not ["--database", _, "--batch", _, "--apply"])
+if (args.Length < 4 || args[0] != "--database" || args[2] is not ("--batch" or "--references") ||
+    args.Skip(4).Any(flag => flag != "--apply" && (flag != "--refresh" || args[2] != "--references")) ||
+    args.Skip(4).Distinct().Count() != args.Length - 4)
 {
     Console.Error.WriteLine(usage);
     return 2;
@@ -39,23 +40,19 @@ try
 
     var database = Path.GetFullPath(args[1]);
     var batchPath = Path.GetFullPath(args[3]);
-    var apply = args.Length == 5;
+    var apply = args.Skip(4).Contains("--apply");
     if (!File.Exists(database))
         throw new InvalidDataException("Database not found. Use an explicit path to an initialized Matric Connect database.");
 
     using var batchFile = File.OpenRead(batchPath);
     using var json = JsonDocument.Parse(batchFile);
     RejectDuplicateFields(json.RootElement);
-    var batch = json.RootElement.Deserialize<CatalogueBatch>(new JsonSerializerOptions
+    var jsonOptions = new JsonSerializerOptions
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         UnmappedMemberHandling = JsonUnmappedMemberHandling.Disallow
-    }) ?? throw new InvalidDataException("Expected a batch object.");
-
+    };
     DateOnly today = DateOnly.FromDateTime(DateTimeOffset.UtcNow.ToOffset(TimeSpan.FromHours(2)).DateTime);
-    var errors = batch.Validate(today).ToArray();
-    if (errors.Length != 0)
-        throw new InvalidDataException(string.Join(Environment.NewLine, errors));
 
     var connection = new SqliteConnectionStringBuilder
     {
@@ -68,6 +65,46 @@ try
     using var transaction = apply ? context.Database.BeginTransaction() : null;
     if (context.Database.GetPendingMigrations().Any())
         throw new InvalidDataException("This database is missing Matric Connect migrations. Update a test copy through the normal app startup first.");
+
+    if (args[2] == "--references")
+    {
+        var references = json.RootElement.Deserialize<ReferenceBatch>(jsonOptions)
+            ?? throw new InvalidDataException("Expected a reference batch object.");
+        var (additions, updates, unchanged) = references.Preview(context, today, args.Skip(4).Contains("--refresh"));
+        Console.WriteLine($"{(apply ? "Apply reviewed references" : "Read-only preview")}: {references.Province}");
+        Console.WriteLine($"Reviewed by {references.ReviewedBy}; checked {references.VerifiedOn:yyyy-MM-dd}.");
+        foreach (var group in additions.GroupBy(item => (item.UniversityId, item.TvetCollegeId)))
+        {
+            var institutionName = group.Key.UniversityId is int id
+                ? context.Universities.Find(id)!.Name : context.TvetColleges.Find(group.Key.TvetCollegeId)!.Name;
+            Console.WriteLine($"{institutionName}: {group.Count()} to add");
+            foreach (var item in group)
+                Console.WriteLine($"  {item.Group}: {item.Name}");
+        }
+
+        foreach (var item in updates)
+            Console.WriteLine($"  Update {item.Group}: {item.Name}");
+
+        if (apply)
+        {
+            context.ProgrammeReferences.AddRange(additions);
+            context.ProgrammeReferences.UpdateRange(updates);
+            context.SaveChanges();
+            transaction!.Commit();
+        }
+
+        var updateSummary = updates.Count == 0 ? "" : $"{updates.Count} {(apply ? "updated" : "to update")}; ";
+        Console.WriteLine($"{additions.Count} {(apply ? "added" : "to add")}; {updateSummary}{unchanged} unchanged.");
+        if (!apply)
+            Console.WriteLine("No data was written.");
+        return 0;
+    }
+
+    var batch = json.RootElement.Deserialize<CatalogueBatch>(jsonOptions)
+        ?? throw new InvalidDataException("Expected a batch object.");
+    var errors = batch.Validate(today).ToArray();
+    if (errors.Length != 0)
+        throw new InvalidDataException(string.Join(Environment.NewLine, errors));
 
     Console.WriteLine($"{(apply ? "Apply reviewed batch" : "Read-only preview")}: {batch.University}, {batch.IntakeYear}");
     Console.WriteLine($"Database: {database}");

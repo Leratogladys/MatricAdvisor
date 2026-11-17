@@ -9,6 +9,7 @@ namespace MatricConnect.Services
 {
     public class TvetCollegeService(ITvetCollegeRepository repository)
     {
+        public TvetCollege? GetById(int id) => repository.GetById(id);
         public List<TvetCollege> GetByProvince(string province) => repository.GetByProvince(province);
     }
 }

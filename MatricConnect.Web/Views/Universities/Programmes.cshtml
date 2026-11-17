@@ -7,7 +7,10 @@
 
 @{
     ViewData["Title"] = "Browse Programmes";
-    var programmeCount = Model.Programmes.Count;
+    var programmeCount = Model.Programmes.Count + Model.References.Count;
+    var faculties = Model.Programmes.Select(programme => programme.Faculty)
+        .Concat(Model.References.Select(reference => reference.Group)).Distinct()
+        .OrderBy(faculty => faculty == null).ThenBy(faculty => faculty).ToArray();
     var now = DateTimeOffset.UtcNow;
     var hasEligibilityCheck = Model.Programmes.Any(programme => programme.LatestVerifiedIntake == null);
     var programmeLabel = programmeCount == 1 ? "programme" : "programmes";
@@ -20,7 +23,7 @@
     {
         <p class="mc-browse-description">@(hasEligibilityCheck
             ? "Choose a programme to view its requirements and check your results."
-            : "Choose a programme to view its last verified intake and published requirements.")</p>
+            : "Explore programmes by faculty and check their published requirements.")</p>
     }
 
     <a asp-controller="Universities" asp-action="Index" asp-route-selectedProvince="@Model.University.Province"
@@ -42,11 +45,27 @@
     {
         <section class="mc-browse-flow" aria-labelledby="programme-results-heading">
             <h2 id="programme-results-heading" class="mc-browse-heading">@programmeCount @programmeLabel at @Model.University.Name</h2>
-            <ul class="mc-browse-results">
-                @foreach (var programme in Model.Programmes)
-                {
+            @if (faculties.Length > 1)
+            {
+                <nav aria-label="Faculties">
+                    <ul>
+                        @for (int i = 0; i < faculties.Length; i++)
+                        {
+                            <li><a href="#faculty-@i">@(faculties[i] ?? "Faculty not yet verified")</a></li>
+                        }
+                    </ul>
+                </nav>
+            }
+            @for (int i = 0; i < faculties.Length; i++)
+            {
+                var faculty = faculties[i];
+                <section class="mc-browse-flow" aria-labelledby="faculty-@i">
+                    <h3 id="faculty-@i" class="mc-browse-heading">@(faculty ?? "Faculty not yet verified")</h3>
+                    <ul class="mc-browse-results">
+                    @foreach (var programme in Model.Programmes.Where(programme => programme.Faculty == faculty))
+                    {
                     <li class="mc-browse-card">
-                        <h3 class="mc-browse-heading">@programme.Name</h3>
+                        <h4 class="mc-browse-heading">@programme.Name</h4>
                         @if (programme.LatestVerifiedIntake is { } intake)
                         {
                             var scoreSummary = string.IsNullOrWhiteSpace(intake.AdmissionScoreBySubject)
@@ -65,9 +84,15 @@
                             View requirements
                         </a>
                     </li>
-                }
-            </ul>
-            <p class="mc-browse-note">The admission score is one requirement. Open a programme to see the full listing.</p>
+                    }
+                    @foreach (var programme in Model.References.Where(reference => reference.Group == faculty))
+                    {
+                        <partial name="_ProgrammeReference" model="programme" />
+                    }
+                    </ul>
+                </section>
+            }
+            <p class="mc-browse-note">Check each programme's published requirements and confirm availability with the institution.</p>
         </section>
     }
 </div>

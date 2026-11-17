@@ -1,0 +1,84 @@
+@model ProgrammeReferenceDetailsViewModel
+@using System.Globalization
+@{
+    var rules = Model.Rules!;
+    var submission = Model.Submission;
+}
+
+<section id="reference-comparison" class="mc-intake-card mc-result-comparison" aria-labelledby="reference-results-heading">
+    <h2 id="reference-results-heading" class="mc-browse-heading">Compare your results</h2>
+    @if (Model.Reference.IntakeYear == null)
+    {
+        <p>The institution’s published minimums are shown here. The intake year these minimums apply to is not confirmed.</p>
+    }
+    @if (rules.Note != null)
+    {
+        <p>@rules.Note</p>
+    }
+    @if (submission == null && rules.Routes.Length > 1)
+    {
+        <p>Choose the entry route that matches your qualifications.</p>
+    }
+    @if (submission?.Compared == true)
+    {
+        var matchedRoute = rules.Routes[submission.Route];
+        <h3 class="mc-browse-heading">Your comparison: @matchedRoute.Label</h3>
+        <dl class="mc-requirement-list">
+            @for (var i = 0; i < matchedRoute.Minimums.Length; i++)
+            {
+                var minimum = matchedRoute.Minimums[i];
+                var value = submission.Values[i]!.Value;
+                var meets = value >= minimum.Minimum;
+                <div class="mc-requirement @(meets ? "mc-requirement-met" : "mc-requirement-unmet")">
+                    <dt>@minimum.Label</dt>
+                    <dd>Your result: @minimum.Display(value) · Minimum: @minimum.Display(minimum.Minimum) · @(meets ? "Meets published minimum" : "Below published minimum")</dd>
+                </div>
+            }
+        </dl>
+        <p>Meeting these checks does not guarantee admission. Check any other conditions listed for the programme.</p>
+    }
+    @for (var i = 0; i < rules.Routes.Length; i++)
+    {
+        var route = rules.Routes[i];
+        var selected = submission?.Route == i;
+        <details open="@(selected || rules.Routes.Length == 1)">
+            <summary>@route.Label</summary>
+            @if (route.Note != null)
+            {
+                <p>@route.Note</p>
+            }
+            <form asp-controller="Universities" asp-action="CompareReference" asp-route-id="@Model.Reference.Id"
+                  asp-fragment="reference-comparison" method="post">
+                <input type="hidden" name="route" value="@i" />
+                @if (selected && !ViewData.ModelState.IsValid)
+                {
+                    <div asp-validation-summary="All" role="alert"></div>
+                }
+                @for (var j = 0; j < route.Minimums.Length; j++)
+                {
+                    var minimum = route.Minimums[j];
+                    var field = $"reference-result-{i}-{j}";
+                    var value = selected ? submission!.ValueAt(j) : null;
+                    <div class="mc-details-field">
+                        <label for="@field">@minimum.Label</label>
+                        @if (minimum.Scale == "yesNo")
+                        {
+                            <select id="@field" name="values" class="form-select" required>
+                                <option value="" selected="@(!value.HasValue)">Select an answer</option>
+                                <option value="1" selected="@(value == 1)">Yes</option>
+                                <option value="0" selected="@(value == 0)">No</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <input id="@field" name="values" class="form-control" type="number" required
+                                   min="@minimum.Lower" max="@minimum.Upper" step="@(minimum.Scale is "percent" or "aps" ? "any" : "1")"
+                                   value="@value?.ToString(CultureInfo.InvariantCulture)" />
+                        }
+                    </div>
+                }
+                <button type="submit" class="btn mc-browse-button">Compare results</button>
+            </form>
+        </details>
+    }
+</section>

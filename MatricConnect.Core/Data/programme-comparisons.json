@@ -36,6 +36,21 @@
     },
     {
       "university": "Nelson Mandela University",
+      "programmeCode": "72001",
+      "intakeYear": 2027,
+      "applicantRoute": "south-african-nsc",
+      "scoreScheme": "mandela-as",
+      "requirementsUrl": "https://www.mandela.ac.za/getmedia/8d278dd0-b607-4ac3-a7d1-8450ba54a8e2/Prospectus-Faculty-of-EBET?disposition=attachment",
+      "verifiedOn": "2026-11-15",
+      "minimumScore": 370,
+      "subjectOptions": [
+        { "subject": "mathematics", "minimumMark": 50 },
+        { "subject": "technicalMathematics", "minimumMark": 50 }
+      ],
+      "remainingRequirements": "Confirm that your NSC is endorsed for bachelor’s degree study."
+    },
+    {
+      "university": "Nelson Mandela University",
       "programmeCode": "7224",
       "intakeYear": 2027,
       "applicantRoute": "south-african-nsc",

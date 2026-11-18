@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "province": "Free State",
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect catalogue review",
+  "verifiedOn": "2026-11-18",
+  "institutions": [
+    {
+      "name": "Flavius Mareka TVET College",
+      "kind": "tvet",
+      "entries": [
+        {
+          "name": "Generic Management",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Sasolburg",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        },
+        {
+          "name": "Office Administration",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Sasolburg, Kroonstad",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        },
+        {
+          "name": "Civil Engineering and Building Construction",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Kroonstad",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        },
+        {
+          "name": "Education and Development",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Sasolburg, Mphohadi",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        },
+        {
+          "name": "Transport and Logistics",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Kroonstad",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        },
+        {
+          "name": "Engineering and Related Design",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://flaviusmareka.net/wp-content/uploads/2025/09/2026-NCV-COURSE-FEE-LIST-SUMMARY.pdf",
+          "campuses": "Sasolburg",
+          "intakeYear": 2026,
+          "availability": "Listed at Level 2 in the college’s 2026 course schedule. Confirm the next intake and entry requirements with the college."
+        }
+      ]
+    }
+  ]
+}

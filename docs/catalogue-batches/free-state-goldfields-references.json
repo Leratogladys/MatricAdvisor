@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "province": "Free State",
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect catalogue review",
+  "verifiedOn": "2026-11-18",
+  "institutions": [
+    {
+      "name": "Goldfields TVET College",
+      "kind": "tvet",
+      "entries": [
+        {
+          "name": "Information Technology and Computer Science",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Tosa",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/tosa-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Electrical Infrastructure Construction",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Tosa",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/tosa-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Engineering and Related Design",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Tosa",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/tosa-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Civil Engineering and Building Construction",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Tosa",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/tosa-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Drawing Office Practice",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Tosa",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/tosa-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Marketing",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Welkom",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/welkom-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Finance, Economics and Accounting",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Welkom",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/welkom-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Office Administration",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Welkom",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/welkom-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Tourism",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Welkom",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/welkom-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        },
+        {
+          "name": "Hospitality",
+          "group": "National Certificate (Vocational)",
+          "campuses": "Welkom",
+          "sourceUrl": "https://goldfieldstvet.edu.za/courses-page/welkom-campus-ncv/",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the next Level 2 intake with the college.",
+          "entryRequirements": "Level 2 is the school-entry route. The college lists Grade 9 as a general entry point; programme-specific requirements and placement still apply. Confirm the applicable route with Goldfields."
+        }
+      ]
+    }
+  ]
+}

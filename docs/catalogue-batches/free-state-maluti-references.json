@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "province": "Free State",
+  "reviewStatus": "reviewed",
+  "reviewedBy": "Matric Connect catalogue review",
+  "verifiedOn": "2026-11-18",
+  "institutions": [
+    {
+      "name": "Maluti TVET College",
+      "kind": "tvet",
+      "entries": [
+        {
+          "name": "Information Technology",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Electrical Infrastructure Construction",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Engineering and Related Design",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Civil Engineering and Building Construction",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Finance, Economics and Accounting",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Office Administration",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Marketing",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Primary Agriculture",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Hospitality",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Education and Development",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Tourism",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        },
+        {
+          "name": "Primary Health",
+          "group": "National Certificate (Vocational)",
+          "sourceUrl": "https://www.malutitvet.co.za/programmes",
+          "availability": "Listed at NC(V) Levels 2–4. Confirm the Level 2 intake and campus with Maluti.",
+          "entryRequirements": "The programme listing gives Grade 9 as the entry point. Confirm any additional requirements with the college."
+        }
+      ]
+    }
+  ]
+}
